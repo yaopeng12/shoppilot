@@ -20,8 +20,8 @@
 # production
 /build
 
-# local json db (created on first request via ensureDBFile)
-/data/db.json
+# local usage tracking db
+/data/usage.json
 
 # misc
 .DS_Store

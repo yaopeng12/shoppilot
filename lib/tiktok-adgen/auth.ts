@@ -1,55 +1,57 @@
-import type { NextRequest } from "next/server";
-import type { DB, DBUser, PlanId, UsageSnapshot } from "./types";
-import { PLANS } from "./types";
-import { getCookie, SESSION_COOKIE } from "./session";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { PLANS, type PlanId, type PublicUser, type UsageSnapshot } from "./types";
+import { getUsage, recordUsage } from "./db";
+import crypto from "crypto";
 
-export function getTodayKey() {
-  return new Date().toISOString().slice(0, 10);
-}
+export async function getCurrentUser(): Promise<PublicUser | null> {
+  const { userId } = await auth();
+  if (!userId) return null;
 
-export function getUser(db: DB, req: NextRequest): DBUser | null {
-  const apiKey = req.headers.get("x-api-key");
-  if (apiKey) {
-    const user = Object.values(db.users).find((u) => u.apiKey === apiKey);
-    if (user) return user;
-  }
+  const user = await currentUser();
+  if (!user) return null;
 
-  const token = getCookie(req, SESSION_COOKIE);
-  if (token && db.sessions[token]) return db.users[db.sessions[token]] || null;
-  return null;
-}
+  const plan = (user.publicMetadata?.plan as PlanId) || "free";
+  const apiKey = (user.privateMetadata?.apiKey as string) || undefined;
+  const usageData = getUsage(userId);
+  const planInfo = PLANS[plan] || PLANS.free;
 
-export function checkUsage(user: DBUser) {
-  const plan = PLANS[user.plan as PlanId] || PLANS.free;
-  if (plan.dailyLimit === -1) return { allowed: true, remaining: -1 };
+  const usage: UsageSnapshot = {
+    used: usageData.used,
+    limit: planInfo.dailyLimit,
+    remaining: planInfo.dailyLimit === -1 ? -1 : Math.max(0, planInfo.dailyLimit - usageData.used),
+    plan,
+  };
 
-  const today = getTodayKey();
-  if (!user.usage) user.usage = {};
-  const used = user.usage[today] || 0;
-  if (used >= plan.dailyLimit) return { allowed: false, error: "limit_reached", remaining: 0 };
-  return { allowed: true, remaining: plan.dailyLimit - used };
-}
-
-export function recordUsage(user: DBUser) {
-  const today = getTodayKey();
-  if (!user.usage) user.usage = {};
-  user.usage[today] = (user.usage[today] || 0) + 1;
-
-  // 仅保留最近 ~30 天（粗略）
-  for (const k of Object.keys(user.usage)) {
-    if (k < getTodayKey().slice(0, 8)) delete user.usage[k];
-  }
-}
-
-export function usageSnapshot(user: DBUser): UsageSnapshot {
-  const plan = PLANS[user.plan as PlanId] || PLANS.free;
-  const today = getTodayKey();
-  const used = user.usage?.[today] || 0;
   return {
-    used,
-    limit: plan.dailyLimit,
-    remaining: plan.dailyLimit === -1 ? -1 : Math.max(0, plan.dailyLimit - used),
-    plan: user.plan,
+    id: user.id,
+    email: user.emailAddresses[0]?.emailAddress || "",
+    name: user.firstName || user.username || "",
+    plan,
+    apiKey,
+    usage,
   };
 }
 
+export function checkUsage(userId: string, plan: PlanId = "free"): { allowed: boolean; snapshot: UsageSnapshot } {
+  const usageData = getUsage(userId);
+  const planInfo = PLANS[plan] || PLANS.free;
+  const limit = planInfo.dailyLimit;
+
+  if (limit < 0) {
+    return { allowed: true, snapshot: { used: usageData.used, limit, remaining: -1, plan } };
+  }
+
+  const remaining = Math.max(0, limit - usageData.used);
+  return {
+    allowed: usageData.used < limit,
+    snapshot: { used: usageData.used, limit, remaining, plan },
+  };
+}
+
+export function recordGeneration(userId: string) {
+  recordUsage(userId);
+}
+
+export function generateApiKey(): string {
+  return "tk_" + crypto.randomBytes(24).toString("hex");
+}

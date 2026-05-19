@@ -1,23 +1,37 @@
-import type { NextRequest } from "next/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { clerkClient } from "@clerk/nextjs/server";
 
-import { loadDB, saveDB } from "@/lib/tiktok-adgen/db";
-import { checkUsage, getUser, recordUsage, usageSnapshot } from "@/lib/tiktok-adgen/auth";
+import { checkUsage, recordGeneration, generateApiKey } from "@/lib/tiktok-adgen/auth";
 import { json } from "@/lib/tiktok-adgen/http";
 import { fetchProduct } from "@/lib/tiktok-adgen/shopify";
 import { generateAll } from "@/lib/tiktok-adgen/generator";
-import { optionsResponse } from "@/lib/tiktok-adgen/session";
+import type { PlanId } from "@/lib/tiktok-adgen/types";
 
 export const runtime = "nodejs";
 
-export const OPTIONS = optionsResponse;
+export async function POST(req: Request) {
+  const { userId } = await auth();
+  if (!userId) return json(401, { error: "auth_required", message: "Please sign in to generate scripts" });
 
-export async function POST(req: NextRequest) {
-  const db = await loadDB();
-  const user = getUser(db, req);
-  if (!user) return json(401, { error: "auth_required", message: "Please sign in to generate scripts" });
+  // Ensure user has an API key
+  const user = await currentUser();
+  if (user && !user.privateMetadata?.apiKey) {
+    const client = await clerkClient();
+    await client.users.updateUserMetadata(userId, {
+      privateMetadata: { apiKey: generateApiKey() },
+    });
+  }
 
-  const usage = checkUsage(user);
-  if (!usage.allowed) {
+  // Ensure user has a plan set
+  if (user && !user.publicMetadata?.plan) {
+    const client = await clerkClient();
+    await client.users.updateUserMetadata(userId, {
+      publicMetadata: { plan: "free" },
+    });
+  }
+
+  const { allowed, snapshot } = checkUsage(userId);
+  if (!allowed) {
     return json(429, {
       error: "limit_reached",
       message: "Daily limit reached. Upgrade to Pro for unlimited generations.",
@@ -36,9 +50,8 @@ export async function POST(req: NextRequest) {
     return json(400, { error: message });
   }
 
-  recordUsage(user);
-  await saveDB(db);
+  recordGeneration(userId);
 
-  const result = { ...generateAll(product), _usage: usageSnapshot(user) };
+  const result = { ...generateAll(product), _usage: snapshot };
   return json(200, result);
 }
