@@ -70,8 +70,26 @@ export default function ShopPilotLanding() {
     document.getElementById("demo")?.scrollIntoView({ behavior: "smooth" });
   }
 
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    name: "ShopPilot",
+    url: "https://shoppilot.help",
+    description: "AI Copilot for Shopify Sellers — automate product descriptions, TikTok ad creatives, SEO, and marketing workflows.",
+    applicationCategory: "BusinessApplication",
+    offers: {
+      "@type": "Offer",
+      price: "0",
+      priceCurrency: "USD",
+    },
+  };
+
   return (
     <div className="min-h-screen text-white">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <Navbar isSignedIn={!!user} />
 
       {/* Hero */}

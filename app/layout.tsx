@@ -14,9 +14,38 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "ShopPilot — AI Copilot for Shopify Sellers",
+  metadataBase: new URL("https://shoppilot.help"),
+  title: {
+    default: "ShopPilot — AI Copilot for Shopify Sellers",
+    template: "%s",
+  },
   description:
-    "Automate product descriptions, ad creatives, SEO, and marketing workflows with AI agents.",
+    "Automate product descriptions, TikTok ad creatives, SEO, and marketing workflows with AI agents. Built for Shopify sellers.",
+  keywords: [
+    "Shopify AI",
+    "product description generator",
+    "TikTok ads",
+    "ecommerce automation",
+    "Shopify SEO",
+    "ad creative generator",
+    "AI marketing",
+  ],
+  openGraph: {
+    type: "website",
+    locale: "en_US",
+    url: "https://shoppilot.help",
+    siteName: "ShopPilot",
+    title: "ShopPilot — AI Copilot for Shopify Sellers",
+    description:
+      "Automate product descriptions, TikTok ad creatives, SEO, and marketing workflows with AI agents.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "ShopPilot — AI Copilot for Shopify Sellers",
+    description:
+      "Automate product descriptions, TikTok ad creatives, SEO, and marketing workflows with AI agents.",
+  },
+  alternates: { canonical: "https://shoppilot.help" },
 };
 
 export default function RootLayout({
