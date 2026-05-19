@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useUser } from "@clerk/nextjs";
 import { PLANS, type PlanId } from "@/lib/tiktok-adgen/types";
@@ -8,21 +8,22 @@ import { apiFetch } from "@/lib/tiktok-adgen/client";
 import { Toast } from "@/components/tiktok-adgen/toast";
 import { useToast } from "@/components/tiktok-adgen/use-toast";
 import { Navbar } from "@/components/tiktok-adgen/navbar";
+import { useI18n } from "@/lib/i18n/context";
 
 export default function PricingPage() {
-  const { user, isLoaded } = useUser();
+  const { user } = useUser();
+  const { t, locale } = useI18n();
   const { message: toast, showToast } = useToast();
   const [upgrading, setUpgrading] = useState<string | null>(null);
   const [currentPlan, setCurrentPlan] = useState<PlanId>("free");
 
-  // Fetch current plan from our API if signed in
-  useState(() => {
+  useEffect(() => {
     if (user) {
       apiFetch<{ plan: PlanId }>("/api/user/me").then((r) => {
         if (r.ok) setCurrentPlan(r.data.plan);
       });
     }
-  });
+  }, [user]);
 
   async function upgradePlan(plan: string) {
     if (!user) {
@@ -36,13 +37,13 @@ export default function PricingPage() {
         body: JSON.stringify({ plan }),
       });
       if (r.ok) {
-        showToast("已升级");
+        showToast(locale === "zh" ? "已升级" : "Upgraded");
         setCurrentPlan(plan as PlanId);
       } else {
-        showToast("升级失败");
+        showToast(locale === "zh" ? "升级失败" : "Upgrade failed");
       }
     } catch {
-      showToast("网络错误");
+      showToast(locale === "zh" ? "网络错误" : "Network error");
     } finally {
       setUpgrading(null);
     }
@@ -55,15 +56,15 @@ export default function PricingPage() {
       <main className="max-w-6xl mx-auto px-6 py-16">
         <div className="text-center mb-14 animate-fade-in-up">
           <div className="inline-flex px-4 py-1.5 rounded-full bg-white/[0.04] text-xs text-white/40 mb-6 tracking-wide uppercase border border-white/[0.08]">
-            Pricing
+            {t.pricing.badge}
           </div>
           <h1 className="text-4xl lg:text-5xl font-bold tracking-tight mb-4">
             <span className="bg-gradient-to-b from-white to-white/50 bg-clip-text text-transparent">
-              选择适合你的方案
+              {t.pricing.title}
             </span>
           </h1>
           <p className="text-white/40 text-base max-w-lg mx-auto">
-            从免费开始，随时升级。所有方案均包含核心 AI 功能。
+            {t.pricing.desc}
           </p>
         </div>
 
@@ -85,7 +86,7 @@ export default function PricingPage() {
               >
                 {isPopular && (
                   <div className="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-gradient-to-r from-violet-600 to-blue-600 text-[11px] font-semibold tracking-wide shadow-lg shadow-violet-500/20">
-                    MOST POPULAR
+                    {t.pricing.popular}
                   </div>
                 )}
 
@@ -93,10 +94,12 @@ export default function PricingPage() {
                   <div className="text-base font-semibold">{p.name}</div>
                   <div className="mt-3 flex items-baseline gap-1">
                     <span className="text-4xl font-bold tracking-tight">${p.price}</span>
-                    {pid !== "free" && <span className="text-sm text-white/30">/月</span>}
+                    {pid !== "free" && <span className="text-sm text-white/30">{t.pricing.perMonth}</span>}
                   </div>
                   <div className="text-xs text-white/30 mt-1">
-                    {pid === "free" ? "永久免费，无需信用卡" : "按月计费，随时取消"}
+                    {pid === "free"
+                      ? (locale === "zh" ? "永久免费，无需信用卡" : "Free forever, no credit card")
+                      : t.pricing.billedMonthly}
                   </div>
                 </div>
 
@@ -118,7 +121,7 @@ export default function PricingPage() {
                 <div className="mt-8">
                   {isCurrent ? (
                     <div className="w-full py-3 rounded-xl bg-white/[0.06] text-white/40 text-sm text-center cursor-default border border-white/[0.06] font-medium">
-                      当前方案
+                      {t.pricing.currentPlan}
                     </div>
                   ) : (
                     <button
@@ -133,7 +136,11 @@ export default function PricingPage() {
                             : "bg-white text-black hover:bg-white/90 shadow-lg shadow-white/10"
                       }`}
                     >
-                      {upgrading === pid ? "处理中..." : pid === "free" ? "免费开始" : `升级到 ${p.name}`}
+                      {upgrading === pid
+                        ? (locale === "zh" ? "处理中..." : "Processing...")
+                        : pid === "free"
+                          ? t.pricing.freeStart
+                          : `${t.pricing.upgradeTo} ${p.name}`}
                     </button>
                   )}
                 </div>
@@ -142,11 +149,8 @@ export default function PricingPage() {
           })}
         </div>
 
-        <div className="text-center mt-16 text-xs text-white/25 animate-fade-in-up delay-200">
-          <p>所有方案均支持 14 天免费试用 · 无隐藏费用 · 随时取消</p>
-          <p className="mt-1">
-            <Link href="/" className="hover:text-white/50 transition-colors">← 返回首页</Link>
-          </p>
+        <div className="text-center mt-10 text-sm text-white/30 animate-fade-in-up delay-200">
+          {t.pricing.yearlyDiscount}
         </div>
       </main>
 
