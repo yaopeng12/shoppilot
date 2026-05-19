@@ -30,7 +30,8 @@ export async function POST(req: Request) {
     });
   }
 
-  const { allowed, snapshot } = checkUsage(userId);
+  const plan = (user?.publicMetadata?.plan as PlanId) || "free";
+  const { allowed, snapshot } = checkUsage(userId, plan);
   if (!allowed) {
     return json(429, {
       error: "limit_reached",
@@ -52,6 +53,7 @@ export async function POST(req: Request) {
 
   recordGeneration(userId);
 
-  const result = { ...generateAll(product), _usage: snapshot };
+  const generated = await generateAll(product);
+  const result = { ...generated, _usage: snapshot };
   return json(200, result);
 }
