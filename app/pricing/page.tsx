@@ -2,11 +2,12 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { useUser, UserButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { PLANS, type PlanId } from "@/lib/tiktok-adgen/types";
 import { apiFetch } from "@/lib/tiktok-adgen/client";
 import { Toast } from "@/components/tiktok-adgen/toast";
 import { useToast } from "@/components/tiktok-adgen/use-toast";
+import { Navbar } from "@/components/tiktok-adgen/navbar";
 
 export default function PricingPage() {
   const { user, isLoaded } = useUser();
@@ -49,33 +50,7 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-white/[0.06] sticky top-0 z-40 bg-[#06060a]/80 backdrop-blur-xl">
-        <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-lg font-bold bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
-            ShopPilot
-          </Link>
-          <div className="flex items-center gap-3">
-            {user ? (
-              <>
-                <Link
-                  href="/dashboard"
-                  className="h-8 px-3.5 rounded-lg border border-white/[0.1] text-white/60 hover:text-white hover:bg-white/[0.05] hover:border-white/20 transition-all duration-200 text-xs inline-flex items-center"
-                >
-                  仪表盘
-                </Link>
-                <UserButton />
-              </>
-            ) : (
-              <Link
-                href="/sign-in"
-                className="h-8 px-4 rounded-lg bg-white text-black text-xs font-medium hover:bg-white/90 transition-all duration-200 inline-flex items-center"
-              >
-                登录
-              </Link>
-            )}
-          </div>
-        </div>
-      </header>
+      <Navbar isSignedIn={!!user} />
 
       <main className="max-w-6xl mx-auto px-6 py-16">
         <div className="text-center mb-14 animate-fade-in-up">

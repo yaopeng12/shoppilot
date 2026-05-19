@@ -6,7 +6,7 @@ import { useUser, useAuth } from "@clerk/nextjs";
 
 import { GenerateForm } from "@/components/tiktok-adgen/generate-form";
 import { GenerationResults } from "@/components/tiktok-adgen/generation-results";
-import { PageHeader } from "@/components/tiktok-adgen/page-header";
+import { Navbar } from "@/components/tiktok-adgen/navbar";
 import { PricingModal } from "@/components/tiktok-adgen/pricing-modal";
 import { TeamModal } from "@/components/tiktok-adgen/team-modal";
 import { Toast } from "@/components/tiktok-adgen/toast";
@@ -14,6 +14,7 @@ import type { GeneratedData, GenerateErrorBody, TeamState } from "@/components/t
 import { useToast } from "@/components/tiktok-adgen/use-toast";
 import { normalizeUrl } from "@/components/tiktok-adgen/utils";
 import { apiFetch } from "@/lib/tiktok-adgen/client";
+import { cn } from "@/components/ui/cn";
 import { PLANS, type PlanId, type PublicUser } from "@/lib/tiktok-adgen/types";
 
 type Plans = typeof PLANS;
@@ -137,14 +138,26 @@ export default function TikTokAdGenPage() {
 
   return (
     <div className="min-h-screen text-white">
-      <PageHeader
-        user={user}
-        usagePill={usagePill}
-        onOpenPricing={openPricing}
-        onOpenTeam={openTeam}
-      />
+      <Navbar isSignedIn={!!clerkUser} />
 
       <main className="max-w-6xl mx-auto px-6 py-10 space-y-8">
+        {usagePill && (
+          <div className="flex items-center justify-end gap-3">
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] text-xs text-white/60">
+              <span className={cn("w-1.5 h-1.5 rounded-full", usagePill.color)} />
+              <span className="whitespace-nowrap">{usagePill.text}</span>
+            </div>
+            {user?.plan === "team" && (
+              <button
+                type="button"
+                className="px-3 py-1.5 rounded-lg border border-white/[0.1] text-white/50 hover:text-white hover:bg-white/[0.05] text-xs transition-all"
+                onClick={openTeam}
+              >
+                团队
+              </button>
+            )}
+          </div>
+        )}
         <GenerateForm
           url={url}
           loading={loading}

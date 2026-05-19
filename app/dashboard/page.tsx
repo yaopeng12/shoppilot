@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useUser, UserButton } from "@clerk/nextjs";
+import { useUser } from "@clerk/nextjs";
 import { PLANS, type PlanId } from "@/lib/tiktok-adgen/types";
 import { apiFetch } from "@/lib/tiktok-adgen/client";
 import { Toast } from "@/components/tiktok-adgen/toast";
 import { useToast } from "@/components/tiktok-adgen/use-toast";
+import { Navbar } from "@/components/tiktok-adgen/navbar";
 
 type MeData = {
   id: string;
@@ -86,22 +87,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen">
-      <header className="border-b border-white/[0.06] sticky top-0 z-40 bg-[#06060a]/80 backdrop-blur-xl">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between">
-          <Link href="/" className="text-lg font-bold bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
-            ShopPilot
-          </Link>
-          <div className="flex items-center gap-3">
-            <Link
-              href="/pricing"
-              className="h-8 px-3.5 rounded-lg border border-white/[0.1] text-white/60 hover:text-white hover:bg-white/[0.05] hover:border-white/20 transition-all duration-200 text-xs inline-flex items-center"
-            >
-              方案
-            </Link>
-            <UserButton />
-          </div>
-        </div>
-      </header>
+      <Navbar isSignedIn={!!user} />
 
       <main className="max-w-5xl mx-auto px-6 py-10 space-y-6 animate-fade-in-up">
         <div>
