@@ -20,6 +20,9 @@
 # production
 /build
 
+# local json db (created on first request via ensureDBFile)
+/data/db.json
+
 # misc
 .DS_Store
 *.pem
