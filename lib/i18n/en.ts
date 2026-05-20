@@ -4,6 +4,8 @@ export default {
     product: "Product",
     pricing: "Pricing",
     dashboard: "Dashboard",
+    inspiration: "Inspiration",
+    knowledge: "Knowledge",
     login: "Log In",
   },
   hero: {
@@ -52,7 +54,7 @@ export default {
     items: [
       {
         title: "AI Product Description",
-        desc: "Paste a Shopify link and get SEO-optimized product titles, descriptions, and metadata instantly.",
+        desc: "Paste a product link and get SEO-optimized product titles, descriptions, and metadata instantly.",
       },
       {
         title: "TikTok Ad Hooks",
@@ -87,7 +89,7 @@ export default {
   },
   demo: {
     title: "See It In Action",
-    desc: "Paste a Shopify product link, get TikTok-ready ad creatives in seconds",
+    desc: "Paste a product link, get TikTok-ready ad creatives in seconds",
     tabs: ["Hooks", "Script", "Voiceover", "Subtitles"],
     tryCta: "Try It Free",
   },

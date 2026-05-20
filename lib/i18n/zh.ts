@@ -4,6 +4,8 @@ export default {
     product: "产品",
     pricing: "方案",
     dashboard: "用户中心",
+    inspiration: "灵感库",
+    knowledge: "知识库",
     login: "登录",
   },
   hero: {
@@ -52,7 +54,7 @@ export default {
     items: [
       {
         title: "AI 产品描述",
-        desc: "粘贴 Shopify 链接，即刻获得 SEO 优化的产品标题、描述和元数据。",
+        desc: "粘贴商品链接，即刻获得 SEO 优化的产品标题、描述和元数据。",
       },
       {
         title: "TikTok 广告 Hook",
@@ -87,7 +89,7 @@ export default {
   },
   demo: {
     title: "效果演示",
-    desc: "粘贴 Shopify 商品链接，几秒内获得 TikTok 广告素材",
+    desc: "粘贴商品链接，几秒内获得 TikTok 广告素材",
     tabs: ["Hook 开头", "视频脚本", "配音文案", "字幕"],
     tryCta: "免费试用",
   },

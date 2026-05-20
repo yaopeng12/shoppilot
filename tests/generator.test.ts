@@ -51,7 +51,7 @@ describe("generator", () => {
       const result = await generateAll(mockProduct);
 
       expect(result.hooks).toHaveLength(5);
-      result.hooks.forEach((h) => {
+      result.hooks.forEach((h: string) => {
         expect(typeof h).toBe("string");
         expect(h.length).toBeGreaterThan(0);
       });
@@ -62,9 +62,9 @@ describe("generator", () => {
       const result = await generateAll(mockProduct);
 
       expect(result.scripts).toHaveLength(2);
-      result.scripts.forEach((s) => {
+      result.scripts.forEach((s: { scenes: Array<{ time: string; text: string }> }) => {
         expect(s.scenes).toHaveLength(5);
-        s.scenes.forEach((sc) => {
+        s.scenes.forEach((sc: { time: string; text: string }) => {
           expect(sc).toHaveProperty("time");
           expect(sc).toHaveProperty("text");
         });
@@ -76,7 +76,7 @@ describe("generator", () => {
       const result = await generateAll(mockProduct);
 
       expect(result.voiceovers).toHaveLength(2);
-      result.voiceovers.forEach((v) => {
+      result.voiceovers.forEach((v: string) => {
         expect(typeof v).toBe("string");
         expect(v.length).toBeGreaterThan(50);
       });
@@ -87,9 +87,9 @@ describe("generator", () => {
       const result = await generateAll(mockProduct);
 
       expect(result.subtitles.length).toBeGreaterThanOrEqual(1);
-      result.subtitles.forEach((set) => {
+      result.subtitles.forEach((set: Array<{ time: string; text: string }>) => {
         expect(set.length).toBeGreaterThanOrEqual(1);
-        set.forEach((s) => {
+        set.forEach((s: { time: string; text: string }) => {
           expect(s).toHaveProperty("time");
           expect(s).toHaveProperty("text");
         });
@@ -101,7 +101,7 @@ describe("generator", () => {
       const result = await generateAll(mockProduct);
 
       const hasProductName = result.hooks.some(
-        (h) => h.toLowerCase().includes("wireless earbuds pro") || h.toLowerCase().includes("earbuds")
+        (h: string) => h.toLowerCase().includes("wireless earbuds pro") || h.toLowerCase().includes("earbuds")
       );
       expect(hasProductName).toBe(true);
     });

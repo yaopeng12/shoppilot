@@ -21,6 +21,16 @@ type MeData = {
   createdAt: number;
 };
 
+type GenRecord = {
+  id: string;
+  product_title: string | null;
+  product_price: string | null;
+  product_image: string | null;
+  style: string | null;
+  hooks: string[];
+  created_at: string;
+};
+
 const dashboardI18n = {
   en: {
     welcome: "Welcome back",
@@ -35,7 +45,7 @@ const dashboardI18n = {
     progressLabel: "of daily limit used",
     quickActions: "Quick Actions",
     generateAd: "Generate Ad Creative",
-    generateAdDesc: "Paste a Shopify link and get TikTok-ready content",
+    generateAdDesc: "Paste a product link and get TikTok-ready content",
     viewPricing: "View Plans",
     viewPricingDesc: "Upgrade for more generations and features",
     apiTitle: "API Key",
@@ -60,6 +70,14 @@ const dashboardI18n = {
     copyFailed: "Copy failed",
     loading: "Loading...",
     goToGenerate: "Start Generating",
+    historyTitle: "Generation History",
+    historyDesc: "Your recently generated ad creatives",
+    noHistory: "No generations yet",
+    noHistoryHint: "Generate your first ad creative to see it here",
+    viewAll: "View All",
+    hooks: "Hooks",
+    style: "Style",
+    auto: "Auto",
   },
   zh: {
     welcome: "欢迎回来",
@@ -74,7 +92,7 @@ const dashboardI18n = {
     progressLabel: "的每日额度已使用",
     quickActions: "快捷操作",
     generateAd: "生成广告素材",
-    generateAdDesc: "粘贴 Shopify 链接，获取 TikTok 广告内容",
+    generateAdDesc: "粘贴商品链接，获取 TikTok 广告内容",
     viewPricing: "查看方案",
     viewPricingDesc: "升级获得更多生成次数和功能",
     apiTitle: "API 密钥",
@@ -99,6 +117,14 @@ const dashboardI18n = {
     copyFailed: "复制失败",
     loading: "加载中...",
     goToGenerate: "去生成",
+    historyTitle: "生成历史",
+    historyDesc: "你最近生成的广告素材",
+    noHistory: "暂无生成记录",
+    noHistoryHint: "生成你的第一个广告素材后会显示在这里",
+    viewAll: "查看全部",
+    hooks: "钩子",
+    style: "风格",
+    auto: "自动",
   },
 } as const;
 
@@ -148,11 +174,15 @@ export default function DashboardPage() {
   const [showKey, setShowKey] = useState(false);
   const [upgrading, setUpgrading] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
+  const [generations, setGenerations] = useState<GenRecord[]>([]);
 
   useEffect(() => {
     if (isLoaded && user) {
       apiFetch<MeData>("/api/user/me").then((r) => {
         if (r.ok) setMe(r.data);
+      });
+      apiFetch<{ generations: GenRecord[] }>("/api/generations").then((r) => {
+        if (r.ok) setGenerations(r.data?.generations || []);
       });
     }
   }, [isLoaded, user]);
@@ -381,6 +411,93 @@ export default function DashboardPage() {
             </button>
           </div>
           <p className="text-[11px] text-white/20 mt-2">{t.apiHint}</p>
+        </div>
+
+        {/* Generation History */}
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <div className="text-sm font-medium">{t.historyTitle}</div>
+              <div className="text-xs text-white/30 mt-0.5">{t.historyDesc}</div>
+            </div>
+            {generations.length > 5 && (
+              <Link href="/tiktok-adgen" className="text-xs text-violet-400 hover:text-violet-300 transition-colors">
+                {t.viewAll} →
+              </Link>
+            )}
+          </div>
+
+          {generations.length === 0 ? (
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 text-center">
+              <div className="w-12 h-12 rounded-xl bg-white/[0.04] flex items-center justify-center mx-auto mb-3">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-white/25">
+                  <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
+                </svg>
+              </div>
+              <div className="text-sm text-white/40">{t.noHistory}</div>
+              <div className="text-xs text-white/20 mt-1">{t.noHistoryHint}</div>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {generations.slice(0, 5).map((gen) => (
+                <div
+                  key={gen.id}
+                  className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4 hover:bg-white/[0.04] hover:border-white/[0.14] transition-all duration-300 flex items-center gap-4"
+                >
+                  {gen.product_image ? (
+                    <img
+                      src={gen.product_image}
+                      alt={gen.product_title || "Product"}
+                      className="w-14 h-14 rounded-xl object-cover shrink-0 border border-white/[0.08]"
+                    />
+                  ) : (
+                    <div className="w-14 h-14 rounded-xl bg-gradient-to-br from-violet-500/20 to-blue-500/20 flex items-center justify-center shrink-0 border border-white/[0.08]">
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" className="text-violet-400">
+                        <rect x="3" y="3" width="18" height="18" rx="2" />
+                        <path d="M3 9h18" />
+                      </svg>
+                    </div>
+                  )}
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-2">
+                      <span className="text-sm font-medium truncate">{gen.product_title || "Untitled"}</span>
+                      {gen.product_price && (
+                        <span className="text-xs text-emerald-400 shrink-0">{gen.product_price}</span>
+                      )}
+                    </div>
+                    <div className="flex items-center gap-2 mt-1">
+                      {gen.style && (
+                        <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-violet-500/10 border border-violet-500/20 text-[10px] text-violet-300 font-medium">
+                          {gen.style}
+                        </span>
+                      )}
+                      <span className="text-[11px] text-white/25">
+                        {new Date(gen.created_at).toLocaleDateString(locale === "zh" ? "zh-CN" : "en-US", {
+                          month: "short",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })}
+                      </span>
+                    </div>
+                    {gen.hooks && gen.hooks.length > 0 && (
+                      <div className="text-xs text-white/30 mt-1.5 truncate">
+                        {gen.hooks[0]}
+                      </div>
+                    )}
+                  </div>
+                  <Link
+                    href="/tiktok-adgen"
+                    className="shrink-0 w-8 h-8 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-white/30 hover:text-white/60 hover:bg-white/[0.08] transition-all"
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </Link>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Plan upgrade */}

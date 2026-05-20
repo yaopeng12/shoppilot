@@ -16,6 +16,8 @@ export function Navbar({ isSignedIn }: { isSignedIn: boolean }) {
   const navLinks = [
     { href: "/", label: t.nav.home },
     { href: "/tiktok-adgen", label: t.nav.product },
+    { href: "/inspiration", label: t.nav.inspiration },
+    { href: "/knowledge", label: t.nav.knowledge },
     { href: "/pricing", label: t.nav.pricing },
     { href: "/dashboard", label: t.nav.dashboard, auth: true },
   ];

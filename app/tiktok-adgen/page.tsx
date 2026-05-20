@@ -1,7 +1,7 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useCallback, useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useUser } from "@clerk/nextjs";
 
 import { GenerateForm } from "@/components/tiktok-adgen/generate-form";
@@ -17,14 +17,15 @@ import { apiFetch } from "@/lib/tiktok-adgen/client";
 import { cn } from "@/components/ui/cn";
 import { useI18n } from "@/lib/i18n/context";
 import { PLANS, type PlanId, type PublicUser } from "@/lib/tiktok-adgen/types";
+import type { AdStyle, TargetMarket } from "@/lib/tiktok-adgen/generator";
 
 type Plans = typeof PLANS;
 
 const pageI18n = {
   en: {
-    badge: "Shopify → TikTok Ad Creative",
+    badge: "E-commerce → TikTok Ad Creative",
     title: "Generate TikTok Ad Content",
-    desc: "Paste a Shopify product link and get AI-powered hooks, scripts, voiceovers, and subtitles.",
+    desc: "Paste a product link from any store and get AI-powered hooks, scripts, voiceovers, and subtitles.",
     unlimited: "Unlimited",
     remaining: "remaining today",
     team: "Team",
@@ -33,7 +34,7 @@ const pageI18n = {
     copyFailed: "Copy failed",
     upgraded: "Upgraded (demo)",
     upgradeFailed: "Upgrade failed",
-    enterUrl: "Please enter a Shopify product link",
+    enterUrl: "Please enter a product link",
     invalidUrl: "Please enter a valid URL",
     limitReached: "Daily limit reached.",
     signInRequired: "Please sign in to generate content.",
@@ -41,9 +42,9 @@ const pageI18n = {
     genFailed: "Generation failed",
   },
   zh: {
-    badge: "Shopify → TikTok 广告素材",
+    badge: "电商 → TikTok 广告素材",
     title: "生成 TikTok 广告内容",
-    desc: "粘贴 Shopify 商品链接，AI 自动生成 Hook、脚本、配音和字幕。",
+    desc: "粘贴任意店铺商品链接，AI 自动生成 Hook、脚本、配音和字幕。",
     unlimited: "无限",
     remaining: "今日剩余",
     team: "团队",
@@ -52,7 +53,7 @@ const pageI18n = {
     copyFailed: "复制失败",
     upgraded: "已升级（演示）",
     upgradeFailed: "升级失败",
-    enterUrl: "请输入 Shopify 商品链接",
+    enterUrl: "请输入商品链接",
     invalidUrl: "请输入有效的 URL",
     limitReached: "今日次数已用完。",
     signInRequired: "请先登录后再生成内容。",
@@ -62,13 +63,27 @@ const pageI18n = {
 } as const;
 
 export default function TikTokAdGenPage() {
+  return (
+    <Suspense fallback={<div className="min-h-screen text-white flex items-center justify-center">Loading...</div>}>
+      <TikTokAdGenContent />
+    </Suspense>
+  );
+}
+
+function TikTokAdGenContent() {
   const router = useRouter();
   const { user: clerkUser } = useUser();
   const { locale } = useI18n();
   const t = pageI18n[locale];
   const { message: toast, showToast } = useToast();
 
+  const searchParams = useSearchParams();
+  const refVideoId = searchParams.get("refVideoId");
+
   const [url, setUrl] = useState("");
+  const [style, setStyle] = useState<AdStyle | null>(null);
+  const [targetMarket, setTargetMarket] = useState<TargetMarket>("us");
+  const [scriptCount, setScriptCount] = useState(10);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
   const [limitMsg, setLimitMsg] = useState<string | null>(null);
@@ -145,7 +160,7 @@ export default function TikTokAdGenPage() {
     try {
       const r = await apiFetch<GeneratedData & GenerateErrorBody>("/api/generate", {
         method: "POST",
-        body: JSON.stringify({ url: u }),
+        body: JSON.stringify({ url: u, style: style || undefined, targetMarket, scriptCount, refVideoId }),
       });
       if (r.status === 429) {
         setLimitMsg(r.data.message || t.limitReached);
@@ -205,12 +220,18 @@ export default function TikTokAdGenPage() {
 
         <GenerateForm
           url={url}
+          style={style}
+          targetMarket={targetMarket}
+          scriptCount={scriptCount}
           loading={loading}
           err={err}
           limitMsg={limitMsg}
           authMsg={authMsg}
           signInLabel={t.signIn}
           onUrlChange={setUrl}
+          onStyleChange={setStyle}
+          onMarketChange={setTargetMarket}
+          onCountChange={setScriptCount}
           onGenerate={generate}
           onUpgrade={openPricing}
           onExample={setUrl}

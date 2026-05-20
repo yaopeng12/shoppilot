@@ -33,7 +33,7 @@ export function buildFullExport(data: GeneratedData) {
   data.scripts.forEach((s) => {
     out += `### 脚本 ${s.id}\n`;
     s.scenes.forEach((sc) => {
-      out += `- [${sc.time || sc.duration || ""}] ${sc.text}\n`;
+      out += `- [${sc.time || ""}] ${sc.text}\n`;
     });
     out += "\n";
   });

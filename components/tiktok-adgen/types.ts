@@ -5,7 +5,13 @@ export type ResultTab = "hooks" | "scripts" | "voiceovers" | "subtitles";
 
 export type Script = {
   id: number;
-  scenes: { text: string; duration?: string; time?: string }[];
+  style?: string;
+  hook?: { text: string; type: string };
+  scenes: { text: string; time?: string; action?: string }[];
+  cta?: { text: string; type: string };
+  tone_notes?: string;
+  filming_tips?: string;
+  bgm_suggestion?: string;
 };
 
 export type SubtitleRow = { time: string; text: string };
@@ -16,7 +22,9 @@ export type GeneratedData = {
   scripts: Script[];
   voiceovers: string[];
   subtitles: SubtitleRow[][];
+  hashtags?: string[];
   _usage?: UsageSnapshot;
+  _category?: string | null;
 };
 
 export type TeamMember = { id: string; name: string; email: string; plan: string };
