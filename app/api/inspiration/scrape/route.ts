@@ -10,7 +10,7 @@ import {
 } from "@/lib/inspiration/db";
 
 export const runtime = "nodejs";
-export const maxDuration = 600; // 10 min timeout for 500 videos
+export const maxDuration = 300; // 10 min timeout for 500 videos
 
 export async function POST(req: Request) {
   const authHeader = req.headers.get("Authorization") || "";
