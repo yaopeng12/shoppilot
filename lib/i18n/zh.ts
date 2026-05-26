@@ -2,6 +2,7 @@ export default {
   nav: {
     home: "首页",
     product: "产品",
+    storyboard: "分镜",
     pricing: "方案",
     dashboard: "用户中心",
     login: "登录",

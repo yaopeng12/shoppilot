@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { useUser } from "@clerk/nextjs";
+import { useSession } from "next-auth/react";
 import { PLANS, type PlanId } from "@/lib/tiktok-adgen/types";
 import { apiFetch } from "@/lib/tiktok-adgen/client";
 import { Toast } from "@/components/tiktok-adgen/toast";
@@ -140,7 +140,8 @@ function RingProgress({ percent, size = 100, stroke = 8 }: { percent: number; si
 }
 
 export default function DashboardPage() {
-  const { user, isLoaded } = useUser();
+  const { data: session, status } = useSession();
+  const user = session?.user;
   const { locale } = useI18n();
   const t = dashboardI18n[locale];
   const { message: toast, showToast } = useToast();
@@ -150,12 +151,12 @@ export default function DashboardPage() {
   const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    if (isLoaded && user) {
+    if (status === "authenticated" && user) {
       apiFetch<MeData>("/api/user/me").then((r) => {
         if (r.ok) setMe(r.data);
       });
     }
-  }, [isLoaded, user]);
+  }, [status, user]);
 
   async function upgradePlan(plan: string) {
     setUpgrading(plan);
@@ -190,7 +191,7 @@ export default function DashboardPage() {
     }
   }
 
-  if (!isLoaded || !user) {
+  if (status === "loading" || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-white/30 text-sm">{t.loading}</div>
@@ -211,7 +212,7 @@ export default function DashboardPage() {
 
   return (
     <div className="min-h-screen">
-      <Navbar isSignedIn={!!user} />
+      <Navbar isSignedIn={!!user} user={user} />
 
       <main className="max-w-6xl mx-auto px-6 py-8 space-y-6 animate-fade-in-up">
         {/* Welcome hero */}
@@ -220,11 +221,11 @@ export default function DashboardPage() {
           <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
             <div className="flex items-center gap-4">
               <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500/30 to-blue-500/30 flex items-center justify-center text-xl font-bold text-white/80 shrink-0 border border-white/[0.08]">
-                {(user.firstName || user.emailAddresses[0]?.emailAddress || "?")[0].toUpperCase()}
+                {(user.name || user.email || "?")[0].toUpperCase()}
               </div>
               <div>
-                <h1 className="text-xl font-bold">{t.welcome}，{user.firstName || user.username || "User"}</h1>
-                <p className="text-sm text-white/40 mt-0.5">{user.emailAddresses[0]?.emailAddress}</p>
+                <h1 className="text-xl font-bold">{t.welcome}, {user.name || "User"}</h1>
+                <p className="text-sm text-white/40 mt-0.5">{user.email}</p>
               </div>
             </div>
             <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r border text-sm font-medium ${planColors[plan] || planColors.free}`}>

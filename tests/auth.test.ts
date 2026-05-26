@@ -4,13 +4,8 @@ import { describe, it, expect, vi, beforeEach } from "vitest";
 vi.mock("@/lib/tiktok-adgen/db", () => ({
   getUsage: vi.fn(() => ({ used: 0 })),
   recordUsage: vi.fn(),
-}));
-
-// Mock Clerk
-vi.mock("@clerk/nextjs/server", () => ({
-  auth: vi.fn(() => ({ userId: null })),
-  currentUser: vi.fn(() => null),
-  clerkClient: vi.fn(),
+  getOrCreateUser: vi.fn(),
+  updateUser: vi.fn(),
 }));
 
 describe("auth module", () => {

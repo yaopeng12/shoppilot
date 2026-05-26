@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
-import { useUser } from "@clerk/nextjs";
+import { useSession } from "next-auth/react";
 
 import { GenerateForm } from "@/components/tiktok-adgen/generate-form";
 import { GenerationResults } from "@/components/tiktok-adgen/generation-results";
@@ -63,7 +63,7 @@ const pageI18n = {
 
 export default function TikTokAdGenPage() {
   const router = useRouter();
-  const { user: clerkUser } = useUser();
+  const { data: session } = useSession();
   const { locale } = useI18n();
   const t = pageI18n[locale];
   const { message: toast, showToast } = useToast();
@@ -82,14 +82,14 @@ export default function TikTokAdGenPage() {
   const [teamState, setTeamState] = useState<TeamState>(null);
 
   const user: PublicUser | null = useMemo(() => {
-    if (!clerkUser) return null;
+    if (!session?.user) return null;
     return {
-      id: clerkUser.id,
-      email: clerkUser.emailAddresses[0]?.emailAddress || "",
-      name: clerkUser.firstName || clerkUser.username || "",
-      plan: (clerkUser.publicMetadata?.plan as PlanId) || "free",
+      id: session.user.id,
+      email: session.user.email || "",
+      name: session.user.name || "",
+      plan: "free",
     };
-  }, [clerkUser]);
+  }, [session]);
 
   const usagePill = useMemo(() => {
     const u = data?._usage;
@@ -139,7 +139,7 @@ export default function TikTokAdGenPage() {
     if (!u) { setErr(t.enterUrl); return; }
     try { new URL(u); } catch { setErr(t.invalidUrl); return; }
 
-    if (!clerkUser) { router.push("/sign-in"); return; }
+    if (!session?.user) { router.push("/sign-in"); return; }
 
     setLoading(true);
     try {
@@ -172,7 +172,7 @@ export default function TikTokAdGenPage() {
 
   return (
     <div className="min-h-screen text-white">
-      <Navbar isSignedIn={!!clerkUser} />
+      <Navbar isSignedIn={!!session?.user} user={session?.user} />
 
       <main className="max-w-6xl mx-auto px-6 py-8">
         {/* Page header */}

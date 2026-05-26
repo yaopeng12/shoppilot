@@ -1,18 +1,26 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
 import { PLANS, type PlanId, type PublicUser, type UsageSnapshot } from "./types";
-import { getUsage, recordUsage } from "./db";
+import { getOrCreateUser, getUsage, recordUsage, updateUser } from "./db";
 import crypto from "crypto";
 
 export async function getCurrentUser(): Promise<PublicUser | null> {
-  const { userId } = await auth();
-  if (!userId) return null;
+  const { auth: nextAuth } = await import("@/auth");
+  const session = await nextAuth();
+  if (!session?.user?.id) return null;
 
-  const user = await currentUser();
-  if (!user) return null;
+  const user = getOrCreateUser(
+    session.user.id,
+    session.user.email || "",
+    session.user.name || "",
+    session.user.image || undefined
+  );
 
-  const plan = (user.publicMetadata?.plan as PlanId) || "free";
-  const apiKey = (user.privateMetadata?.apiKey as string) || undefined;
-  const usageData = getUsage(userId);
+  if (!user.apiKey) {
+    const updated = updateUser(user.id, { apiKey: generateApiKey() });
+    user.apiKey = updated?.apiKey;
+  }
+
+  const plan = user.plan || "free";
+  const usageData = getUsage(user.id);
   const planInfo = PLANS[plan] || PLANS.free;
 
   const usage: UsageSnapshot = {
@@ -24,10 +32,10 @@ export async function getCurrentUser(): Promise<PublicUser | null> {
 
   return {
     id: user.id,
-    email: user.emailAddresses[0]?.emailAddress || "",
-    name: user.firstName || user.username || "",
+    email: user.email,
+    name: user.name,
     plan,
-    apiKey,
+    apiKey: user.apiKey,
     usage,
   };
 }

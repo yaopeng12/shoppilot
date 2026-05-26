@@ -16,36 +16,54 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://shoppilot.help"),
   title: {
-    default: "ShopPilot — AI Copilot for Shopify Sellers",
+    default: "ShopPilot - AI TikTok Ad Creative and Video Storyboard Generator",
     template: "%s",
   },
   description:
-    "Automate product descriptions, TikTok ad creatives, SEO, and marketing workflows with AI agents. Built for Shopify sellers.",
+    "Generate vertical video storyboards, TikTok ad hooks, scripts, voiceovers, and subtitles from Shopify product links. Built for ecommerce sellers and creative teams.",
   keywords: [
     "Shopify AI",
-    "product description generator",
-    "TikTok ads",
-    "ecommerce automation",
-    "Shopify SEO",
-    "ad creative generator",
-    "AI marketing",
+    "TikTok ad generator",
+    "AI storyboard generator",
+    "vertical video generator",
+    "ecommerce ad creative",
+    "Shopify TikTok ads",
+    "product video script",
+    "UGC script generator",
   ],
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
   openGraph: {
     type: "website",
     locale: "en_US",
     url: "https://shoppilot.help",
     siteName: "ShopPilot",
-    title: "ShopPilot — AI Copilot for Shopify Sellers",
+    title: "ShopPilot - AI TikTok Ad Creative and Video Storyboard Generator",
     description:
-      "Automate product descriptions, TikTok ad creatives, SEO, and marketing workflows with AI agents.",
+      "Turn Shopify product links into vertical video storyboards, TikTok ad scripts, hooks, voiceovers, and subtitles.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ShopPilot — AI Copilot for Shopify Sellers",
+    title: "ShopPilot - AI TikTok Ad Creative and Video Storyboard Generator",
     description:
-      "Automate product descriptions, TikTok ad creatives, SEO, and marketing workflows with AI agents.",
+      "Generate vertical video storyboards and TikTok ad creatives from Shopify product links.",
   },
-  alternates: { canonical: "https://shoppilot.help" },
+  alternates: {
+    canonical: "https://shoppilot.help",
+    languages: {
+      en: "https://shoppilot.help",
+      zh: "https://shoppilot.help",
+    },
+  },
 };
 
 export default function RootLayout({

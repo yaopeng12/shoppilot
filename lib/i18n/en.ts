@@ -2,6 +2,7 @@ export default {
   nav: {
     home: "Home",
     product: "Product",
+    storyboard: "Storyboard",
     pricing: "Pricing",
     dashboard: "Dashboard",
     login: "Log In",

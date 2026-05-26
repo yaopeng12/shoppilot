@@ -1,13 +1,14 @@
 import { checkUsage, getCurrentUser, recordGeneration } from "@/lib/tiktok-adgen/auth";
 import { json } from "@/lib/tiktok-adgen/http";
 import { fetchProduct } from "@/lib/tiktok-adgen/shopify";
-import { generateAll } from "@/lib/tiktok-adgen/generator";
+import { generateStoryboard } from "@/lib/storyboard/generator";
+import type { StoryboardOptions } from "@/lib/storyboard/types";
 
 export const runtime = "nodejs";
 
 export async function POST(req: Request) {
   const user = await getCurrentUser();
-  if (!user) return json(401, { error: "auth_required", message: "Please sign in to generate scripts" });
+  if (!user) return json(401, { error: "auth_required", message: "Please sign in to generate storyboards" });
 
   const { allowed, snapshot } = checkUsage(user.id, user.plan);
   if (!allowed) {
@@ -18,7 +19,11 @@ export async function POST(req: Request) {
     });
   }
 
-  const { url: productUrl } = (await req.json().catch(() => ({}))) as { url?: string };
+  const {
+    url: productUrl,
+    vertical,
+    creativeAngle,
+  } = (await req.json().catch(() => ({}))) as { url?: string } & StoryboardOptions;
   if (!productUrl) return json(400, { error: "URL is required" });
 
   let product;
@@ -31,6 +36,6 @@ export async function POST(req: Request) {
 
   recordGeneration(user.id);
 
-  const generated = await generateAll(product);
-  return json(200, { ...generated, _usage: snapshot });
+  const storyboard = await generateStoryboard(product, { vertical, creativeAngle });
+  return json(200, { ...storyboard, _usage: snapshot });
 }

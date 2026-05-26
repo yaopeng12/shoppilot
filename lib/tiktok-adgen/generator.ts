@@ -1,12 +1,28 @@
 import OpenAI from "openai";
 import type { Product } from "./types";
 
-const client = new OpenAI({
-  baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
-  apiKey: process.env.DASHSCOPE_API_KEY || "",
-});
-
 const MODEL = "qwen-plus";
+
+type ParsedScript = {
+  scenes?: Array<{ time?: string; text?: string }>;
+};
+
+type ParsedGeneration = {
+  hooks?: string[];
+  scripts?: ParsedScript[];
+  voiceovers?: string[];
+  subtitles?: Array<Array<{ time?: string; text?: string }>>;
+};
+
+function getClient() {
+  const apiKey = process.env.DASHSCOPE_API_KEY;
+  if (!apiKey) return null;
+
+  return new OpenAI({
+    baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
+    apiKey,
+  });
+}
 
 function buildPrompt(product: Product) {
   const name = product.title || "this product";
@@ -78,7 +94,7 @@ Requirements:
 All content must be in English. Be creative, specific to this product, and use trending TikTok ad patterns.`;
 }
 
-function parseResponse(text: string) {
+function parseResponse(text: string): ParsedGeneration | null {
   // Try to extract JSON from the response
   let jsonStr = text.trim();
 
@@ -88,13 +104,13 @@ function parseResponse(text: string) {
 
   // Try parsing
   try {
-    return JSON.parse(jsonStr);
+    return JSON.parse(jsonStr) as ParsedGeneration;
   } catch {
     // Try to find JSON object in the text
     const objMatch = jsonStr.match(/\{[\s\S]*\}/);
     if (objMatch) {
       try {
-        return JSON.parse(objMatch[0]);
+        return JSON.parse(objMatch[0]) as ParsedGeneration;
       } catch {}
     }
     return null;
@@ -175,6 +191,17 @@ export async function generateAll(product: Product) {
   }
 
   try {
+    const client = getClient();
+    if (!client) {
+      return {
+        product,
+        hooks: fallbackHooks(product),
+        scripts: fallbackScripts(product),
+        voiceovers: fallbackVoiceovers(product),
+        subtitles: fallbackSubtitles(product),
+      };
+    }
+
     const completion = await client.chat.completions.create({
       model: MODEL,
       messages: [
@@ -192,7 +219,7 @@ export async function generateAll(product: Product) {
       return {
         product,
         hooks: parsed.hooks.slice(0, 5),
-        scripts: parsed.scripts.slice(0, 2).map((s: any, i: number) => ({
+        scripts: parsed.scripts.slice(0, 2).map((s, i) => ({
           id: i + 1,
           scenes: s.scenes || [],
         })),

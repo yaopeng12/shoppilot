@@ -1,13 +1,13 @@
 "use client";
 
-import { createContext, useContext, useState, useCallback, type ReactNode } from "react";
+import { createContext, useContext, useState, useCallback, useEffect, type ReactNode } from "react";
 import en from "./en";
 import zh from "./zh";
 
 export type Locale = "en" | "zh";
 export type Messages = typeof en;
 
-const messages: Record<Locale, any> = { en, zh };
+const messages: Record<Locale, Messages> = { en, zh };
 
 interface I18nContextValue {
   locale: Locale;
@@ -22,14 +22,16 @@ const I18nContext = createContext<I18nContextValue>({
 });
 
 export function I18nProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>(() => {
-    if (typeof window === "undefined") return "en";
+  const [locale, setLocaleState] = useState<Locale>("en");
+
+  useEffect(() => {
     const saved = localStorage.getItem("locale") as Locale | null;
-    if (saved && messages[saved]) return saved;
     const lang = navigator.language.toLowerCase();
-    if (lang.startsWith("zh")) return "zh";
-    return "en";
-  });
+    const nextLocale = saved && messages[saved] ? saved : lang.startsWith("zh") ? "zh" : "en";
+
+    document.documentElement.lang = nextLocale;
+    queueMicrotask(() => setLocaleState(nextLocale));
+  }, []);
 
   const setLocale = useCallback((l: Locale) => {
     setLocaleState(l);

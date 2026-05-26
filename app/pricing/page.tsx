@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import Link from "next/link";
-import { useUser } from "@clerk/nextjs";
+import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 import { PLANS, type PlanId } from "@/lib/tiktok-adgen/types";
 import { apiFetch } from "@/lib/tiktok-adgen/client";
 import { Toast } from "@/components/tiktok-adgen/toast";
@@ -11,7 +11,9 @@ import { Navbar } from "@/components/tiktok-adgen/navbar";
 import { useI18n } from "@/lib/i18n/context";
 
 export default function PricingPage() {
-  const { user } = useUser();
+  const router = useRouter();
+  const { data: session } = useSession();
+  const user = session?.user;
   const { t, locale } = useI18n();
   const { message: toast, showToast } = useToast();
   const [upgrading, setUpgrading] = useState<string | null>(null);
@@ -27,7 +29,7 @@ export default function PricingPage() {
 
   async function upgradePlan(plan: string) {
     if (!user) {
-      window.location.href = "/sign-in";
+      router.push("/sign-in");
       return;
     }
     setUpgrading(plan);
@@ -51,7 +53,7 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen">
-      <Navbar isSignedIn={!!user} />
+      <Navbar isSignedIn={!!user} user={user} />
 
       <main className="max-w-6xl mx-auto px-6 py-16">
         <div className="text-center mb-14 animate-fade-in-up">

@@ -1,6 +1,4 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { PLANS } from "@/lib/tiktok-adgen/types";
-
 // Mock OpenAI to prevent constructor from throwing
 vi.mock("openai", () => ({
   default: class MockOpenAI {
@@ -8,21 +6,48 @@ vi.mock("openai", () => ({
   },
 }));
 
-// Mock Clerk before importing routes
-vi.mock("@clerk/nextjs/server", () => ({
-  auth: vi.fn(() => ({ userId: null })),
-  currentUser: vi.fn(() => null),
-  clerkClient: vi.fn(),
+// Mock Auth.js before importing routes
+vi.mock("@/auth", () => ({
+  auth: vi.fn(() => null),
 }));
 
 vi.mock("@/lib/tiktok-adgen/db", () => ({
   getUsage: vi.fn(() => ({ used: 0 })),
   recordUsage: vi.fn(),
+  getOrCreateUser: vi.fn((id: string, email: string, name: string, image?: string) => ({
+    id,
+    email,
+    name,
+    image,
+    plan: "free",
+    apiKey: "tk_test",
+    createdAt: "2026-01-01T00:00:00.000Z",
+  })),
+  getUser: vi.fn(() => ({
+    id: "user123",
+    email: "test@test.com",
+    name: "Test",
+    plan: "free",
+    apiKey: "tk_test",
+    createdAt: "2026-01-01T00:00:00.000Z",
+  })),
+  updateUser: vi.fn((id: string, updates: Record<string, unknown>) => ({
+    id,
+    email: "test@test.com",
+    name: "Test",
+    plan: updates.plan || "free",
+    apiKey: updates.apiKey || "tk_test",
+    createdAt: "2026-01-01T00:00:00.000Z",
+  })),
 }));
 
 vi.mock("@/lib/tiktok-adgen/shopify", () => ({
   fetchProduct: vi.fn(),
 }));
+
+const mockSession = {
+  user: { id: "user123", email: "test@test.com", name: "Test" },
+};
 
 describe("API routes", () => {
   beforeEach(() => {
@@ -71,8 +96,8 @@ describe("API routes", () => {
 
   describe("POST /api/generate", () => {
     it("returns 401 when not authenticated", async () => {
-      const { auth } = await import("@clerk/nextjs/server");
-      vi.mocked(auth).mockResolvedValue({ userId: null } as any);
+      const { auth } = await import("@/auth");
+      vi.mocked(auth).mockResolvedValue(null as any);
 
       const { POST } = await import("@/app/api/generate/route");
       const req = new Request("http://localhost/api/generate", {
@@ -88,18 +113,8 @@ describe("API routes", () => {
     });
 
     it("returns 400 when URL is missing", async () => {
-      const { auth, currentUser, clerkClient } = await import("@clerk/nextjs/server");
-      vi.mocked(auth).mockResolvedValue({ userId: "user123" } as any);
-      vi.mocked(currentUser).mockResolvedValue({
-        id: "user123",
-        emailAddresses: [{ emailAddress: "test@test.com" }],
-        firstName: "Test",
-        publicMetadata: { plan: "free" },
-        privateMetadata: { apiKey: "tk_test" },
-      } as any);
-      vi.mocked(clerkClient).mockResolvedValue({
-        users: { updateUserMetadata: vi.fn() },
-      } as any);
+      const { auth } = await import("@/auth");
+      vi.mocked(auth).mockResolvedValue(mockSession as any);
 
       const { POST } = await import("@/app/api/generate/route");
       const req = new Request("http://localhost/api/generate", {
@@ -115,18 +130,8 @@ describe("API routes", () => {
     });
 
     it("returns 429 when daily limit reached", async () => {
-      const { auth, currentUser, clerkClient } = await import("@clerk/nextjs/server");
-      vi.mocked(auth).mockResolvedValue({ userId: "user123" } as any);
-      vi.mocked(currentUser).mockResolvedValue({
-        id: "user123",
-        emailAddresses: [{ emailAddress: "test@test.com" }],
-        firstName: "Test",
-        publicMetadata: { plan: "free" },
-        privateMetadata: { apiKey: "tk_test" },
-      } as any);
-      vi.mocked(clerkClient).mockResolvedValue({
-        users: { updateUserMetadata: vi.fn() },
-      } as any);
+      const { auth } = await import("@/auth");
+      vi.mocked(auth).mockResolvedValue(mockSession as any);
 
       const { getUsage } = await import("@/lib/tiktok-adgen/db");
       vi.mocked(getUsage).mockReturnValue({ used: 3 }); // limit reached
@@ -145,18 +150,8 @@ describe("API routes", () => {
     });
 
     it("generates content for authenticated user under limit", async () => {
-      const { auth, currentUser, clerkClient } = await import("@clerk/nextjs/server");
-      vi.mocked(auth).mockResolvedValue({ userId: "user123" } as any);
-      vi.mocked(currentUser).mockResolvedValue({
-        id: "user123",
-        emailAddresses: [{ emailAddress: "test@test.com" }],
-        firstName: "Test",
-        publicMetadata: { plan: "free" },
-        privateMetadata: { apiKey: "tk_test" },
-      } as any);
-      vi.mocked(clerkClient).mockResolvedValue({
-        users: { updateUserMetadata: vi.fn() },
-      } as any);
+      const { auth } = await import("@/auth");
+      vi.mocked(auth).mockResolvedValue(mockSession as any);
 
       const { getUsage } = await import("@/lib/tiktok-adgen/db");
       vi.mocked(getUsage).mockReturnValue({ used: 0 });
@@ -190,8 +185,8 @@ describe("API routes", () => {
 
   describe("POST /api/upgrade", () => {
     it("returns 401 when not authenticated", async () => {
-      const { auth } = await import("@clerk/nextjs/server");
-      vi.mocked(auth).mockResolvedValue({ userId: null } as any);
+      const { auth } = await import("@/auth");
+      vi.mocked(auth).mockResolvedValue(null as any);
 
       const { POST } = await import("@/app/api/upgrade/route");
       const req = new Request("http://localhost/api/upgrade", {
@@ -206,8 +201,8 @@ describe("API routes", () => {
     });
 
     it("returns 400 for invalid plan", async () => {
-      const { auth } = await import("@clerk/nextjs/server");
-      vi.mocked(auth).mockResolvedValue({ userId: "user123" } as any);
+      const { auth } = await import("@/auth");
+      vi.mocked(auth).mockResolvedValue(mockSession as any);
 
       const { POST } = await import("@/app/api/upgrade/route");
       const req = new Request("http://localhost/api/upgrade", {
@@ -223,8 +218,8 @@ describe("API routes", () => {
     });
 
     it("returns 400 when upgrading to free", async () => {
-      const { auth } = await import("@clerk/nextjs/server");
-      vi.mocked(auth).mockResolvedValue({ userId: "user123" } as any);
+      const { auth } = await import("@/auth");
+      vi.mocked(auth).mockResolvedValue(mockSession as any);
 
       const { POST } = await import("@/app/api/upgrade/route");
       const req = new Request("http://localhost/api/upgrade", {
@@ -238,12 +233,9 @@ describe("API routes", () => {
     });
 
     it("upgrades to pro plan successfully", async () => {
-      const { auth, clerkClient } = await import("@clerk/nextjs/server");
-      const mockUpdate = vi.fn();
-      vi.mocked(auth).mockResolvedValue({ userId: "user123" } as any);
-      vi.mocked(clerkClient).mockResolvedValue({
-        users: { updateUserMetadata: mockUpdate },
-      } as any);
+      const { auth } = await import("@/auth");
+      const { updateUser } = await import("@/lib/tiktok-adgen/db");
+      vi.mocked(auth).mockResolvedValue(mockSession as any);
 
       const { POST } = await import("@/app/api/upgrade/route");
       const req = new Request("http://localhost/api/upgrade", {
@@ -257,16 +249,14 @@ describe("API routes", () => {
       expect(res.status).toBe(200);
       expect(data.ok).toBe(true);
       expect(data.plan).toBe("pro");
-      expect(mockUpdate).toHaveBeenCalledWith("user123", {
-        publicMetadata: { plan: "pro" },
-      });
+      expect(updateUser).toHaveBeenCalledWith("user123", { plan: "pro" });
     });
   });
 
   describe("GET /api/team/[action]", () => {
     it("returns 401 when not authenticated", async () => {
-      const { auth } = await import("@clerk/nextjs/server");
-      vi.mocked(auth).mockResolvedValue({ userId: null } as any);
+      const { auth } = await import("@/auth");
+      vi.mocked(auth).mockResolvedValue(null as any);
 
       const { GET } = await import("@/app/api/team/[action]/route");
       const res = await GET();
@@ -276,8 +266,8 @@ describe("API routes", () => {
     });
 
     it("returns team state for authenticated user", async () => {
-      const { auth } = await import("@clerk/nextjs/server");
-      vi.mocked(auth).mockResolvedValue({ userId: "user123" } as any);
+      const { auth } = await import("@/auth");
+      vi.mocked(auth).mockResolvedValue(mockSession as any);
 
       const { GET } = await import("@/app/api/team/[action]/route");
       const res = await GET();
@@ -288,8 +278,8 @@ describe("API routes", () => {
     });
 
     it("POST returns 501 (not implemented)", async () => {
-      const { auth } = await import("@clerk/nextjs/server");
-      vi.mocked(auth).mockResolvedValue({ userId: "user123" } as any);
+      const { auth } = await import("@/auth");
+      vi.mocked(auth).mockResolvedValue(mockSession as any);
 
       const { POST } = await import("@/app/api/team/[action]/route");
       const res = await POST();
