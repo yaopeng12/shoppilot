@@ -35,6 +35,15 @@
       "plan": "free",
       "createdAt": "2026-05-26T09:04:56.843Z",
       "apiKey": "tk_ce3343af500d9f46fd607d2ed6035e1e27fc0dc42f8acfc0"
+    },
+    "6257dc1f-5630-4aac-bc6d-7333cd9c080e": {
+      "id": "6257dc1f-5630-4aac-bc6d-7333cd9c080e",
+      "email": "yaopeng1227@outlook.com",
+      "name": "Mason.yao",
+      "image": "https://avatars.githubusercontent.com/u/26002879?v=4",
+      "plan": "free",
+      "createdAt": "2026-05-27T17:26:39.791Z",
+      "apiKey": "tk_ad4a6d93029415dd861469b132d57333da65870528e538dd"
     }
   }
 }
