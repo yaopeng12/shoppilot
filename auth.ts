@@ -1,6 +1,7 @@
 import NextAuth, { customFetch } from "next-auth";
 import type { Provider } from "next-auth/providers";
 import GitHub from "next-auth/providers/github";
+import { isPublicRoute } from "@/lib/auth/routes";
 
 const proxyFetch: typeof fetch = async (input, init) => {
   const proxyUrl = process.env.AUTH_PROXY_URL || process.env.HTTPS_PROXY || process.env.HTTP_PROXY;
@@ -123,32 +124,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     authorized({ auth: session, request: { nextUrl } }) {
       const isLoggedIn = !!session?.user;
-      const isPublicRoute = [
-        "/",
-        "/sign-in",
-        "/sign-up",
-        "/auth/start",
-        "/pricing",
-        "/storyboard",
-        "/tiktok-adgen",
-        "/robots.txt",
-        "/sitemap.xml",
-        "/opengraph-image",
-        "/icon.svg",
-        "/favicon.ico",
-        "/api/auth",
-        "/api/plans",
-        "/api/pet-ad-pack",
-        "/api/generate",
-        "/api/variants",
-        "/api/generations",
-        "/api/inspiration",
-        "/api/user",
-        "/api/upgrade",
-        "/api/team",
-      ].some((path) => nextUrl.pathname === path || nextUrl.pathname.startsWith(path + "/"));
 
-      if (isPublicRoute) return true;
+      if (isPublicRoute(nextUrl.pathname)) return true;
       if (isLoggedIn) return true;
 
       // Redirect unauthenticated users to login
