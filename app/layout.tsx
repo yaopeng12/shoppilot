@@ -16,20 +16,21 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://shoppilot.help"),
   title: {
-    default: "ShopPilot - AI TikTok Ad Creative and Video Storyboard Generator",
+    default: "ShopPilot - Pet Cleaning Ad Pack Generator",
     template: "%s",
   },
   description:
-    "Generate vertical video storyboards, TikTok ad hooks, scripts, voiceovers, and subtitles from Shopify product links. Built for ecommerce sellers and creative teams.",
+    "Generate pet cleaning ad packs from one product link: source matching, cat odor and litter templates, UGC scripts, storyboard, captions, AI video prompts, and claim-safe TikTok creative.",
   keywords: [
-    "Shopify AI",
-    "TikTok ad generator",
-    "AI storyboard generator",
-    "vertical video generator",
-    "ecommerce ad creative",
-    "Shopify TikTok ads",
-    "product video script",
-    "UGC script generator",
+    "pet cleaning ad generator",
+    "cat litter odor ads",
+    "pet odor remover marketing",
+    "cat urine cleaner ads",
+    "pet hair remover TikTok ads",
+    "1688 pet product sourcing",
+    "UGC script generator for pet products",
+    "TikTok pet ads",
+    "pet ecommerce creative",
   ],
   robots: {
     index: true,
@@ -47,15 +48,15 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://shoppilot.help",
     siteName: "ShopPilot",
-    title: "ShopPilot - AI TikTok Ad Creative and Video Storyboard Generator",
+    title: "ShopPilot - Pet Cleaning Ad Pack Generator",
     description:
-      "Turn Shopify product links into vertical video storyboards, TikTok ad scripts, hooks, voiceovers, and subtitles.",
+      "Turn pet cleaning product links into source matches, niche templates, UGC scripts, storyboards, captions, AI video prompts, and claim-safe TikTok ad packs.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ShopPilot - AI TikTok Ad Creative and Video Storyboard Generator",
+    title: "ShopPilot - Pet Cleaning Ad Pack Generator",
     description:
-      "Generate vertical video storyboards and TikTok ad creatives from Shopify product links.",
+      "Generate source matching, pet cleaning templates, UGC scripts, storyboards, captions, and claim-safe TikTok ad packs.",
   },
   alternates: {
     canonical: "https://shoppilot.help",
@@ -74,6 +75,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">

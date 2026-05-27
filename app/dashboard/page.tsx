@@ -1,13 +1,13 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { PLANS, type PlanId } from "@/lib/tiktok-adgen/types";
-import { apiFetch } from "@/lib/tiktok-adgen/client";
+import { Navbar } from "@/components/tiktok-adgen/navbar";
 import { Toast } from "@/components/tiktok-adgen/toast";
 import { useToast } from "@/components/tiktok-adgen/use-toast";
-import { Navbar } from "@/components/tiktok-adgen/navbar";
+import { apiFetch } from "@/lib/tiktok-adgen/client";
+import { PLANS, type PlanId } from "@/lib/tiktok-adgen/types";
 import { useI18n } from "@/lib/i18n/context";
 
 type MeData = {
@@ -21,151 +21,183 @@ type MeData = {
   createdAt: number;
 };
 
-const dashboardI18n = {
+type GenerationRecord = {
+  id: string;
+  product_title: string | null;
+  product_price: string | null;
+  product_image: string | null;
+  style: string | null;
+  category: string | null;
+  hooks: string[];
+  created_at: string;
+};
+
+const copy = {
   en: {
-    welcome: "Welcome back",
-    manageAccount: "Manage your account, usage, and subscription",
-    overview: "Overview",
-    currentPlan: "Current Plan",
-    todayUsed: "Today's Usage",
-    todayRemaining: "Remaining",
+    loading: "Loading...",
+    welcome: "Pet cleaning command center",
+    subtitle: "Track usage, manage your plan, and revisit every generated ad pack.",
+    plan: "Plan",
+    todayUsed: "Used today",
+    remaining: "Remaining",
     unlimited: "Unlimited",
-    usageTitle: "Daily Usage",
-    usageDesc: "Resets every day at midnight",
-    progressLabel: "of daily limit used",
-    quickActions: "Quick Actions",
-    generateAd: "Generate Ad Creative",
-    generateAdDesc: "Paste a Shopify link and get TikTok-ready content",
-    viewPricing: "View Plans",
-    viewPricingDesc: "Upgrade for more generations and features",
-    apiTitle: "API Key",
-    apiDesc: "Use this key to integrate ShopPilot into your own tools",
-    copy: "Copy",
+    adPacks: "Ad packs",
+    quickGenerate: "Generate new ad pack",
+    quickGenerateDesc: "Start from a product or competitor link.",
+    templateLibrary: "Template research",
+    templateLibraryDesc: "Review pet-cleaning video structures.",
+    pricing: "Upgrade plan",
+    pricingDesc: "Unlock more ad packs and team workflows.",
+    apiTitle: "API key",
+    apiDesc: "Use this key for integrations when API access is enabled.",
     show: "Show",
     hide: "Hide",
+    copy: "Copy",
+    copied: "API key copied",
+    copyFailed: "Copy failed",
     notGenerated: "Not generated yet",
-    apiHint: "Auto-generated on first content generation",
-    planTitle: "Subscription Plan",
-    planDesc: "Choose a plan that fits your store",
-    popular: "POPULAR",
-    current: "Current Plan",
+    apiHint: "The key is created automatically for your account.",
+    historyTitle: "Ad Pack History",
+    historyDesc: "Recently generated pet cleaning ad packs.",
+    noHistory: "No ad packs yet",
+    noHistoryHint: "Generate your first pet cleaning ad pack and it will appear here.",
+    openGenerator: "Open generator",
+    template: "Template",
+    scenario: "Scenario",
+    firstHook: "First hook",
+    plansTitle: "Plan options",
+    current: "Current",
+    popular: "Popular",
     upgradeTo: "Upgrade to",
     processing: "Processing...",
-    freeForever: "Free forever",
-    perMonth: "/month",
     upgraded: "Upgraded",
     upgradeFailed: "Upgrade failed",
     networkError: "Network error",
-    copied: "API Key copied",
-    copyFailed: "Copy failed",
-    loading: "Loading...",
-    goToGenerate: "Start Generating",
+    perMonth: "/month",
+    freeForever: "Free forever",
+    features: {
+      free: ["3 ad packs/day", "Source match scoring", "Pet cleaning templates", "Hooks + UGC scripts"],
+      pro: [
+        "Unlimited ad packs",
+        "Source match scoring",
+        "Pet cleaning templates",
+        "Hooks + UGC scripts",
+        "Claim safety guidance",
+        "JSON and Markdown export",
+      ],
+      team: ["Everything in Pro", "Up to 10 members", "Shared template workflow", "Team creative library", "Admin dashboard", "API access"],
+    },
   },
   zh: {
-    welcome: "欢迎回来",
-    manageAccount: "管理你的账户、用量和订阅",
-    overview: "概览",
-    currentPlan: "当前方案",
+    loading: "加载中...",
+    welcome: "宠物清洁广告工作台",
+    subtitle: "查看用量、管理方案，并回看每一次生成的广告包。",
+    plan: "当前方案",
     todayUsed: "今日已用",
-    todayRemaining: "今日剩余",
+    remaining: "今日剩余",
     unlimited: "无限",
-    usageTitle: "今日用量",
-    usageDesc: "每天午夜自动重置",
-    progressLabel: "的每日额度已使用",
-    quickActions: "快捷操作",
-    generateAd: "生成广告素材",
-    generateAdDesc: "粘贴 Shopify 链接，获取 TikTok 广告内容",
-    viewPricing: "查看方案",
-    viewPricingDesc: "升级获得更多生成次数和功能",
+    adPacks: "广告包",
+    quickGenerate: "生成新广告包",
+    quickGenerateDesc: "从商品或竞品链接开始。",
+    templateLibrary: "模板研究",
+    templateLibraryDesc: "查看宠物清洁视频结构。",
+    pricing: "升级方案",
+    pricingDesc: "解锁更多广告包和团队工作流。",
     apiTitle: "API 密钥",
-    apiDesc: "使用此密钥将 ShopPilot 集成到你的工具中",
-    copy: "复制",
+    apiDesc: "开启 API 能力后可用于集成。",
     show: "显示",
     hide: "隐藏",
+    copy: "复制",
+    copied: "API 密钥已复制",
+    copyFailed: "复制失败",
     notGenerated: "尚未生成",
-    apiHint: "首次生成内容时自动创建",
-    planTitle: "订阅方案",
-    planDesc: "选择适合你店铺的方案",
-    popular: "最受欢迎",
+    apiHint: "密钥会随账户自动创建。",
+    historyTitle: "广告包历史",
+    historyDesc: "最近生成的宠物清洁广告包。",
+    noHistory: "暂无广告包",
+    noHistoryHint: "生成第一个宠物清洁广告包后会显示在这里。",
+    openGenerator: "打开生成器",
+    template: "模板",
+    scenario: "场景",
+    firstHook: "首个 Hook",
+    plansTitle: "方案选择",
     current: "当前方案",
+    popular: "热门",
     upgradeTo: "升级到",
     processing: "处理中...",
-    freeForever: "永久免费",
-    perMonth: "/月",
     upgraded: "已升级",
     upgradeFailed: "升级失败",
     networkError: "网络错误",
-    copied: "已复制 API Key",
-    copyFailed: "复制失败",
-    loading: "加载中...",
-    goToGenerate: "去生成",
+    perMonth: "/月",
+    freeForever: "永久免费",
+    features: {
+      free: ["每天 3 次广告包生成", "货源匹配评分", "宠物清洁模板", "Hook + UGC 脚本"],
+      pro: ["不限次数生成广告包", "货源匹配评分", "宠物清洁模板", "Hook + UGC 脚本", "合规表达建议", "JSON 和 Markdown 导出"],
+      team: ["包含 Pro 全部功能", "最多 10 名成员", "共享模板工作流", "团队创意库", "管理后台", "API 接入"],
+    },
   },
 } as const;
 
-function RingProgress({ percent, size = 100, stroke = 8 }: { percent: number; size?: number; stroke?: number }) {
-  const radius = (size - stroke) / 2;
-  const circumference = 2 * Math.PI * radius;
-  const offset = circumference - (Math.min(percent, 100) / 100) * circumference;
+const scenarioLabels: Record<string, { en: string; zh: string }> = {
+  cat_litter_odor: { en: "Cat litter odor", zh: "猫砂盆异味" },
+  cat_urine_cleanup: { en: "Cat urine cleanup", zh: "猫尿清洁" },
+  litter_tracking: { en: "Litter tracking", zh: "猫砂带出" },
+  pet_hair_cleanup: { en: "Pet hair cleanup", zh: "宠物毛发清理" },
+  fabric_odor: { en: "Fabric odor", zh: "织物异味" },
+  dog_pad_floor: { en: "Dog pad floor", zh: "狗狗尿垫地板" },
+};
 
-  return (
-    <svg width={size} height={size} className="transform -rotate-90">
-      <circle
-        cx={size / 2}
-        cy={size / 2}
-        r={radius}
-        fill="none"
-        stroke="rgba(255,255,255,0.06)"
-        strokeWidth={stroke}
-      />
-      <circle
-        cx={size / 2}
-        cy={size / 2}
-        r={radius}
-        fill="none"
-        stroke="url(#ring-gradient)"
-        strokeWidth={stroke}
-        strokeLinecap="round"
-        strokeDasharray={circumference}
-        strokeDashoffset={offset}
-        className="transition-all duration-700 ease-out"
-      />
-      <defs>
-        <linearGradient id="ring-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-          <stop offset="0%" stopColor="#8b5cf6" />
-          <stop offset="100%" stopColor="#3b82f6" />
-        </linearGradient>
-      </defs>
-    </svg>
-  );
-}
+type DashboardLabels = (typeof copy)["en"] | (typeof copy)["zh"];
 
 export default function DashboardPage() {
   const { data: session, status } = useSession();
   const user = session?.user;
   const { locale } = useI18n();
-  const t = dashboardI18n[locale];
+  const t = copy[locale];
   const { message: toast, showToast } = useToast();
   const [me, setMe] = useState<MeData | null>(null);
+  const [generations, setGenerations] = useState<GenerationRecord[]>([]);
   const [showKey, setShowKey] = useState(false);
   const [upgrading, setUpgrading] = useState<string | null>(null);
-  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    if (status === "authenticated" && user) {
-      apiFetch<MeData>("/api/user/me").then((r) => {
-        if (r.ok) setMe(r.data);
-      });
-    }
+    if (status !== "authenticated" || !user) return;
+
+    apiFetch<MeData>("/api/user/me").then((response) => {
+      if (response.ok) setMe(response.data);
+    });
+
+    apiFetch<{ generations: GenerationRecord[] }>("/api/generations").then((response) => {
+      if (response.ok) setGenerations(response.data?.generations || []);
+    });
   }, [status, user]);
 
-  async function upgradePlan(plan: string) {
-    setUpgrading(plan);
+  const usage = me?.usage;
+  const plan = me?.plan || "free";
+  const planInfo = PLANS[plan];
+  const usagePercent = useMemo(() => {
+    if (!usage || usage.limit <= 0) return 0;
+    return Math.min(100, Math.round((usage.used / usage.limit) * 100));
+  }, [usage]);
+
+  async function copyApiKey() {
+    if (!me?.apiKey) return;
     try {
-      const r = await apiFetch("/api/upgrade", {
+      await navigator.clipboard.writeText(me.apiKey);
+      showToast(t.copied);
+    } catch {
+      showToast(t.copyFailed);
+    }
+  }
+
+  async function upgradePlan(nextPlan: string) {
+    setUpgrading(nextPlan);
+    try {
+      const response = await apiFetch("/api/upgrade", {
         method: "POST",
-        body: JSON.stringify({ plan }),
+        body: JSON.stringify({ plan: nextPlan }),
       });
-      if (r.ok) {
+      if (response.ok) {
         showToast(t.upgraded);
         const refresh = await apiFetch<MeData>("/api/user/me");
         if (refresh.ok) setMe(refresh.data);
@@ -179,276 +211,179 @@ export default function DashboardPage() {
     }
   }
 
-  async function copyApiKey() {
-    if (!me?.apiKey) return;
-    try {
-      await navigator.clipboard.writeText(me.apiKey);
-      setCopied(true);
-      showToast(t.copied);
-      setTimeout(() => setCopied(false), 2000);
-    } catch {
-      showToast(t.copyFailed);
-    }
-  }
-
   if (status === "loading" || !user) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="text-white/30 text-sm">{t.loading}</div>
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="text-sm text-white/35">{t.loading}</div>
       </div>
     );
   }
-
-  const plan = me?.plan || "free";
-  const planInfo = PLANS[plan];
-  const usage = me?.usage;
-  const usagePct = usage && usage.limit > 0 ? (usage.used / usage.limit) * 100 : 0;
-
-  const planColors: Record<string, string> = {
-    free: "from-slate-500/20 to-slate-500/10 text-slate-300 border-slate-500/20",
-    pro: "from-violet-500/20 to-blue-500/10 text-violet-300 border-violet-500/20",
-    team: "from-amber-500/20 to-orange-500/10 text-amber-300 border-amber-500/20",
-  };
 
   return (
     <div className="min-h-screen">
       <Navbar isSignedIn={!!user} user={user} />
 
-      <main className="max-w-6xl mx-auto px-6 py-8 space-y-6 animate-fade-in-up">
-        {/* Welcome hero */}
-        <div className="rounded-2xl border border-white/[0.08] bg-gradient-to-br from-violet-500/[0.06] via-white/[0.02] to-blue-500/[0.04] p-6 lg:p-8 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-64 h-64 bg-violet-600/5 blur-[80px] rounded-full" />
-          <div className="relative flex flex-col lg:flex-row items-start lg:items-center justify-between gap-6">
+      <main className="mx-auto max-w-6xl space-y-7 px-6 py-8">
+        <section className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-6">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-500/30 to-blue-500/30 flex items-center justify-center text-xl font-bold text-white/80 shrink-0 border border-white/[0.08]">
+              <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-emerald-400/15 bg-emerald-400/[0.08] text-xl font-bold text-emerald-100">
                 {(user.name || user.email || "?")[0].toUpperCase()}
               </div>
               <div>
-                <h1 className="text-xl font-bold">{t.welcome}, {user.name || "User"}</h1>
-                <p className="text-sm text-white/40 mt-0.5">{user.email}</p>
+                <h1 className="text-2xl font-bold tracking-tight">{t.welcome}</h1>
+                <p className="mt-1 text-sm text-white/45">{t.subtitle}</p>
+                <p className="mt-1 text-xs text-white/30">{user.email}</p>
               </div>
             </div>
-            <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r border text-sm font-medium ${planColors[plan] || planColors.free}`}>
-              <span className="w-2 h-2 rounded-full bg-current opacity-60" />
-              {planInfo?.name || "Free"} {t.currentPlan}
+            <Link
+              href="/storyboard"
+              className="inline-flex h-11 items-center justify-center rounded-xl bg-white px-5 text-sm font-semibold text-black transition hover:bg-white/90"
+            >
+              {t.openGenerator}
+            </Link>
+          </div>
+        </section>
+
+        <section className="grid gap-4 md:grid-cols-3">
+          <MetricCard label={t.plan} value={planInfo?.name || "Free"} />
+          <MetricCard label={t.todayUsed} value={`${usage?.used || 0} ${t.adPacks}`} />
+          <MetricCard label={t.remaining} value={usage?.remaining === -1 ? t.unlimited : String(usage?.remaining || 0)} />
+        </section>
+
+        <section className="grid gap-6 lg:grid-cols-[0.9fr_1.1fr]">
+          <div className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-5">
+            <div className="mb-4 flex items-center justify-between">
+              <div>
+                <h2 className="text-sm font-semibold">{t.todayUsed}</h2>
+                <p className="mt-1 text-xs text-white/35">
+                  {usage?.limit === -1 ? t.unlimited : `${usagePercent}%`}
+                </p>
+              </div>
+              <div className="text-2xl font-bold text-emerald-200">{usage?.used || 0}</div>
+            </div>
+            <div className="h-2 overflow-hidden rounded-full bg-white/[0.08]">
+              <div className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-blue-500" style={{ width: usage?.limit === -1 ? "100%" : `${usagePercent}%` }} />
+            </div>
+
+            <div className="mt-6 grid gap-3">
+              <QuickAction href="/storyboard" title={t.quickGenerate} desc={t.quickGenerateDesc} />
+              <QuickAction href="/inspiration" title={t.templateLibrary} desc={t.templateLibraryDesc} />
+              <QuickAction href="/pricing" title={t.pricing} desc={t.pricingDesc} />
             </div>
           </div>
-        </div>
 
-        {/* Stats + Usage ring */}
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Usage ring */}
-          <div className="lg:col-span-1 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6 flex flex-col items-center justify-center">
-            <div className="relative mb-4">
-              <RingProgress percent={usagePct} size={120} stroke={10} />
-              <div className="absolute inset-0 flex flex-col items-center justify-center">
-                <span className="text-2xl font-bold">{usage ? usage.used : 0}</span>
-                <span className="text-[10px] text-white/35 mt-0.5">
-                  / {usage ? (usage.limit === -1 ? "∞" : usage.limit) : "—"}
-                </span>
+          <div className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-5">
+            <div className="mb-4">
+              <h2 className="text-sm font-semibold">{t.apiTitle}</h2>
+              <p className="mt-1 text-xs text-white/35">{t.apiDesc}</p>
+            </div>
+            <div className="flex flex-col gap-3 sm:flex-row">
+              <code className="min-w-0 flex-1 truncate rounded-xl border border-white/[0.06] bg-white/[0.035] px-4 py-3 font-mono text-sm text-white/55">
+                {showKey ? me?.apiKey || t.notGenerated : "••••••••••••••••••••••••••••••••"}
+              </code>
+              <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={() => setShowKey((value) => !value)}
+                  className="h-11 rounded-xl border border-white/[0.1] px-4 text-xs text-white/55 transition hover:bg-white/[0.06] hover:text-white"
+                >
+                  {showKey ? t.hide : t.show}
+                </button>
+                <button
+                  type="button"
+                  onClick={copyApiKey}
+                  disabled={!me?.apiKey}
+                  className="h-11 rounded-xl bg-white px-4 text-xs font-semibold text-black transition hover:bg-white/90 disabled:cursor-not-allowed disabled:opacity-40"
+                >
+                  {t.copy}
+                </button>
               </div>
             </div>
-            <div className="text-sm font-medium text-white/70">{t.usageTitle}</div>
-            <div className="text-[11px] text-white/30 mt-1">{t.usageDesc}</div>
-            {usage && usage.limit > 0 && (
-              <div className="text-[11px] text-white/40 mt-2">
-                {Math.round(usagePct)}% {t.progressLabel}
-              </div>
-            )}
+            <p className="mt-2 text-xs text-white/25">{t.apiHint}</p>
+          </div>
+        </section>
+
+        <section>
+          <div className="mb-4 flex items-end justify-between gap-4">
+            <div>
+              <h2 className="text-lg font-semibold">{t.historyTitle}</h2>
+              <p className="mt-1 text-sm text-white/38">{t.historyDesc}</p>
+            </div>
+            <Link href="/storyboard" className="hidden text-xs text-emerald-200/75 transition hover:text-emerald-100 sm:inline">
+              {t.openGenerator}
+            </Link>
           </div>
 
-          {/* Overview stats */}
-          <div className="lg:col-span-2 grid sm:grid-cols-3 gap-4">
-            {[
-              {
-                label: t.currentPlan,
-                value: planInfo?.name || "Free",
-                icon: (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-                  </svg>
-                ),
-                gradient: "from-violet-500/10 to-violet-500/5",
-              },
-              {
-                label: t.todayUsed,
-                value: usage ? String(usage.used) : "0",
-                icon: (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-                  </svg>
-                ),
-                gradient: "from-blue-500/10 to-blue-500/5",
-              },
-              {
-                label: t.todayRemaining,
-                value: usage ? (usage.remaining === -1 ? t.unlimited : String(usage.remaining)) : "—",
-                icon: (
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10" />
-                    <polyline points="12 6 12 12 16 14" />
-                  </svg>
-                ),
-                gradient: "from-emerald-500/10 to-emerald-500/5",
-              },
-            ].map((s) => (
-              <div
-                key={s.label}
-                className={`rounded-2xl border border-white/[0.08] bg-gradient-to-br ${s.gradient} p-5 flex flex-col justify-between`}
+          {generations.length === 0 ? (
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-9 text-center">
+              <div className="text-sm text-white/45">{t.noHistory}</div>
+              <div className="mt-1 text-xs text-white/25">{t.noHistoryHint}</div>
+              <Link
+                href="/storyboard"
+                className="mt-5 inline-flex h-10 items-center justify-center rounded-xl bg-white px-4 text-xs font-semibold text-black transition hover:bg-white/90"
               >
-                <div className="w-8 h-8 rounded-lg bg-white/[0.06] flex items-center justify-center text-white/40 mb-3">
-                  {s.icon}
-                </div>
-                <div>
-                  <div className="text-2xl font-bold tracking-tight">{s.value}</div>
-                  <div className="text-xs text-white/35 mt-1">{s.label}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
+                {t.openGenerator}
+              </Link>
+            </div>
+          ) : (
+            <div className="grid gap-3">
+              {generations.slice(0, 8).map((generation) => (
+                <HistoryCard key={generation.id} generation={generation} locale={locale} labels={t} />
+              ))}
+            </div>
+          )}
+        </section>
 
-        {/* Quick actions */}
-        <div className="grid sm:grid-cols-2 gap-4">
-          <Link
-            href="/tiktok-adgen"
-            className="group rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 hover:bg-white/[0.04] hover:border-white/[0.14] transition-all duration-300 flex items-center gap-4"
-          >
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-violet-500/20 to-blue-500/20 flex items-center justify-center shrink-0 group-hover:from-violet-500/30 group-hover:to-blue-500/30 transition-all">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-violet-400">
-                <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-              </svg>
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="text-sm font-semibold group-hover:text-white transition-colors">{t.generateAd}</div>
-              <div className="text-xs text-white/35 mt-0.5">{t.generateAdDesc}</div>
-            </div>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/20 group-hover:text-white/50 transition-colors shrink-0">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </Link>
+        <section>
+          <h2 className="mb-4 text-lg font-semibold">{t.plansTitle}</h2>
+          <div className="grid gap-4 md:grid-cols-3">
+            {Object.entries(PLANS).map(([id, planOption]) => {
+              const planId = id as PlanId;
+              const isCurrent = planId === plan;
+              const isPopular = planId === "pro";
 
-          <Link
-            href="/pricing"
-            className="group rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 hover:bg-white/[0.04] hover:border-white/[0.14] transition-all duration-300 flex items-center gap-4"
-          >
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-500/20 to-orange-500/20 flex items-center justify-center shrink-0 group-hover:from-amber-500/30 group-hover:to-orange-500/30 transition-all">
-              <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-amber-400">
-                <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" />
-              </svg>
-            </div>
-            <div className="min-w-0 flex-1">
-              <div className="text-sm font-semibold group-hover:text-white transition-colors">{t.viewPricing}</div>
-              <div className="text-xs text-white/35 mt-0.5">{t.viewPricingDesc}</div>
-            </div>
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white/20 group-hover:text-white/50 transition-colors shrink-0">
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </Link>
-        </div>
-
-        {/* API Key */}
-        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-6">
-          <div className="flex items-center gap-3 mb-1">
-            <div className="w-8 h-8 rounded-lg bg-white/[0.06] flex items-center justify-center">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" className="text-white/40">
-                <path d="M21 2l-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.78 7.78 5.5 5.5 0 0 1 7.78-7.78zm0 0L15.5 7.5m0 0l3 3L22 7l-3-3m-3.5 3.5L19 4" />
-              </svg>
-            </div>
-            <div>
-              <div className="text-sm font-medium">{t.apiTitle}</div>
-              <div className="text-[11px] text-white/30">{t.apiDesc}</div>
-            </div>
-          </div>
-
-          <div className="mt-4 flex items-center gap-3">
-            <code className="flex-1 text-sm text-white/50 bg-white/[0.03] border border-white/[0.06] rounded-xl px-4 py-3 font-mono truncate">
-              {showKey ? me?.apiKey || t.notGenerated : "••••••••••••••••••••••••••••••••"}
-            </code>
-            <button
-              type="button"
-              onClick={() => setShowKey(!showKey)}
-              className="shrink-0 h-10 px-4 rounded-xl border border-white/[0.1] text-white/50 hover:text-white hover:bg-white/[0.05] hover:border-white/20 transition-all duration-200 text-xs"
-            >
-              {showKey ? t.hide : t.show}
-            </button>
-            <button
-              type="button"
-              onClick={copyApiKey}
-              disabled={!me?.apiKey}
-              className="shrink-0 h-10 px-4 rounded-xl bg-white/[0.06] border border-white/[0.08] text-white/50 hover:text-white hover:bg-white/[0.1] transition-all duration-200 text-xs disabled:opacity-30 disabled:cursor-not-allowed"
-            >
-              {copied ? "✓" : t.copy}
-            </button>
-          </div>
-          <p className="text-[11px] text-white/20 mt-2">{t.apiHint}</p>
-        </div>
-
-        {/* Plan upgrade */}
-        <div>
-          <div className="flex items-center justify-between mb-4">
-            <div>
-              <div className="text-sm font-medium">{t.planTitle}</div>
-              <div className="text-xs text-white/30 mt-0.5">{t.planDesc}</div>
-            </div>
-          </div>
-          <div className="grid sm:grid-cols-3 gap-4">
-            {Object.entries(PLANS).map(([pid, p]) => {
-              const isCurrent = plan === pid;
-              const isPopular = pid === "pro";
               return (
                 <div
-                  key={pid}
-                  className={`rounded-2xl border p-5 transition-all duration-300 relative ${
-                    isCurrent
-                      ? "border-violet-500/30 bg-gradient-to-b from-violet-500/[0.06] to-transparent"
-                      : "border-white/[0.08] bg-white/[0.02] hover:bg-white/[0.04] hover:border-white/[0.14]"
+                  key={planId}
+                  className={`relative rounded-2xl border p-5 ${
+                    isCurrent ? "border-emerald-400/35 bg-emerald-400/[0.055]" : "border-white/[0.08] bg-white/[0.025]"
                   }`}
                 >
                   {isPopular && (
-                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-gradient-to-r from-violet-600 to-blue-600 text-[10px] font-semibold tracking-wide shadow-lg shadow-violet-500/20">
+                    <div className="absolute -top-2.5 left-1/2 -translate-x-1/2 rounded-full bg-gradient-to-r from-emerald-500 to-blue-600 px-3 py-0.5 text-[10px] font-semibold">
                       {t.popular}
                     </div>
                   )}
-                  <div className="text-sm font-semibold">{p.name}</div>
-                  <div className="flex items-baseline gap-1 mt-2">
-                    <span className="text-3xl font-bold tracking-tight">${p.price}</span>
-                    {pid !== "free" && <span className="text-xs text-white/30">{t.perMonth}</span>}
+                  <div className="text-sm font-semibold">{planOption.name}</div>
+                  <div className="mt-2 flex items-baseline gap-1">
+                    <span className="text-3xl font-bold">${planOption.price}</span>
+                    {planId !== "free" && <span className="text-xs text-white/35">{t.perMonth}</span>}
                   </div>
-                  <div className="text-[11px] text-white/25 mt-1">
-                    {pid === "free" ? t.freeForever : t.perMonth}
-                  </div>
+                  <div className="mt-1 text-xs text-white/30">{planId === "free" ? t.freeForever : t.perMonth}</div>
                   <ul className="mt-4 space-y-2">
-                    {p.features.map((f, i) => (
-                      <li key={i} className="flex items-start gap-2 text-xs text-white/45">
-                        <span className="text-emerald-400 mt-0.5 shrink-0">
-                          <svg width="12" height="12" viewBox="0 0 16 16" fill="none">
-                            <path d="M3 8.5l3.5 3.5 6.5-8" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                        </span>
-                        <span>{f}</span>
+                    {t.features[planId].map((feature) => (
+                      <li key={feature} className="flex gap-2 text-xs leading-5 text-white/52">
+                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-emerald-300/70" />
+                        <span>{feature}</span>
                       </li>
                     ))}
                   </ul>
                   <div className="mt-5">
                     {isCurrent ? (
-                      <div className="w-full py-2.5 rounded-xl bg-white/[0.06] text-white/35 text-xs text-center cursor-default border border-white/[0.06] font-medium">
+                      <div className="rounded-xl border border-white/[0.06] bg-white/[0.06] py-2.5 text-center text-xs text-white/45">
                         {t.current}
                       </div>
                     ) : (
                       <button
                         type="button"
-                        disabled={upgrading === pid}
-                        onClick={() => upgradePlan(pid)}
-                        className={`w-full py-2.5 rounded-xl text-xs font-semibold transition-all duration-200 active:scale-[0.97] ${
-                          upgrading === pid
-                            ? "bg-white/[0.08] text-white/40 cursor-not-allowed"
-                            : isPopular
-                              ? "bg-gradient-to-r from-violet-600 to-blue-600 text-white shadow-lg shadow-violet-500/20 hover:from-violet-500 hover:to-blue-500"
-                              : "bg-white text-black hover:bg-white/90 shadow-lg shadow-white/10"
-                        }`}
+                        disabled={upgrading === planId}
+                        onClick={() => upgradePlan(planId)}
+                        className={`w-full rounded-xl py-2.5 text-xs font-semibold transition ${
+                          isPopular ? "bg-gradient-to-r from-emerald-500 to-blue-600 text-white" : "bg-white text-black"
+                        } disabled:cursor-not-allowed disabled:opacity-45`}
                       >
-                        {upgrading === pid ? t.processing : `${t.upgradeTo} ${p.name}`}
+                        {upgrading === planId ? t.processing : `${t.upgradeTo} ${planOption.name}`}
                       </button>
                     )}
                   </div>
@@ -456,10 +391,95 @@ export default function DashboardPage() {
               );
             })}
           </div>
-        </div>
+        </section>
       </main>
 
       <Toast message={toast} />
     </div>
+  );
+}
+
+function MetricCard({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-5">
+      <div className="text-xs text-white/35">{label}</div>
+      <div className="mt-2 text-2xl font-bold tracking-tight">{value}</div>
+    </div>
+  );
+}
+
+function QuickAction({ href, title, desc }: { href: string; title: string; desc: string }) {
+  return (
+    <Link href={href} className="group rounded-xl border border-white/[0.07] bg-white/[0.025] p-4 transition hover:bg-white/[0.05]">
+      <div className="flex items-center justify-between gap-3">
+        <div>
+          <div className="text-sm font-semibold text-white/85">{title}</div>
+          <div className="mt-1 text-xs leading-5 text-white/35">{desc}</div>
+        </div>
+        <span className="text-white/25 transition group-hover:text-white/55">-&gt;</span>
+      </div>
+    </Link>
+  );
+}
+
+function HistoryCard({
+  generation,
+  locale,
+  labels,
+}: {
+  generation: GenerationRecord;
+  locale: "en" | "zh";
+  labels: DashboardLabels;
+}) {
+  const scenario = generation.category
+    ? scenarioLabels[generation.category]?.[locale] || generation.category.replace(/_/g, " ")
+    : "-";
+
+  return (
+    <Link
+      href="/storyboard"
+      className="grid gap-4 rounded-2xl border border-white/[0.08] bg-white/[0.025] p-4 transition hover:border-white/[0.15] hover:bg-white/[0.045] sm:grid-cols-[72px_1fr_auto]"
+    >
+      {generation.product_image ? (
+        <img
+          src={generation.product_image}
+          alt={generation.product_title || "Product"}
+          className="h-[72px] w-[72px] rounded-xl border border-white/[0.08] object-cover"
+        />
+      ) : (
+        <div className="flex h-[72px] w-[72px] items-center justify-center rounded-xl border border-white/[0.08] bg-emerald-400/[0.06] text-xs text-emerald-100/45">
+          Ad
+        </div>
+      )}
+      <div className="min-w-0">
+        <div className="flex flex-wrap items-center gap-2">
+          <h3 className="truncate text-sm font-semibold text-white/90">{generation.product_title || "Pet Cleaning Ad Pack"}</h3>
+          {generation.product_price && <span className="text-xs text-emerald-200/75">{generation.product_price}</span>}
+        </div>
+        <div className="mt-2 flex flex-wrap gap-2 text-[11px]">
+          {generation.style && (
+            <span className="rounded-full border border-blue-300/15 bg-blue-300/[0.06] px-2.5 py-1 text-blue-100/65">
+              {labels.template}: {generation.style}
+            </span>
+          )}
+          <span className="rounded-full border border-emerald-300/15 bg-emerald-300/[0.06] px-2.5 py-1 text-emerald-100/65">
+            {labels.scenario}: {scenario}
+          </span>
+        </div>
+        {generation.hooks?.[0] && (
+          <p className="mt-2 truncate text-xs text-white/38">
+            {labels.firstHook}: {generation.hooks[0]}
+          </p>
+        )}
+      </div>
+      <div className="text-xs text-white/30 sm:text-right">
+        {new Date(generation.created_at).toLocaleString(locale === "zh" ? "zh-CN" : "en-US", {
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        })}
+      </div>
+    </Link>
   );
 }

@@ -19,18 +19,6 @@ export default function OGImage() {
           overflow: "hidden",
         }}
       >
-        {/* Gradient glow */}
-        <div
-          style={{
-            position: "absolute",
-            top: "-20%",
-            left: "10%",
-            width: "80%",
-            height: "60%",
-            background: "radial-gradient(ellipse, rgba(124,58,237,0.25), transparent 70%)",
-          }}
-        />
-
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", position: "relative" }}>
           <div
             style={{
@@ -45,21 +33,21 @@ export default function OGImage() {
           </div>
           <div
             style={{
-              fontSize: 28,
-              color: "rgba(255,255,255,0.5)",
-              maxWidth: 700,
+              fontSize: 30,
+              color: "rgba(255,255,255,0.62)",
+              maxWidth: 760,
               textAlign: "center",
               lineHeight: 1.4,
             }}
           >
-            AI Copilot for Shopify Sellers
+            Pet Cleaning Ad Pack Generator
           </div>
           <div
             style={{
               marginTop: 32,
               padding: "12px 32px",
               borderRadius: 12,
-              background: "linear-gradient(135deg, #7c3aed, #3b82f6)",
+              background: "linear-gradient(135deg, #10b981, #2563eb)",
               color: "white",
               fontSize: 22,
               fontWeight: 600,

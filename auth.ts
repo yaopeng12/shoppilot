@@ -138,6 +138,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         "/favicon.ico",
         "/api/auth",
         "/api/plans",
+        "/api/pet-ad-pack",
+        "/api/generate",
+        "/api/variants",
+        "/api/generations",
+        "/api/inspiration",
+        "/api/user",
+        "/api/upgrade",
+        "/api/team",
       ].some((path) => nextUrl.pathname === path || nextUrl.pathname.startsWith(path + "/"));
 
       if (isPublicRoute) return true;

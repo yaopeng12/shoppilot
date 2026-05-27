@@ -12,7 +12,7 @@ export function json(code: number, data: unknown, extraHeaders?: Record<string, 
   return new NextResponse(JSON.stringify(data), {
     status: code,
     headers: {
-      "Content-Type": "application/json",
+      "Content-Type": "application/json; charset=utf-8",
       ...corsHeaders(),
       ...(extraHeaders || {}),
     },

@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "TikTok Ad Script Generator for Shopify - ShopPilot",
+  title: "Pet Cleaning TikTok Ad Workflow - ShopPilot",
   description:
-    "Paste a Shopify product link and generate TikTok ad hooks, scripts, voiceovers, subtitles, and creative copy for ecommerce campaigns.",
+    "ShopPilot now focuses on pet cleaning ad packs: source matching, cat odor and litter templates, UGC scripts, storyboards, captions, and claim-safe TikTok creative.",
   openGraph: {
-    title: "TikTok Ad Script Generator for Shopify - ShopPilot",
+    title: "Pet Cleaning TikTok Ad Workflow - ShopPilot",
     description:
-      "Generate TikTok ad hooks, scripts, voiceovers, and subtitles from Shopify product URLs.",
+      "Generate integrated pet cleaning ad packs from one product link.",
     url: "https://shoppilot.help/tiktok-adgen",
     siteName: "ShopPilot",
     type: "website",

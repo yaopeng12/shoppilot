@@ -2,6 +2,7 @@ import { checkUsage, getCurrentUser, recordGeneration } from "@/lib/tiktok-adgen
 import { json } from "@/lib/tiktok-adgen/http";
 import { fetchProduct } from "@/lib/tiktok-adgen/shopify";
 import { generateAll } from "@/lib/tiktok-adgen/generator";
+import type { AdStyle, TargetMarket } from "@/lib/tiktok-adgen/generator";
 
 export const runtime = "nodejs";
 
@@ -18,7 +19,13 @@ export async function POST(req: Request) {
     });
   }
 
-  const { url: productUrl } = (await req.json().catch(() => ({}))) as { url?: string };
+  const { url: productUrl, style, targetMarket, scriptCount, refVideoId } = (await req.json().catch(() => ({}))) as {
+    url?: string;
+    style?: AdStyle;
+    targetMarket?: TargetMarket;
+    scriptCount?: number;
+    refVideoId?: string;
+  };
   if (!productUrl) return json(400, { error: "URL is required" });
 
   let product;
@@ -31,6 +38,6 @@ export async function POST(req: Request) {
 
   recordGeneration(user.id);
 
-  const generated = await generateAll(product);
+  const generated = await generateAll(product, { style, targetMarket, scriptCount });
   return json(200, { ...generated, _usage: snapshot });
 }

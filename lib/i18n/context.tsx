@@ -7,7 +7,7 @@ import zh from "./zh";
 export type Locale = "en" | "zh";
 export type Messages = typeof en;
 
-const messages: Record<Locale, Messages> = { en, zh };
+const messages = { en, zh } as unknown as Record<Locale, Messages>;
 
 interface I18nContextValue {
   locale: Locale;

@@ -3,19 +3,33 @@ export const PLANS = {
     name: "Free",
     dailyLimit: 3,
     price: 0,
-    features: ["3 generations/day", "10 Hooks + Scripts", "Voiceover copy", "SRT subtitles"],
+    features: ["3 ad packs/day", "Source match scoring", "Pet cleaning templates", "Hooks + UGC scripts"],
   },
   pro: {
     name: "Pro",
     dailyLimit: -1,
     price: 19,
-    features: ["Unlimited generations", "10 Hooks + Scripts", "Voiceover copy", "SRT subtitles", "Priority support", "Export to PDF"],
+    features: [
+      "Unlimited ad packs",
+      "Source match scoring",
+      "Pet cleaning templates",
+      "Hooks + UGC scripts",
+      "Claim safety guidance",
+      "JSON and Markdown export",
+    ],
   },
   team: {
     name: "Team",
     dailyLimit: -1,
     price: 49,
-    features: ["Everything in Pro", "Up to 10 members", "Shared workspace", "Team analytics", "Admin dashboard", "API access"],
+    features: [
+      "Everything in Pro",
+      "Up to 10 members",
+      "Shared template workflow",
+      "Team creative library",
+      "Admin dashboard",
+      "API access",
+    ],
   },
 } as const;
 

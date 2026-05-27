@@ -65,7 +65,7 @@ describe("http helper", () => {
     const res = json(200, { ok: true });
 
     expect(res.status).toBe(200);
-    expect(res.headers.get("Content-Type")).toBe("application/json");
+    expect(res.headers.get("Content-Type")).toBe("application/json; charset=utf-8");
     expect(res.headers.get("Access-Control-Allow-Origin")).toBe("*");
 
     const data = await res.json();

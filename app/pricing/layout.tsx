@@ -1,13 +1,13 @@
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Pricing - ShopPilot",
+  title: "Pricing for Pet Cleaning Ad Packs - ShopPilot",
   description:
-    "Choose a ShopPilot plan for AI video storyboards, TikTok ad scripts, hooks, voiceovers, subtitles, and ecommerce creative workflows.",
+    "Choose a ShopPilot plan for pet cleaning ad packs, source matching, niche templates, UGC scripts, storyboards, AI video prompts, and claim-safe creative workflows.",
   openGraph: {
-    title: "Pricing - ShopPilot",
+    title: "Pricing for Pet Cleaning Ad Packs - ShopPilot",
     description:
-      "Choose a plan for AI-powered ecommerce video creative and TikTok ad generation.",
+      "Choose a plan for pet cleaning source matching, templates, scripts, storyboards, and claim-safe TikTok creative.",
     url: "https://shoppilot.help/pricing",
     siteName: "ShopPilot",
     type: "website",

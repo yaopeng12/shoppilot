@@ -4,131 +4,153 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useSession } from "next-auth/react";
 
-import { GenerateForm } from "@/components/storyboard/generate-form";
-import { TimelineView } from "@/components/storyboard/timeline-view";
 import { Navbar } from "@/components/tiktok-adgen/navbar";
 import { Toast } from "@/components/tiktok-adgen/toast";
 import { useToast } from "@/components/tiktok-adgen/use-toast";
 import { normalizeUrl } from "@/components/tiktok-adgen/utils";
-import { apiFetch } from "@/lib/tiktok-adgen/client";
 import { cn } from "@/components/ui/cn";
+import { PetAdPackGenerateForm } from "@/components/pet-ad-pack/generate-form";
+import { PetAdPackView } from "@/components/pet-ad-pack/ad-pack-view";
+import { apiFetch } from "@/lib/tiktok-adgen/client";
 import { useI18n } from "@/lib/i18n/context";
-import type { StoryboardData, VerticalDomainId } from "@/lib/storyboard/types";
+import { DEFAULT_TARGET_MARKET, type TargetMarketCode } from "@/lib/localization/markets";
+import type { PetAdPack } from "@/lib/pet-ad-pack/types";
 
-type StoryboardResponse = StoryboardData & {
-  _usage?: {
-    remaining: number;
-    limit: number;
-  };
+type PetAdPackResponse = PetAdPack & {
+  error?: string;
+  message?: string;
 };
 
-const pageI18n = {
+const copy = {
   en: {
-    badge: "Shopify to vertical TikTok storyboard",
-    title: "Vertical Video Storyboard Generator",
-    desc: "Paste a Shopify product link, choose a niche, and get a scene-by-scene TikTok storyboard with domain-specific shots, proof patterns, narration, and production notes.",
+    badge: "Pet cleaning growth workstation",
+    title: "Generate a Pet Cleaning Ad Pack",
+    desc: "Paste a product or competitor link. ShopPilot detects the pet-cleaning scenario, selects the highest-scoring 1688-style source candidate, matches a proven template, and builds a shoot-ready ad pack.",
+    enterUrl: "Please enter a product or competitor link",
+    invalidUrl: "Please enter a valid URL",
+    generated: "Pet Cleaning Ad Pack generated",
+    genFailed: "Generation failed",
+    limitReached: "Daily limit reached.",
     unlimited: "Unlimited",
     remaining: "remaining today",
-    generated: "Storyboard generated!",
-    enterUrl: "Please enter a Shopify product link",
-    invalidUrl: "Please enter a valid URL",
-    limitReached: "Daily limit reached.",
-    signInRequired: "Please sign in to generate storyboards.",
-    signIn: "Sign in",
-    genFailed: "Generation failed",
+    workflow: [
+      ["Source", "Auto-scores candidate suppliers by fit, demand, margin, demo value, and compliance safety."],
+      ["Template", "Matches the best pet cleaning structure from cat odor, urine cleanup, litter tracking, fur, and fabric odor patterns."],
+      ["Ad Pack", "Outputs hooks, scripts, storyboard, shot list, AI video prompts, captions, claims, and A/B tests."],
+    ],
     form: {
-      verticalDomain: "Vertical domain",
-      creativeAngle: "Creative angle",
-      urlPlaceholder: "Paste Shopify product URL...",
-      generate: "Generate Storyboard",
+      url: "Product / competitor link",
+      urlPlaceholder: "Paste Shopify, Amazon, TikTok, or competitor product URL...",
+      note: "Optional signal",
+      notePlaceholder: "e.g. cat litter smell, Japan market, multi-cat home",
+      market: "Target market",
+      marketHint: "Localizes hooks, scripts, captions, CTA, and template examples beyond direct translation.",
+      generate: "Generate Pet Cleaning Ad Pack",
       generating: "Generating...",
       try: "Try:",
-      upgrade: "Upgrade",
-      verticalOptions: {
-        general: "General ecommerce",
-        beauty: "Beauty and skincare",
-        fashion: "Fashion and accessories",
-        home: "Home and lifestyle",
-        pet: "Pet products",
-        fitness: "Fitness and wellness",
-        electronics: "Consumer electronics",
-        parenting: "Baby and parenting",
-      },
-      creativePlaceholders: {
-        general: "show the product solving one clear problem, then reinforce with a fast result or testimonial",
-        beauty: "routine problem, application texture, immediate finish, realistic expectation, social proof",
-        fashion: "show 3 ways to wear it, then zoom into fit and material proof",
-        home: "messy problem, simple setup, satisfying transformation, everyday usage",
-        pet: "owner problem, pet curiosity, product interaction, calm or happy result",
-        fitness: "barrier to workout, quick demo, ease-of-use proof, motivating result",
-        electronics: "annoying tech problem, one-tap setup, feature demo, measurable convenience",
-        parenting: "parent stress, product setup, calmer routine, practical relief",
-      },
+    },
+    results: {
+      autoSource: "Auto-selected source candidate",
+      score: "overall score",
+      why: "Why this source was selected",
+      sourceSearch: "Open 1688 search",
+      alternatives: "Backup source candidates",
+      strategy: "Creative Strategy",
+      template: "Matched Template",
+      hooks: "Hook Matrix",
+      scripts: "UGC Scripts",
+      storyboard: "Storyboard",
+      shotList: "Shot List",
+      captions: "Caption Lines",
+      voiceover: "Voiceover",
+      videoPrompts: "AI Video Prompts",
+      compliance: "Claim Safety",
+      testing: "A/B Testing Plan",
+      exportJson: "Export JSON",
+      exportMarkdown: "Export Markdown",
+      safeClaims: "Safe claims",
+      avoidClaims: "Avoid",
+      saferPhrases: "Safer phrases",
+      localization: "Localization Strategy",
+      targetMarket: "Target market",
+      language: "Language",
+      creatorVoice: "Creator voice",
+      culturalNotes: "Cultural notes",
     },
   },
   zh: {
-    badge: "Shopify 到垂直领域 TikTok 分镜",
-    title: "垂直领域视频分镜生成器",
-    desc: "粘贴 Shopify 商品链接，选择细分领域，生成包含行业镜头语言、证明结构、旁白和拍摄提示的 TikTok 分镜。",
+    badge: "宠物清洁投放一体化工具",
+    title: "生成 Pet Cleaning Ad Pack",
+    desc: "粘贴商品或竞品链接，系统自动识别宠物清洁场景，选择综合评分最高的 1688 候选货源，匹配爆款视频模板，并生成可拍摄、可投放、可测试的广告包。",
+    enterUrl: "请输入商品或竞品链接",
+    invalidUrl: "请输入有效 URL",
+    generated: "Pet Cleaning Ad Pack 已生成",
+    genFailed: "生成失败",
+    limitReached: "今日次数已用完。",
     unlimited: "无限",
     remaining: "今日剩余",
-    generated: "分镜已生成！",
-    enterUrl: "请输入 Shopify 商品链接",
-    invalidUrl: "请输入有效的 URL",
-    limitReached: "今日次数已用完。",
-    signInRequired: "请先登录后再生成分镜。",
-    signIn: "去登录",
-    genFailed: "生成失败",
+    workflow: [
+      ["选货源", "按匹配度、需求热度、利润空间、演示价值和合规安全自动评分。"],
+      ["套模板", "自动匹配猫砂除味、猫尿清洁、猫砂带出、宠物毛发、织物异味等爆款结构。"],
+      ["出广告包", "一次输出 Hook、UGC 脚本、分镜、镜头清单、AI 视频提示词、字幕、合规和 A/B 测试。"],
+    ],
     form: {
-      verticalDomain: "垂直领域",
-      creativeAngle: "创意角度",
-      urlPlaceholder: "粘贴 Shopify 商品链接...",
-      generate: "生成分镜",
+      url: "商品 / 竞品链接",
+      urlPlaceholder: "粘贴 Shopify、Amazon、TikTok 或竞品商品 URL...",
+      note: "可选补充",
+      notePlaceholder: "例如：猫砂盆异味、日本市场、多猫家庭",
+      market: "目标市场",
+      marketHint: "按当地 TikTok 口语、文化语境和表达禁忌本地化生成内容。",
+      generate: "生成宠物清洁广告包",
       generating: "生成中...",
       try: "试试：",
-      upgrade: "升级",
-      verticalOptions: {
-        general: "通用电商",
-        beauty: "美妆护肤",
-        fashion: "服饰配件",
-        home: "家居生活",
-        pet: "宠物用品",
-        fitness: "健身健康",
-        electronics: "消费电子",
-        parenting: "母婴亲子",
-      },
-      creativePlaceholders: {
-        general: "展示产品解决一个明确问题，再用快速结果或用户证明强化信任",
-        beauty: "日常痛点、上脸质地、即时妆效、真实预期、社交证明",
-        fashion: "展示 3 种穿搭方式，再放大合身度和材质细节",
-        home: "凌乱痛点、简单安装、爽感改造、日常使用",
-        pet: "主人痛点、宠物好奇、产品互动、安心或开心结果",
-        fitness: "运动阻碍、快速演示、易用证明、激励结果",
-        electronics: "烦人的技术痛点、一键设置、功能演示、可感知便利",
-        parenting: "父母压力、产品设置、更平静的流程、实际减负",
-      },
+    },
+    results: {
+      autoSource: "自动选择的候选货源",
+      score: "综合评分",
+      why: "选择原因",
+      sourceSearch: "打开 1688 搜索",
+      alternatives: "备选货源",
+      strategy: "创意策略",
+      template: "匹配模板",
+      hooks: "Hook 矩阵",
+      scripts: "UGC 脚本",
+      storyboard: "视频分镜",
+      shotList: "拍摄镜头清单",
+      captions: "字幕文案",
+      voiceover: "口播文案",
+      videoPrompts: "AI 视频提示词",
+      compliance: "合规表达",
+      testing: "A/B 测试计划",
+      exportJson: "导出 JSON",
+      exportMarkdown: "导出 Markdown",
+      safeClaims: "可用表达",
+      avoidClaims: "避免表达",
+      saferPhrases: "更安全说法",
+      localization: "本地化策略",
+      targetMarket: "目标市场",
+      language: "语言",
+      creatorVoice: "创作者语气",
+      culturalNotes: "文化注意事项",
     },
   },
 } as const;
 
-export default function StoryboardPage() {
+export default function PetAdPackPage() {
   const router = useRouter();
   const { data: session } = useSession();
   const { locale } = useI18n();
-  const t = pageI18n[locale];
+  const t = copy[locale];
   const { message: toast, showToast } = useToast();
 
   const [url, setUrl] = useState("");
-  const [vertical, setVertical] = useState<VerticalDomainId>("beauty");
-  const [creativeAngle, setCreativeAngle] = useState("");
+  const [userNote, setUserNote] = useState("");
+  const [targetMarket, setTargetMarket] = useState<TargetMarketCode>(DEFAULT_TARGET_MARKET);
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
-  const [limitMsg, setLimitMsg] = useState<string | null>(null);
-  const [authMsg, setAuthMsg] = useState<string | null>(null);
-  const [data, setData] = useState<StoryboardData | null>(null);
+  const [data, setData] = useState<PetAdPack | null>(null);
 
-  const usage = (data as StoryboardResponse | null)?._usage;
-
+  const usage = data?._usage;
   const usagePill = useMemo(() => {
     if (!usage) return null;
     if (usage.remaining === -1) return { text: t.unlimited, color: "bg-emerald-500" };
@@ -139,15 +161,13 @@ export default function StoryboardPage() {
 
   async function generate() {
     setErr(null);
-    setLimitMsg(null);
-    setAuthMsg(null);
-    const u = normalizeUrl(url);
-    if (!u) {
+    const normalized = normalizeUrl(url);
+    if (!normalized) {
       setErr(t.enterUrl);
       return;
     }
     try {
-      new URL(u);
+      new URL(normalized);
     } catch {
       setErr(t.invalidUrl);
       return;
@@ -160,19 +180,17 @@ export default function StoryboardPage() {
 
     setLoading(true);
     try {
-      const r = await apiFetch<StoryboardData & { error?: string; message?: string }>("/api/storyboard", {
+      const response = await apiFetch<PetAdPackResponse>("/api/pet-ad-pack", {
         method: "POST",
-        body: JSON.stringify({ url: u, vertical, creativeAngle }),
+        body: JSON.stringify({ url: normalized, userNote, targetMarket }),
       });
-      if (r.status === 429) {
-        setLimitMsg(r.data.message || t.limitReached);
-        throw new Error(r.data.message || t.limitReached);
-      }
-      if (!r.ok) throw new Error(r.data.error || t.genFailed);
-      setData(r.data);
+      if (response.status === 429) throw new Error(response.data.message || t.limitReached);
+      if (!response.ok) throw new Error(response.data.error || t.genFailed);
+
+      setData(response.data);
       showToast(t.generated);
-    } catch (e: unknown) {
-      setErr(e instanceof Error ? e.message : t.genFailed);
+    } catch (error: unknown) {
+      setErr(error instanceof Error ? error.message : t.genFailed);
     } finally {
       setLoading(false);
     }
@@ -182,49 +200,58 @@ export default function StoryboardPage() {
     <div className="min-h-screen text-white">
       <Navbar isSignedIn={!!session?.user} user={session?.user} />
 
-      <main className="max-w-6xl mx-auto px-6 py-8">
-        <div className="mb-8 animate-fade-in-up">
-          <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] text-xs text-white/45 mb-4 tracking-wide">
-            {t.badge}
-          </div>
-          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight">
-            <span className="bg-gradient-to-b from-white to-white/60 bg-clip-text text-transparent">
+      <main className="mx-auto max-w-6xl px-6 py-8">
+        <div className="mb-7 grid gap-7 lg:grid-cols-[1fr_0.92fr] lg:items-end">
+          <div>
+            <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-emerald-300/15 bg-emerald-300/[0.06] px-3.5 py-1.5 text-xs text-emerald-100/70">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
+              {t.badge}
+            </div>
+            <h1 className="max-w-3xl text-3xl font-bold tracking-tight text-white sm:text-4xl">
               {t.title}
-            </span>
-          </h1>
-          <p className="text-sm text-white/35 mt-2 max-w-2xl">{t.desc}</p>
+            </h1>
+            <p className="mt-3 max-w-2xl text-sm leading-7 text-white/50">{t.desc}</p>
+          </div>
+
+          <div className="grid gap-3 sm:grid-cols-3">
+            {t.workflow.map(([title, desc]) => (
+              <div key={title} className="rounded-xl border border-white/[0.08] bg-white/[0.03] p-4">
+                <div className="text-sm font-semibold text-white">{title}</div>
+                <p className="mt-2 text-xs leading-5 text-white/42">{desc}</p>
+              </div>
+            ))}
+          </div>
         </div>
 
         {usagePill && (
-          <div className="flex items-center justify-end gap-3 mb-5">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full border border-white/[0.08] bg-white/[0.03] text-xs text-white/60">
-              <span className={cn("w-1.5 h-1.5 rounded-full", usagePill.color)} />
+          <div className="mb-4 flex justify-end">
+            <div className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.03] px-3.5 py-1.5 text-xs text-white/60">
+              <span className={cn("h-1.5 w-1.5 rounded-full", usagePill.color)} />
               <span className="whitespace-nowrap">{usagePill.text}</span>
             </div>
           </div>
         )}
 
-        <GenerateForm
+        <PetAdPackGenerateForm
           url={url}
-          vertical={vertical}
-          creativeAngle={creativeAngle}
+          userNote={userNote}
+          targetMarket={targetMarket}
           loading={loading}
           err={err}
-          limitMsg={limitMsg}
-          authMsg={authMsg}
-          signInLabel={t.signIn}
           labels={t.form}
           onUrlChange={setUrl}
-          onVerticalChange={setVertical}
-          onCreativeAngleChange={setCreativeAngle}
+          onUserNoteChange={setUserNote}
+          onTargetMarketChange={setTargetMarket}
           onGenerate={generate}
-          onUpgrade={() => {}}
-          onExample={setUrl}
+          onExample={(exampleUrl, note) => {
+            setUrl(exampleUrl);
+            if (note) setUserNote(note);
+          }}
         />
 
         {data && (
-          <div className="mt-8 animate-fade-in-up">
-            <TimelineView data={data} />
+          <div className="mt-9">
+            <PetAdPackView data={data} labels={t.results} />
           </div>
         )}
       </main>
