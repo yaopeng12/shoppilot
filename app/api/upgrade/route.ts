@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   const { plan } = (await req.json().catch(() => ({}))) as { plan?: string };
   if (!plan || !(plan in PLANS) || plan === "free") return json(400, { error: "Invalid plan" });
 
-  updateUser(user.id, { plan: plan as PlanId });
+  await updateUser(user.id, { plan: plan as PlanId });
 
   return json(200, {
     ok: true,

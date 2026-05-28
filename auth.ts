@@ -1,7 +1,9 @@
 import NextAuth, { customFetch } from "next-auth";
 import type { Provider } from "next-auth/providers";
+import Credentials from "next-auth/providers/credentials";
 import GitHub from "next-auth/providers/github";
 import { isPublicRoute } from "@/lib/auth/routes";
+import { authenticateEmailPassword, getOrCreateUser } from "@/lib/tiktok-adgen/db";
 
 const proxyFetch: typeof fetch = async (input, init) => {
   const proxyUrl = process.env.AUTH_PROXY_URL || process.env.HTTPS_PROXY || process.env.HTTP_PROXY;
@@ -95,6 +97,33 @@ const WeChat: Provider = {
 
 const providers: Provider[] = [];
 
+providers.push(
+  Credentials({
+    id: "email-password",
+    name: "Email and password",
+    credentials: {
+      email: { label: "Email", type: "email" },
+      password: { label: "Password", type: "password" },
+    },
+    async authorize(credentials) {
+      const rawEmail = typeof credentials?.email === "string" ? credentials.email : "";
+      const password = typeof credentials?.password === "string" ? credentials.password : "";
+      const email = rawEmail.trim().toLowerCase();
+      if (!email || !email.includes("@") || !password) return null;
+
+      const result = await authenticateEmailPassword(email, password);
+      if (result.ok) {
+        return {
+          id: result.user.id,
+          email: result.user.email,
+          name: result.user.name || email.split("@")[0],
+        };
+      }
+      return null;
+    },
+  }),
+);
+
 if (process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET) {
   providers.push(GoogleOAuth);
 }
@@ -120,6 +149,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   providers,
   pages: {
     signIn: "/sign-in",
+  },
+  events: {
+    async signIn({ user }) {
+      const id = user.id || user.email;
+      if (!id) return;
+      await getOrCreateUser(id, user.email || "", user.name || "", user.image || undefined);
+    },
   },
   callbacks: {
     authorized({ auth: session, request: { nextUrl } }) {

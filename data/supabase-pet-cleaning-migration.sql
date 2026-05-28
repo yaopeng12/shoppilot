@@ -13,12 +13,25 @@ CREATE TABLE IF NOT EXISTS profiles (
   plan           TEXT NOT NULL DEFAULT 'free' CHECK (plan IN ('free', 'pro', 'team')),
   api_key_hash   TEXT,
   api_key_last4  TEXT,
+  password_hash  TEXT,
+  email_verified_at TIMESTAMPTZ,
+  verification_code_hash TEXT,
+  verification_code_expires_at TIMESTAMPTZ,
   created_at     TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at     TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE UNIQUE INDEX IF NOT EXISTS idx_profiles_email ON profiles(email);
 CREATE INDEX IF NOT EXISTS idx_profiles_plan ON profiles(plan);
+
+ALTER TABLE profiles
+  ADD COLUMN IF NOT EXISTS image TEXT,
+  ADD COLUMN IF NOT EXISTS password_hash TEXT,
+  ADD COLUMN IF NOT EXISTS email_verified_at TIMESTAMPTZ,
+  ADD COLUMN IF NOT EXISTS verification_code_hash TEXT,
+  ADD COLUMN IF NOT EXISTS verification_code_expires_at TIMESTAMPTZ;
+
+CREATE INDEX IF NOT EXISTS idx_profiles_email_verified ON profiles(email_verified_at);
 
 CREATE TABLE IF NOT EXISTS daily_usage (
   user_id          TEXT NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,

@@ -9,7 +9,7 @@ export async function GET() {
   const user = await getCurrentUser();
   if (!user) return json(401, { error: "Not authenticated" });
 
-  const dbUser = getUser(user.id);
+  const dbUser = await getUser(user.id);
 
   return json(200, {
     id: user.id,

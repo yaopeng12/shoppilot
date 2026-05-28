@@ -7,7 +7,7 @@ export async function getCurrentUser(): Promise<PublicUser | null> {
   const session = await nextAuth();
   if (!session?.user?.id) return null;
 
-  const user = getOrCreateUser(
+  const user = await getOrCreateUser(
     session.user.id,
     session.user.email || "",
     session.user.name || "",
@@ -15,7 +15,7 @@ export async function getCurrentUser(): Promise<PublicUser | null> {
   );
 
   if (!user.apiKey) {
-    const updated = updateUser(user.id, { apiKey: generateApiKey() });
+    const updated = await updateUser(user.id, { apiKey: generateApiKey() });
     user.apiKey = updated?.apiKey;
   }
 

@@ -3,11 +3,15 @@
     "63eeeb69-6a52-42e8-9dc8-6598e0453336": {
       "id": "63eeeb69-6a52-42e8-9dc8-6598e0453336",
       "email": "yaopeng1227@outlook.com",
-      "name": "Mason.yao",
+      "name": "zhang",
       "image": "https://avatars.githubusercontent.com/u/26002879?v=4",
       "plan": "free",
       "createdAt": "2026-05-25T17:32:52.750Z",
-      "apiKey": "tk_fc2cb9354bf93368288d964b91d39252084f43051c9bb2cd"
+      "apiKey": "tk_fc2cb9354bf93368288d964b91d39252084f43051c9bb2cd",
+      "passwordHash": "$2b$12$dMoZjXhmL8SUgFujhsTKKecekXtvtdHNHnLWI5OWta2ocKU8wKkoq",
+      "emailVerifiedAt": "2026-05-28T07:50:19.794Z",
+      "verificationCodeHash": null,
+      "verificationCodeExpiresAt": null
     },
     "0e09c51d-22e1-4f84-ae80-ca3c7e4e123a": {
       "id": "0e09c51d-22e1-4f84-ae80-ca3c7e4e123a",
