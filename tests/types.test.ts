@@ -2,11 +2,10 @@ import { describe, it, expect } from "vitest";
 import { PLANS, type PlanId } from "@/lib/tiktok-adgen/types";
 
 describe("PLANS constant", () => {
-  it("has exactly 3 plans", () => {
-    expect(Object.keys(PLANS)).toHaveLength(3);
+  it("has exactly 2 plans", () => {
+    expect(Object.keys(PLANS)).toHaveLength(2);
     expect(PLANS).toHaveProperty("free");
     expect(PLANS).toHaveProperty("pro");
-    expect(PLANS).toHaveProperty("team");
   });
 
   it("free plan has correct structure", () => {
@@ -19,15 +18,8 @@ describe("PLANS constant", () => {
   it("pro plan has correct structure", () => {
     expect(PLANS.pro.name).toBe("Pro");
     expect(PLANS.pro.dailyLimit).toBe(-1);
-    expect(PLANS.pro.price).toBe(19);
+    expect(PLANS.pro.price).toBe(9.9);
     expect(PLANS.pro.features.length).toBeGreaterThan(PLANS.free.features.length);
-  });
-
-  it("team plan has correct structure", () => {
-    expect(PLANS.team.name).toBe("Team");
-    expect(PLANS.team.dailyLimit).toBe(-1);
-    expect(PLANS.team.price).toBe(49);
-    expect(PLANS.team.features.length).toBeGreaterThanOrEqual(PLANS.pro.features.length);
   });
 
   it("all plans have name, dailyLimit, price, features", () => {
@@ -47,15 +39,13 @@ describe("PLANS constant", () => {
     expect(PLANS.free.dailyLimit).toBeGreaterThan(0);
   });
 
-  it("paid plans have unlimited (-1) daily limit", () => {
+  it("paid plan has unlimited (-1) daily limit", () => {
     expect(PLANS.pro.dailyLimit).toBe(-1);
-    expect(PLANS.team.dailyLimit).toBe(-1);
   });
 
-  it("prices are non-negative and increasing", () => {
+  it("prices are non-negative and increase from free to pro", () => {
     expect(PLANS.free.price).toBe(0);
     expect(PLANS.pro.price).toBeGreaterThan(PLANS.free.price);
-    expect(PLANS.team.price).toBeGreaterThan(PLANS.pro.price);
   });
 });
 

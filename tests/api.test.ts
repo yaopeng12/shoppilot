@@ -63,7 +63,7 @@ describe("API routes", () => {
       expect(res.status).toBe(200);
       expect(data).toHaveProperty("free");
       expect(data).toHaveProperty("pro");
-      expect(data).toHaveProperty("team");
+      expect(data).not.toHaveProperty("team");
     });
 
     it("free plan has daily limit of 3", async () => {
@@ -81,16 +81,7 @@ describe("API routes", () => {
       const data = await res.json();
 
       expect(data.pro.dailyLimit).toBe(-1);
-      expect(data.pro.price).toBe(19);
-    });
-
-    it("team plan has unlimited generations", async () => {
-      const { GET } = await import("@/app/api/plans/route");
-      const res = await GET();
-      const data = await res.json();
-
-      expect(data.team.dailyLimit).toBe(-1);
-      expect(data.team.price).toBe(49);
+      expect(data.pro.price).toBe(9.9);
     });
   });
 

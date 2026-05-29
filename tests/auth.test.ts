@@ -13,6 +13,17 @@ describe("auth module", () => {
     vi.clearAllMocks();
   });
 
+  describe("public routes", () => {
+    it("allows viewing template and knowledge libraries without signing in", async () => {
+      const { isPublicRoute } = await import("@/lib/auth/routes");
+
+      expect(isPublicRoute("/inspiration")).toBe(true);
+      expect(isPublicRoute("/inspiration/videos")).toBe(true);
+      expect(isPublicRoute("/knowledge")).toBe(true);
+      expect(isPublicRoute("/knowledge/pet-cleaning")).toBe(true);
+    });
+  });
+
   describe("checkUsage", () => {
     it("allows generation for free plan under limit", async () => {
       const { getUsage } = await import("@/lib/tiktok-adgen/db");
@@ -48,17 +59,6 @@ describe("auth module", () => {
       expect(result.allowed).toBe(true);
       expect(result.snapshot.remaining).toBe(-1);
       expect(result.snapshot.limit).toBe(-1);
-    });
-
-    it("allows unlimited for team plan", async () => {
-      const { getUsage } = await import("@/lib/tiktok-adgen/db");
-      vi.mocked(getUsage).mockReturnValue({ used: 999 });
-
-      const { checkUsage } = await import("@/lib/tiktok-adgen/auth");
-      const result = checkUsage("user1", "team");
-
-      expect(result.allowed).toBe(true);
-      expect(result.snapshot.remaining).toBe(-1);
     });
 
     it("calculates remaining correctly for partial usage", async () => {

@@ -66,7 +66,10 @@ export default function InspirationPage() {
   const [loading, setLoading] = useState(true);
   const [selected, setSelected] = useState<VideoWithAnalysis | null>(null);
   const [analyzeUrl, setAnalyzeUrl] = useState("");
+  const [analyzeTitle, setAnalyzeTitle] = useState("");
+  const [analyzeNote, setAnalyzeNote] = useState("");
   const [analyzing, setAnalyzing] = useState(false);
+  const [analyzeError, setAnalyzeError] = useState("");
 
   const fetchVideos = useCallback(async (nextFilters: InspirationFilters, append = false) => {
     setLoading(true);
@@ -96,24 +99,46 @@ export default function InspirationPage() {
   }, []);
 
   useEffect(() => {
-    void fetchVideos(filters);
-    void fetchStats();
-  }, [fetchVideos, fetchStats, filters.category, filters.period, filters.sort, filters.search, targetMarket]);
+    const nextFilters = filters;
+    void Promise.resolve().then(() => {
+      void fetchVideos(nextFilters);
+      void fetchStats();
+    });
+  }, [fetchVideos, fetchStats, filters]);
 
   async function handleAnalyze() {
     if (!analyzeUrl.trim()) return;
     setAnalyzing(true);
+    setAnalyzeError("");
     try {
-      const response = await apiFetch<{ video: TrendingVideo; analysis: VideoAnalysis }>("/api/inspiration/analyze-url", {
+      const response = await apiFetch<{ video?: TrendingVideo; analysis?: VideoAnalysis; error?: string; message?: string }>("/api/inspiration/analyze-url", {
         method: "POST",
-        body: JSON.stringify({ videoUrl: analyzeUrl.trim(), category: "pet_cleaning" }),
+        body: JSON.stringify({
+          videoUrl: analyzeUrl.trim(),
+          title: analyzeTitle.trim() || undefined,
+          userNote: analyzeNote.trim() || undefined,
+          targetMarket,
+        }),
       });
-      if (response.data) {
-        setSelected({
-          ...response.data.video,
-          video_analyses: [response.data.analysis],
-        });
+
+      if (!response.ok || !response.data?.video || !response.data?.analysis) {
+        setAnalyzeError(
+          response.status === 401
+            ? (locale === "zh" ? "请先登录后再分析视频。" : "Please sign in before analyzing a video.")
+            : response.data?.message || response.data?.error || (locale === "zh" ? "分析失败，请检查链接后重试。" : "Analysis failed. Check the link and try again."),
+        );
+        return;
       }
+
+      setSelected({
+        ...response.data.video,
+        video_analyses: [response.data.analysis],
+      });
+      // Refresh the list to show the new video
+      void fetchVideos(filters);
+      void fetchStats();
+    } catch {
+      setAnalyzeError(locale === "zh" ? "网络异常，分析没有完成。" : "Network error. Analysis did not complete.");
     } finally {
       setAnalyzing(false);
     }
@@ -163,6 +188,32 @@ export default function InspirationPage() {
               {analyzing ? t.analyzing : t.analyzeBtn}
             </button>
           </div>
+          <div className="grid gap-2 sm:grid-cols-2">
+            <input
+              type="text"
+              value={analyzeTitle}
+              onChange={(event) => setAnalyzeTitle(event.target.value)}
+              placeholder={locale === "zh" ? "视频标题（可选）" : "Video title (optional)"}
+              className="min-h-9 rounded-lg border border-white/[0.08] bg-white/[0.04] px-3 py-2 text-xs text-white placeholder:text-white/25 transition-colors focus:border-emerald-500/50 focus:outline-none"
+            />
+            <input
+              type="text"
+              value={analyzeNote}
+              onChange={(event) => setAnalyzeNote(event.target.value)}
+              placeholder={locale === "zh" ? "产品关键词（推荐填写，提高准确率）" : "Product keywords (recommended for accuracy)"}
+              className="min-h-9 rounded-lg border border-emerald-500/30 bg-emerald-500/[0.05] px-3 py-2 text-xs text-white placeholder:text-emerald-300/50 transition-colors focus:border-emerald-500/50 focus:outline-none"
+            />
+          </div>
+          <p className="text-[11px] text-emerald-400/60 text-center">
+            {locale === "zh"
+              ? "填写产品关键词可以大幅提高分析准确率，例如：宠物洗澡喷头、狗狗除毛器、猫砂除臭剂"
+              : "Adding product keywords significantly improves accuracy, e.g.: pet bathing spray, dog hair remover, cat litter deodorizer"}
+          </p>
+          {analyzeError && (
+            <div className="rounded-lg border border-rose-400/20 bg-rose-400/[0.06] px-3 py-2 text-center text-xs text-rose-100/75">
+              {analyzeError}
+            </div>
+          )}
         </div>
 
         {stats && <InspirationStatsSection stats={stats} />}

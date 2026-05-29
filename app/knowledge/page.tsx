@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { Navbar } from "@/components/tiktok-adgen/navbar";
@@ -13,37 +13,53 @@ import type { KnowledgeEntry } from "@/lib/inspiration/types";
 const pageI18n = {
   en: {
     badge: "Pet Cleaning Knowledge Base",
-    title: "Creative Pattern Library",
-    desc: "Reusable hooks, structures, CTAs, tones, and hashtags extracted from pet cleaning video research.",
-    hooks: "Hook Patterns",
-    structures: "Video Structures",
-    ctas: "CTA Templates",
-    tones: "Tone Profiles",
-    hashtags: "Top Hashtags",
-    videosAnalyzed: "videos analyzed",
-    avgDuration: "avg duration",
-    seconds: "s",
-    noData: "No knowledge entries yet. Add or import pet cleaning video research first.",
-    viewInspiration: "View Template Research",
+    title: "Patterns worth turning into ads",
+    desc: "Browse proven hook angles, scene structures, CTA language, tones, and hashtags extracted from pet-cleaning short-video research.",
+    insight: "Pattern intelligence",
+    categories: "scenarios",
+    videos: "source videos",
+    hooks: "hook patterns",
+    avgDuration: "avg seconds",
     market: "Knowledge market",
     marketHint: "Localizes hook examples, CTA, tone, and structure notes.",
+    spotlight: "Top scenario spotlight",
+    generate: "Generate ad pack",
+    viewResearch: "View template research",
+    noData: "No knowledge entries yet. Add or import pet cleaning video research first.",
+    hookPatterns: "High-signal hooks",
+    structures: "Reusable video structures",
+    ctas: "CTA language",
+    tones: "Creative tone",
+    hashtags: "Hashtags",
+    videosAnalyzed: "videos analyzed",
+    seconds: "s",
+    bestFor: "Best for",
+    benchmark: "Benchmark",
   },
   zh: {
     badge: "宠物清洁知识库",
-    title: "创意结构库",
-    desc: "从宠物清洁视频研究中沉淀可复用的 Hook、视频结构、CTA、语气和标签。",
+    title: "把爆款结构变成可复用广告",
+    desc: "浏览从宠物清洁短视频研究里沉淀出的 Hook 角度、镜头结构、CTA 话术、语气风格和标签。",
+    insight: "结构洞察",
+    categories: "细分场景",
+    videos: "来源视频",
     hooks: "Hook 模式",
-    structures: "视频结构",
-    ctas: "CTA 模板",
-    tones: "语气风格",
-    hashtags: "热门标签",
-    videosAnalyzed: "条视频已分析",
-    avgDuration: "平均时长",
-    seconds: "秒",
-    noData: "暂无知识库内容，请先导入或分析宠物清洁视频。",
-    viewInspiration: "查看模板研究",
+    avgDuration: "平均秒数",
     market: "知识库市场",
     marketHint: "按目标市场本地化 Hook 示例、CTA、语气和结构说明。",
+    spotlight: "重点场景",
+    generate: "生成广告包",
+    viewResearch: "查看模板研究",
+    noData: "暂无知识库内容，请先导入或分析宠物清洁视频。",
+    hookPatterns: "高信号 Hook",
+    structures: "可复用视频结构",
+    ctas: "CTA 话术",
+    tones: "创意语气",
+    hashtags: "热门标签",
+    videosAnalyzed: "条视频已分析",
+    seconds: "秒",
+    bestFor: "适合",
+    benchmark: "指标",
   },
 } as const;
 
@@ -55,135 +71,235 @@ export default function KnowledgePage() {
   const t = pageI18n[locale];
   const [entries, setEntries] = useState<KnowledgeEntry[]>([]);
   const [targetMarket, setTargetMarket] = useState<TargetMarketCode>(DEFAULT_TARGET_MARKET);
-  const [loading, setLoading] = useState(true);
+  const [loadingMarket, setLoadingMarket] = useState<TargetMarketCode | null>(DEFAULT_TARGET_MARKET);
 
   useEffect(() => {
-    setLoading(true);
+    let isCurrent = true;
     apiFetch<{ entries: KnowledgeEntry[] }>(`/api/inspiration/knowledge?targetMarket=${targetMarket}`).then((response) => {
+      if (!isCurrent) return;
       if (response.data) setEntries(response.data.entries);
-      setLoading(false);
+      setLoadingMarket(null);
     });
+    return () => {
+      isCurrent = false;
+    };
   }, [targetMarket]);
+
+  const loading = loadingMarket === targetMarket;
+
+  const stats = useMemo(() => {
+    const videoCount = entries.reduce((sum, entry) => sum + (entry.video_count || 0), 0);
+    const hookCount = entries.reduce((sum, entry) => sum + entry.hook_patterns.length, 0);
+    const avgDuration = entries.length
+      ? Math.round(entries.reduce((sum, entry) => sum + (entry.avg_duration || 0), 0) / entries.length)
+      : 0;
+    return { videoCount, hookCount, avgDuration };
+  }, [entries]);
+
+  const spotlight = entries[0];
 
   return (
     <div className="min-h-screen bg-[#06060a] text-white">
       <Navbar isSignedIn={!!session?.user} user={session?.user} />
 
-      <main className="mx-auto max-w-5xl space-y-8 px-4 pb-20 pt-12 sm:px-6">
-        <div className="mx-auto max-w-2xl space-y-4 text-center">
-          <div className="inline-flex items-center gap-2 rounded-full border border-white/[0.08] bg-white/[0.05] px-3 py-1 text-[11px] font-medium uppercase tracking-wide text-white/50">
-            {t.badge}
+      <main className="mx-auto max-w-7xl px-4 pb-20 pt-10 sm:px-6">
+        <section className="grid gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
+          <div>
+            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-300/15 bg-emerald-300/[0.06] px-3.5 py-1.5 text-xs text-emerald-100/70">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse-glow" />
+              {t.badge}
+            </div>
+            <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl">{t.title}</h1>
+            <p className="mt-4 max-w-2xl text-sm leading-7 text-white/52">{t.desc}</p>
+            <div className="mt-6 flex flex-wrap gap-3">
+              <Link href="/storyboard" className="inline-flex h-11 items-center rounded-xl bg-white px-5 text-sm font-semibold text-black transition hover:bg-white/90">
+                {t.generate}
+              </Link>
+              <Link href="/inspiration" className="inline-flex h-11 items-center rounded-xl border border-white/[0.1] px-5 text-sm font-semibold text-white/62 transition hover:bg-white/[0.05] hover:text-white">
+                {t.viewResearch}
+              </Link>
+            </div>
           </div>
-          <h1 className="bg-gradient-to-b from-white to-white/60 bg-clip-text text-3xl font-bold tracking-tight text-transparent sm:text-4xl">
-            {t.title}
-          </h1>
-          <p className="text-sm leading-7 text-white/45">{t.desc}</p>
-        </div>
 
-        <div className="mx-auto max-w-sm">
-          <TargetMarketSelect
-            value={targetMarket}
-            onChange={setTargetMarket}
-            label={t.market}
-            hint={t.marketHint}
-          />
-        </div>
+          <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
+            <TargetMarketSelect
+              value={targetMarket}
+              onChange={(value) => {
+                setTargetMarket(value);
+                setLoadingMarket(value);
+              }}
+              label={t.market}
+              hint={t.marketHint}
+            />
+          </div>
+        </section>
+
+        <section className="mt-8 grid gap-4 md:grid-cols-4">
+          <MetricCard label={t.categories} value={String(entries.length)} tone="emerald" />
+          <MetricCard label={t.videos} value={String(stats.videoCount)} tone="blue" />
+          <MetricCard label={t.hooks} value={String(stats.hookCount)} tone="violet" />
+          <MetricCard label={t.avgDuration} value={`${stats.avgDuration}${t.seconds}`} tone="orange" />
+        </section>
 
         {loading ? (
-          <div className="py-16 text-center text-sm text-white/30">Loading...</div>
+          <div className="py-20 text-center text-sm text-white/30">Loading...</div>
         ) : entries.length === 0 ? (
-          <div className="space-y-4 py-16 text-center">
+          <div className="space-y-4 py-20 text-center">
             <div className="text-sm text-white/35">{t.noData}</div>
-            <Link
-              href="/inspiration"
-              className="inline-flex items-center gap-2 rounded-xl border border-white/[0.1] px-4 py-2 text-xs text-white/55 transition-all hover:bg-white/[0.05] hover:text-white"
-            >
-              {t.viewInspiration}
+            <Link href="/inspiration" className="inline-flex items-center rounded-xl border border-white/[0.1] px-4 py-2 text-xs text-white/55 transition-all hover:bg-white/[0.05] hover:text-white">
+              {t.viewResearch}
             </Link>
           </div>
         ) : (
-          <div className="space-y-6">
-            {entries.map((entry) => (
-              <CategoryCard key={entry.id} entry={entry} t={t as PageCopy} />
-            ))}
-          </div>
+          <>
+            {spotlight && <Spotlight entry={spotlight} t={t as PageCopy} />}
+
+            <section className="mt-10 grid gap-5">
+              {entries.map((entry, index) => (
+                <CategoryCard key={entry.id} entry={entry} t={t as PageCopy} index={index} />
+              ))}
+            </section>
+          </>
         )}
       </main>
     </div>
   );
 }
 
-function CategoryCard({ entry, t }: { entry: KnowledgeEntry; t: PageCopy }) {
+function MetricCard({ label, value, tone }: { label: string; value: string; tone: "emerald" | "blue" | "violet" | "orange" }) {
+  const toneClass = {
+    emerald: "from-emerald-400/28 to-emerald-400/[0.03] text-emerald-100",
+    blue: "from-blue-400/28 to-blue-400/[0.03] text-blue-100",
+    violet: "from-violet-400/28 to-violet-400/[0.03] text-violet-100",
+    orange: "from-orange-400/28 to-orange-400/[0.03] text-orange-100",
+  }[tone];
+
   return (
-    <article className="space-y-5 rounded-2xl border border-white/[0.08] bg-white/[0.025] p-5">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-start sm:justify-between">
+    <div className={`rounded-2xl border border-white/[0.08] bg-gradient-to-br ${toneClass} p-5`}>
+      <div className="text-xs text-white/42">{label}</div>
+      <div className="mt-2 text-3xl font-bold tracking-tight">{value}</div>
+    </div>
+  );
+}
+
+function Spotlight({ entry, t }: { entry: KnowledgeEntry; t: PageCopy }) {
+  const topHook = entry.hook_patterns[0];
+  const topStructure = entry.structure_templates[0];
+
+  return (
+    <section className="mt-8 overflow-hidden rounded-2xl border border-emerald-300/15 bg-emerald-300/[0.045]">
+      <div className="grid gap-5 p-5 lg:grid-cols-[0.9fr_1.1fr] lg:p-6">
         <div>
-          <h2 className="text-lg font-bold text-white/90">{entry.category}</h2>
-          <div className="mt-1 flex items-center gap-3 text-[11px] text-white/35">
-            <span>{entry.video_count} {t.videosAnalyzed}</span>
-            <span>{t.avgDuration}: {entry.avg_duration}{t.seconds}</span>
+          <div className="text-xs uppercase tracking-[0.18em] text-emerald-100/65">{t.spotlight}</div>
+          <h2 className="mt-3 text-2xl font-bold tracking-tight text-white">{entry.category}</h2>
+          <p className="mt-3 text-sm leading-7 text-emerald-50/70">{entry.summary}</p>
+          <div className="mt-4 flex flex-wrap gap-2 text-xs">
+            <span className="rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-white/55">
+              {entry.video_count} {t.videosAnalyzed}
+            </span>
+            <span className="rounded-full border border-white/[0.08] bg-white/[0.04] px-3 py-1 text-white/55">
+              {t.avgDuration}: {entry.avg_duration}{t.seconds}
+            </span>
           </div>
         </div>
-      </div>
 
-      {entry.summary && (
-        <div className="rounded-xl border border-emerald-500/10 bg-emerald-500/[0.045] p-3 text-xs leading-relaxed text-emerald-100/80">
-          {entry.summary}
-        </div>
-      )}
-
-      <div className="grid gap-5 lg:grid-cols-2">
-        <KnowledgeSection title={t.hooks}>
-          {entry.hook_patterns.map((hook, index) => (
-            <div key={`${hook.pattern}-${index}`} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
-              <div className="text-xs font-semibold text-emerald-300">{hook.pattern}</div>
-              <div className="mt-1 text-xs italic text-white/60">&ldquo;{hook.example}&rdquo;</div>
+        <div className="grid gap-3 md:grid-cols-2">
+          {topHook && (
+            <div className="rounded-xl border border-white/[0.08] bg-[#050508]/50 p-4">
+              <div className="text-xs font-semibold text-emerald-200">{t.hookPatterns}</div>
+              <div className="mt-3 text-sm font-semibold text-white">{topHook.pattern}</div>
+              <p className="mt-2 text-sm leading-6 text-white/60">&ldquo;{topHook.example}&rdquo;</p>
+              <div className="mt-3 text-xs text-white/35">{t.benchmark}: {topHook.avg_engagement}</div>
             </div>
-          ))}
-        </KnowledgeSection>
-
-        <KnowledgeSection title={t.structures}>
-          {entry.structure_templates.map((template, templateIndex) => (
-            <div key={`${template.name}-${templateIndex}`} className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-3">
-              <div className="mb-2 text-xs font-semibold text-blue-300">{template.name}</div>
-              <div className="space-y-1">
-                {template.scenes.map((scene, sceneIndex) => (
-                  <div key={`${template.name}-${scene.time}-${sceneIndex}`} className="flex gap-2 text-[11px]">
-                    <span className="w-10 shrink-0 font-mono text-white/25">{scene.time}</span>
-                    <span className="text-white/60">{scene.description}</span>
+          )}
+          {topStructure && (
+            <div className="rounded-xl border border-white/[0.08] bg-[#050508]/50 p-4">
+              <div className="text-xs font-semibold text-blue-200">{t.structures}</div>
+              <div className="mt-3 text-sm font-semibold text-white">{topStructure.name}</div>
+              <div className="mt-3 space-y-2">
+                {topStructure.scenes.slice(0, 3).map((scene) => (
+                  <div key={`${topStructure.name}-${scene.time}`} className="grid grid-cols-[44px_1fr] gap-2 text-xs">
+                    <span className="font-mono text-blue-200/60">{scene.time}</span>
+                    <span className="leading-5 text-white/58">{scene.description}</span>
                   </div>
                 ))}
               </div>
             </div>
-          ))}
-        </KnowledgeSection>
+          )}
+        </div>
       </div>
+    </section>
+  );
+}
 
-      <div className="grid gap-5 md:grid-cols-3">
-        <PillList title={t.ctas} items={entry.cta_templates} />
-        <PillList title={t.tones} items={entry.tone_profiles} />
-        <PillList title={t.hashtags} items={entry.top_hashtags.map((tag) => `#${tag}`)} />
+function CategoryCard({ entry, t, index }: { entry: KnowledgeEntry; t: PageCopy; index: number }) {
+  const topHooks = entry.hook_patterns.slice(0, 3);
+  const topStructures = entry.structure_templates.slice(0, 2);
+
+  return (
+    <article className="rounded-2xl border border-white/[0.08] bg-white/[0.025] p-5 transition hover:border-white/[0.15] hover:bg-white/[0.04]">
+      <div className="grid gap-5 lg:grid-cols-[280px_1fr]">
+        <div>
+          <div className="text-[11px] uppercase tracking-[0.18em] text-white/30">Pattern {String(index + 1).padStart(2, "0")}</div>
+          <h2 className="mt-2 text-xl font-bold text-white/92">{entry.category}</h2>
+          <div className="mt-2 flex flex-wrap gap-2 text-[11px] text-white/40">
+            <span>{entry.video_count} {t.videosAnalyzed}</span>
+            <span>/</span>
+            <span>{t.avgDuration}: {entry.avg_duration}{t.seconds}</span>
+          </div>
+          {entry.summary && <p className="mt-4 text-sm leading-7 text-white/48">{entry.summary}</p>}
+          <PillList title={t.tones} items={entry.tone_profiles.slice(0, 4)} />
+        </div>
+
+        <div className="space-y-5">
+          <div className="grid gap-3 md:grid-cols-3">
+            {topHooks.map((hook, hookIndex) => (
+              <div key={`${hook.pattern}-${hookIndex}`} className="rounded-xl border border-white/[0.07] bg-[#07070c] p-4">
+                <div className="flex items-center justify-between gap-3">
+                  <div className="text-xs font-semibold text-emerald-300">{hook.pattern}</div>
+                  <div className="rounded-full bg-emerald-300/10 px-2 py-0.5 text-[10px] text-emerald-100/65">{hook.frequency}x</div>
+                </div>
+                <p className="mt-3 text-sm leading-6 text-white/65">&ldquo;{hook.example}&rdquo;</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid gap-3 lg:grid-cols-2">
+            {topStructures.map((template, templateIndex) => (
+              <div key={`${template.name}-${templateIndex}`} className="rounded-xl border border-blue-300/10 bg-blue-300/[0.035] p-4">
+                <div className="text-sm font-semibold text-blue-100">{template.name}</div>
+                {template.best_for && <div className="mt-1 text-[11px] text-blue-100/45">{t.bestFor}: {template.best_for}</div>}
+                <div className="mt-3 space-y-2">
+                  {template.scenes.slice(0, 4).map((scene, sceneIndex) => (
+                    <div key={`${template.name}-${scene.time}-${sceneIndex}`} className="grid grid-cols-[48px_1fr] gap-2 text-xs">
+                      <span className="font-mono text-blue-100/45">{scene.time}</span>
+                      <span className="leading-5 text-white/58">{scene.description}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            <PillList title={t.ctas} items={entry.cta_templates.slice(0, 5)} compact />
+            <PillList title={t.hashtags} items={entry.top_hashtags.slice(0, 8).map((tag) => `#${tag}`)} compact />
+          </div>
+        </div>
       </div>
     </article>
   );
 }
 
-function KnowledgeSection({ title, children }: { title: string; children: React.ReactNode }) {
-  return (
-    <div>
-      <h3 className="mb-3 text-sm font-semibold text-white/88">{title}</h3>
-      <div className="space-y-2">{children}</div>
-    </div>
-  );
-}
+function PillList({ title, items, compact = false }: { title: string; items: string[]; compact?: boolean }) {
+  if (!items.length) return null;
 
-function PillList({ title, items }: { title: string; items: string[] }) {
   return (
-    <div>
-      <h3 className="mb-3 text-sm font-semibold text-white/88">{title}</h3>
+    <div className={compact ? "" : "mt-5"}>
+      <h3 className="mb-3 text-sm font-semibold text-white/82">{title}</h3>
       <div className="flex flex-wrap gap-2">
         {items.map((item, index) => (
-          <span key={`${title}-${index}-${item}`} className="rounded-full border border-white/[0.06] bg-white/[0.035] px-3 py-1 text-[11px] text-white/55">
+          <span key={`${title}-${index}-${item}`} className="rounded-full border border-white/[0.07] bg-white/[0.035] px-3 py-1.5 text-[11px] text-white/55">
             {item}
           </span>
         ))}

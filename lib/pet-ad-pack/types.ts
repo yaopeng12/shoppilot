@@ -1,5 +1,6 @@
 import type { Product, UsageSnapshot } from "@/lib/tiktok-adgen/types";
 import type { MarketProfile, TargetMarketCode } from "@/lib/localization/markets";
+import type { MarketPlaybook } from "@/lib/inspiration/types";
 
 export type PetCleaningScenario =
   | "cat_litter_odor"
@@ -7,7 +8,13 @@ export type PetCleaningScenario =
   | "litter_tracking"
   | "pet_hair_cleanup"
   | "fabric_odor"
-  | "dog_pad_floor";
+  | "dog_pad_floor"
+  | "auto_litter_box"
+  | "pet_bathing"
+  | "paw_cleanup"
+  | "pet_stain_removal"
+  | "aquarium_cleaning"
+  | "pet_toys_cleaning";
 
 export type PetTargetMarket = TargetMarketCode;
 
@@ -72,6 +79,7 @@ export type PetAdPack = {
   product: Product;
   targetMarket: PetTargetMarket;
   localization: MarketProfile;
+  marketPlaybook: MarketPlaybook;
   detectedScenario: PetCleaningScenario;
   selectedSource: SourceCandidate;
   alternatives: SourceCandidate[];
@@ -101,6 +109,63 @@ export type PetAdPack = {
     change: string;
     successMetric: string;
   }>;
+  creativeVariants?: Array<{
+    id: string;
+    angle: string;
+    hook: string;
+    firstShot: string;
+    cta: string;
+    bestFor: string;
+  }>;
+  ali1688?: {
+    products: Array<{
+      id: string;
+      title: string;
+      price: number;
+      priceRange: string;
+      suggestedRetailUsd: number;
+      grossMarginPercent: number;
+      unit: string;
+      minOrder: number;
+      supplier: string;
+      supplierLocation: string;
+      supplierRating: number;
+      transactionCount: number;
+      imageUrl: string;
+      productUrl: string;
+      tags: string[];
+      matchScore?: number;
+      matchReasons?: string[];
+      riskLevel: "low" | "medium" | "high";
+      riskFlags: string[];
+      sourcingTips: string[];
+      searchKeywords: string[];
+    }>;
+    searchUrls: { keyword: string; url: string }[];
+    selectedProduct?: {
+      id: string;
+      title: string;
+      price: number;
+      priceRange: string;
+      suggestedRetailUsd: number;
+      grossMarginPercent: number;
+      unit: string;
+      minOrder: number;
+      supplier: string;
+      supplierLocation: string;
+      supplierRating: number;
+      transactionCount: number;
+      imageUrl: string;
+      productUrl: string;
+      tags: string[];
+      matchScore?: number;
+      matchReasons?: string[];
+      riskLevel: "low" | "medium" | "high";
+      riskFlags: string[];
+      sourcingTips: string[];
+      searchKeywords: string[];
+    };
+  };
   _usage?: UsageSnapshot;
 };
 

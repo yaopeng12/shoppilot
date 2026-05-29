@@ -42,6 +42,7 @@ function VideoCard({ video, onClick }: { video: VideoWithAnalysis; onClick: () =
   const analysis = getAnalysis(video);
   const hook = analysis?.hooks?.find(Boolean);
   const categoryLabel = getUiProductCategoryLabel(video.product_category, locale);
+  const playbook = video.market_playbook || analysis?.market_playbook;
 
   return (
     <button
@@ -100,6 +101,13 @@ function VideoCard({ video, onClick }: { video: VideoWithAnalysis; onClick: () =
           <span>{formatNum(video.comment_count)} {t.comments}</span>
           <span>{formatNum(video.share_count)} {t.shares}</span>
         </div>
+
+        {playbook && (
+          <div className="rounded-lg border border-blue-400/10 bg-blue-400/[0.04] px-3 py-2 text-[11px] leading-5 text-blue-100/70">
+            <span className="font-semibold text-blue-100/90">Top market: {playbook.primaryMarketLabel}</span>
+            <span className="block text-blue-100/45">{playbook.confidence} · {playbook.reason}</span>
+          </div>
+        )}
 
         {hook && (
           <div className="mt-auto line-clamp-2 rounded-lg border border-emerald-400/10 bg-emerald-400/[0.04] px-3 py-2 text-[11px] leading-5 text-emerald-100/70">

@@ -1,5 +1,6 @@
 import OpenAI from "openai";
 import type { TrendingVideo, VideoAnalysis, VideoScene } from "./types";
+import { inferVideoMarketPlaybook } from "./market-intelligence";
 
 const client = new OpenAI({
   baseURL: "https://dashscope.aliyuncs.com/compatible-mode/v1",
@@ -20,6 +21,7 @@ Shares: ${video.share_count.toLocaleString()}
 Duration: ${video.duration_seconds || "N/A"}s
 Hashtags: ${(video.hashtags || []).join(", ") || "N/A"}
 Category: ${video.product_category || "N/A"}
+Likely play market: ${inferVideoMarketPlaybook(video).primaryMarketLabel}
 
 Return a JSON object with exactly this structure (no markdown, no code fences, pure JSON only):
 {
@@ -82,6 +84,7 @@ function calcEngagementScore(video: TrendingVideo): number {
 
 function fallbackAnalysis(video: TrendingVideo): VideoAnalysis {
   const name = video.title || "this product";
+  const playbook = inferVideoMarketPlaybook(video);
   return {
     id: "",
     video_id: video.id,
@@ -105,7 +108,9 @@ function fallbackAnalysis(video: TrendingVideo): VideoAnalysis {
       "Show the product in real-use scenarios for authenticity",
       "Include a clear call-to-action at the end",
       "Use trending sounds or formats to boost discoverability",
+      `Best market signal: ${playbook.primaryMarketLabel}. Adapt with: ${playbook.hookAngle}`,
     ],
+    market_playbook: playbook,
     analysis_model: "fallback",
     analyzed_at: new Date().toISOString(),
     created_at: new Date().toISOString(),
@@ -135,6 +140,7 @@ export async function analyzeVideo(video: TrendingVideo): Promise<VideoAnalysis>
     const parsed = parseResponse(text);
 
     if (parsed?.hooks && parsed?.video_structure) {
+      const playbook = inferVideoMarketPlaybook(video);
       return {
         id: "",
         video_id: video.id,
@@ -145,7 +151,11 @@ export async function analyzeVideo(video: TrendingVideo): Promise<VideoAnalysis>
         cta_patterns: Array.isArray(parsed.cta_patterns) ? (parsed.cta_patterns as string[]).slice(0, 5) : [],
         tone_style: typeof parsed.tone_style === "string" ? parsed.tone_style : null,
         engagement_score: calcEngagementScore(video),
-        key_takeaways: Array.isArray(parsed.key_takeaways) ? (parsed.key_takeaways as string[]).slice(0, 5) : [],
+        key_takeaways: [
+          ...(Array.isArray(parsed.key_takeaways) ? (parsed.key_takeaways as string[]).slice(0, 5) : []),
+          `Best market signal: ${playbook.primaryMarketLabel}. Adapt with: ${playbook.hookAngle}`,
+        ],
+        market_playbook: playbook,
         analysis_model: MODEL,
         analyzed_at: new Date().toISOString(),
         created_at: new Date().toISOString(),

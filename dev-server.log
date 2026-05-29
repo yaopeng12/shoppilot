@@ -6,93 +6,1499 @@
 - Local:         http://localhost:3000
 - Network:       http://192.168.31.214:3000
 - Environments: .env.local
-✓ Ready in 353ms
+✓ Ready in 357ms
 
- GET /sign-in 200 in 748ms (next.js: 435ms, proxy.ts: 137ms, application-code: 176ms)
- GET /sign-in 200 in 754ms (next.js: 328ms, proxy.ts: 249ms, application-code: 178ms)
- GET /sign-in 200 in 61ms (next.js: 8ms, proxy.ts: 4ms, application-code: 49ms)
- GET /auth/start/google 307 in 724ms (next.js: 699ms, proxy.ts: 5ms, application-code: 21ms)
- GET /api/auth/session 200 in 637ms (next.js: 620ms, proxy.ts: 10ms, application-code: 8ms)
- GET /api/auth/session 200 in 568ms (next.js: 540ms, proxy.ts: 8ms, application-code: 20ms)
- GET /api/auth/session 200 in 19ms (next.js: 10ms, proxy.ts: 4ms, application-code: 5ms)
+ GET /api/inspiration/pet-scrape 200 in 2.4s (next.js: 623ms, proxy.ts: 232ms, application-code: 1531ms)
+Found 6 existing videos in database
+Starting scrape with 26 queries...
+TikTok API error for query "cat litter box odor": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "cat litter box odor": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "cat litter box odor" (0 duplicates skipped)
+TikTok API error for query "cat litter deodorizer": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "cat litter deodorizer": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "cat litter deodorizer" (0 duplicates skipped)
+TikTok API error for query "litter box smell": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "litter box smell": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "litter box smell" (0 duplicates skipped)
+TikTok API error for query "cat litter mat tracking": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "cat litter mat tracking": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "cat litter mat tracking" (0 duplicates skipped)
+TikTok API error for query "automatic litter box": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "automatic litter box": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "automatic litter box" (0 duplicates skipped)
+TikTok API error for query "self cleaning litter box": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "self cleaning litter box": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "self cleaning litter box" (0 duplicates skipped)
+TikTok API error for query "cat urine cleaner": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "cat urine cleaner": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "cat urine cleaner" (0 duplicates skipped)
+TikTok API error for query "pet stain remover": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "pet stain remover": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "pet stain remover" (0 duplicates skipped)
+TikTok API error for query "enzyme cleaner cat": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "enzyme cleaner cat": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "enzyme cleaner cat" (0 duplicates skipped)
+TikTok API error for query "cat pee carpet": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "cat pee carpet": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "cat pee carpet" (0 duplicates skipped)
+TikTok API error for query "pet accident cleanup": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "pet accident cleanup": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "pet accident cleanup" (0 duplicates skipped)
+TikTok API error for query "pet hair remover": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "pet hair remover": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "pet hair remover" (0 duplicates skipped)
+TikTok API error for query "dog hair sofa": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "dog hair sofa": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "dog hair sofa" (0 duplicates skipped)
+TikTok API error for query "cat fur clothes": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "cat fur clothes": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "cat fur clothes" (0 duplicates skipped)
+TikTok API error for query "lint roller pet": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "lint roller pet": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "lint roller pet" (0 duplicates skipped)
+TikTok API error for query "pet hair vacuum": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "pet hair vacuum": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "pet hair vacuum" (0 duplicates skipped)
+TikTok API error for query "dog bath time": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "dog bath time": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "dog bath time" (0 duplicates skipped)
+TikTok API error for query "paw cleaner dog": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "paw cleaner dog": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "paw cleaner dog" (0 duplicates skipped)
+TikTok API error for query "dog grooming": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "dog grooming": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "dog grooming" (0 duplicates skipped)
+TikTok API error for query "puppy bath": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "puppy bath": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "puppy bath" (0 duplicates skipped)
+TikTok API error for query "dog drying towel": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "dog drying towel": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "dog drying towel" (0 duplicates skipped)
+TikTok API error for query "pet odor eliminator": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "pet odor eliminator": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "pet odor eliminator" (0 duplicates skipped)
+TikTok API error for query "fabric pet smell": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "fabric pet smell": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "fabric pet smell" (0 duplicates skipped)
+TikTok API error for query "pet bed cleaning": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "pet bed cleaning": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "pet bed cleaning" (0 duplicates skipped)
+TikTok API error for query "pet toy cleaner": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "pet toy cleaner": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "pet toy cleaner" (0 duplicates skipped)
+TikTok API error for query "pet safe floor cleaner": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:95:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:710:18)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  93 |       });
+  94 |
+> 95 |       const res = await fetch(
+     |                   ^
+  96 |         `https://ads.tiktok.com/creative_radar_api/v1/popular/video/list?${params}`,
+  97 |         {
+  98 |           headers: { {
+  [cause]: Error [ConnectTimeoutError]: Connect Timeout Error (attempted address: ads.tiktok.com:443, timeout: 10000ms)
+      at ignore-listed frames {
+    code: 'UND_ERR_CONNECT_TIMEOUT'
+  }
+}
+Web search error for query "pet safe floor cleaner": TypeError: fetch failed
+    at async Object.fetchVideos (lib\inspiration\pet-scraper.ts:155:19)
+    at async scrapeAndAnalyzePetCleaning (lib\inspiration\pet-scraper.ts:714:20)
+    at async POST (app\api\inspiration\pet-scrape\route.ts:25:20)
+  153 |       // Try TikTok search page
+  154 |       const searchUrl = `https://www.tiktok.com/api/search/general/full/?keyword=${encode...
+> 155 |       const res = await fetch(searchUrl, {
+      |                   ^
+  156 |         headers: {
+  157 |           "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chr...
+  158 |         }, {
+  [cause]: Error: read ECONNRESET
+      at ignore-listed frames {
+    errno: -4077,
+    code: 'ECONNRESET',
+    syscall: 'read'
+  }
+}
+Scraped 0 new videos for "pet safe floor cleaner" (0 duplicates skipped)
+Total new videos scraped: 0
+No new videos to process
+ POST /api/inspiration/pet-scrape 200 in 6.0min (next.js: 3ms, proxy.ts: 6ms, application-code: 6.0min)
+ GET /api/inspiration/pet-scrape 200 in 735ms (next.js: 146ms, proxy.ts: 107ms, application-code: 482ms)
+ GET / 200 in 2.4s (next.js: 2.1s, proxy.ts: 14ms, application-code: 286ms)
+ GET /api/auth/session 200 in 877ms (proxy.ts: 7ms)
+ GET / 200 in 69ms (next.js: 6ms, proxy.ts: 17ms, application-code: 46ms)
+ GET /api/auth/session 200 in 42ms (next.js: 14ms, proxy.ts: 10ms, application-code: 18ms)
+ GET /api/auth/session 200 in 26ms (next.js: 4ms, proxy.ts: 11ms, application-code: 10ms)
+ GET /inspiration 200 in 386ms (next.js: 350ms, proxy.ts: 9ms, application-code: 27ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 1451ms (next.js: 218ms, proxy.ts: 15ms, application-code: 1219ms)
+ GET /api/inspiration/stats 200 in 1457ms (next.js: 170ms, proxy.ts: 15ms, application-code: 1273ms)
+ GET /api/inspiration/stats 200 in 333ms (next.js: 13ms, proxy.ts: 17ms, application-code: 302ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 363ms (next.js: 8ms, proxy.ts: 20ms, application-code: 335ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=2&pageSize=20 200 in 406ms (next.js: 3ms, proxy.ts: 10ms, application-code: 393ms)
+ GET /api/inspiration/videos?sort=likes&targetMarket=en-US&page=2&pageSize=20 200 in 381ms (next.js: 5ms, proxy.ts: 13ms, application-code: 363ms)
+ GET /api/inspiration/stats 200 in 385ms (next.js: 11ms, proxy.ts: 13ms, application-code: 361ms)
+ GET /api/inspiration/videos?sort=engagement&targetMarket=en-US&page=2&pageSize=20 200 in 155ms (next.js: 4ms, proxy.ts: 13ms, application-code: 138ms)
+ GET /api/inspiration/stats 200 in 358ms (next.js: 8ms, proxy.ts: 12ms, application-code: 338ms)
+ GET /api/inspiration/videos?sort=newest&targetMarket=en-US&page=2&pageSize=20 200 in 164ms (next.js: 5ms, proxy.ts: 12ms, application-code: 147ms)
+ GET /api/inspiration/stats 200 in 338ms (next.js: 9ms, proxy.ts: 12ms, application-code: 317ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=2&pageSize=20 200 in 148ms (next.js: 5ms, proxy.ts: 10ms, application-code: 133ms)
+ GET /api/inspiration/stats 200 in 371ms (next.js: 8ms, proxy.ts: 11ms, application-code: 352ms)
+ GET /api/inspiration/videos?category=cat_litter&sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 145ms (next.js: 5ms, proxy.ts: 14ms, application-code: 126ms)
+ GET /api/inspiration/stats 200 in 349ms (next.js: 10ms, proxy.ts: 14ms, application-code: 325ms)
+ GET /knowledge 200 in 353ms (next.js: 319ms, proxy.ts: 8ms, application-code: 27ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 525ms (next.js: 147ms, proxy.ts: 8ms, application-code: 369ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 134ms (next.js: 4ms, proxy.ts: 8ms, application-code: 122ms)
+ GET /inspiration 200 in 37ms (next.js: 3ms, proxy.ts: 9ms, application-code: 24ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 395ms (next.js: 4ms, proxy.ts: 12ms, application-code: 378ms)
+ GET /api/inspiration/stats 200 in 396ms (next.js: 10ms, proxy.ts: 12ms, application-code: 374ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 154ms (next.js: 5ms, proxy.ts: 16ms, application-code: 133ms)
+ GET /api/inspiration/stats 200 in 443ms (next.js: 9ms, proxy.ts: 16ms, application-code: 418ms)
+ GET /api/auth/session 200 in 40ms (next.js: 16ms, proxy.ts: 9ms, application-code: 15ms)
+ GET /api/auth/session 200 in 22ms (next.js: 5ms, proxy.ts: 7ms, application-code: 10ms)
+ GET /api/auth/session 200 in 30ms (next.js: 12ms, proxy.ts: 9ms, application-code: 10ms)
+ GET /api/auth/session 200 in 20ms (next.js: 5ms, proxy.ts: 7ms, application-code: 9ms)
+ GET /api/auth/session 200 in 28ms (next.js: 11ms, proxy.ts: 7ms, application-code: 10ms)
+ GET /api/auth/session 200 in 22ms (next.js: 5ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=2&pageSize=20 200 in 1073ms (next.js: 3ms, proxy.ts: 8ms, application-code: 1063ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=3&pageSize=20 200 in 155ms (next.js: 4ms, proxy.ts: 7ms, application-code: 144ms)
+ GET /api/auth/session 200 in 31ms (next.js: 13ms, proxy.ts: 8ms, application-code: 10ms)
+ GET /api/auth/session 200 in 20ms (next.js: 4ms, proxy.ts: 7ms, application-code: 9ms)
+ GET /api/auth/session 200 in 30ms (next.js: 12ms, proxy.ts: 8ms, application-code: 10ms)
+ GET /api/auth/session 200 in 20ms (next.js: 5ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=4&pageSize=20 200 in 988ms (next.js: 4ms, proxy.ts: 8ms, application-code: 976ms)
+[browser] Encountered two children with the same key, `cand_20260527_tiktok_double_layer_litter_mat`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 
+[browser] Encountered two children with the same key, `cand_20260527_tiktok_double_layer_litter_mat`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 
+ GET /api/auth/session 200 in 30ms (next.js: 12ms, proxy.ts: 8ms, application-code: 10ms)
+[browser] Encountered two children with the same key, `cand_20260527_tiktok_double_layer_litter_mat`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 
+ GET /api/auth/session 200 in 25ms (next.js: 10ms, proxy.ts: 6ms, application-code: 9ms)
+[browser] Encountered two children with the same key, `cand_20260527_tiktok_double_layer_litter_mat`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 
+[browser] Encountered two children with the same key, `cand_20260527_tiktok_double_layer_litter_mat`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 
+[browser] Encountered two children with the same key, `cand_20260527_tiktok_double_layer_litter_mat`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 
+ GET /api/auth/session 200 in 31ms (next.js: 13ms, proxy.ts: 8ms, application-code: 10ms)
+[browser] Encountered two children with the same key, `cand_20260527_tiktok_double_layer_litter_mat`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 
+ GET /api/auth/session 200 in 23ms (next.js: 6ms, proxy.ts: 7ms, application-code: 9ms)
+[browser] Encountered two children with the same key, `cand_20260527_tiktok_double_layer_litter_mat`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 
+[browser] Encountered two children with the same key, `cand_20260527_tiktok_double_layer_litter_mat`. Keys should be unique so that components maintain their identity across updates. Non-unique keys may cause children to be duplicated and/or omitted — the behavior is unsupported and could change in a future version. 
+ GET /inspiration 200 in 75ms (next.js: 3ms, proxy.ts: 7ms, application-code: 65ms)
+ GET /api/auth/session 200 in 57ms (next.js: 30ms, proxy.ts: 16ms, application-code: 11ms)
+ GET /api/auth/session 200 in 20ms (next.js: 5ms, proxy.ts: 7ms, application-code: 7ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 1032ms (next.js: 5ms, proxy.ts: 16ms, application-code: 1011ms)
+ GET /api/inspiration/stats 200 in 1034ms (next.js: 11ms, proxy.ts: 16ms, application-code: 1007ms)
+ GET /api/auth/session 200 in 26ms (next.js: 11ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 19ms (next.js: 5ms, proxy.ts: 6ms, application-code: 8ms)
+ GET /api/auth/session 200 in 33ms (next.js: 13ms, proxy.ts: 10ms, application-code: 11ms)
+ GET /api/auth/session 200 in 21ms (next.js: 5ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /knowledge 200 in 38ms (next.js: 5ms, proxy.ts: 8ms, application-code: 25ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 581ms (next.js: 2ms, proxy.ts: 7ms, application-code: 572ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 168ms (next.js: 5ms, proxy.ts: 8ms, application-code: 156ms)
+ GET /api/auth/session 200 in 29ms (next.js: 12ms, proxy.ts: 9ms, application-code: 9ms)
+ GET /api/auth/session 200 in 19ms (next.js: 4ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 28ms (next.js: 11ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /api/auth/session 200 in 22ms (next.js: 6ms, proxy.ts: 8ms, application-code: 9ms)
+ GET / 200 in 71ms (next.js: 5ms, proxy.ts: 4ms, application-code: 62ms)
+ GET /api/auth/session 200 in 24ms (next.js: 12ms, proxy.ts: 5ms, application-code: 6ms)
+ GET /api/auth/session 200 in 29ms (next.js: 17ms, proxy.ts: 7ms, application-code: 5ms)
+ GET /storyboard 200 in 377ms (next.js: 340ms, proxy.ts: 5ms, application-code: 31ms)
+ GET /sign-in 200 in 677ms (next.js: 637ms, proxy.ts: 3ms, application-code: 37ms)
+ GET / 200 in 70ms (next.js: 4ms, proxy.ts: 4ms, application-code: 62ms)
+ GET /api/auth/session 200 in 22ms (next.js: 12ms, proxy.ts: 5ms, application-code: 5ms)
+ GET /api/auth/session 200 in 14ms (next.js: 6ms, proxy.ts: 4ms, application-code: 5ms)
+ GET / 200 in 66ms (next.js: 3ms, proxy.ts: 9ms, application-code: 54ms)
+ GET /api/auth/session 200 in 27ms (next.js: 12ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 19ms (next.js: 4ms, proxy.ts: 7ms, application-code: 8ms)
  GET /api/auth/session 200 in 19ms (next.js: 4ms, proxy.ts: 6ms, application-code: 9ms)
- GET /sign-in 200 in 91ms (next.js: 13ms, proxy.ts: 5ms, application-code: 72ms)
- GET /api/auth/session 200 in 35ms (next.js: 19ms, proxy.ts: 9ms, application-code: 7ms)
- GET /api/auth/session 200 in 17ms (next.js: 6ms, proxy.ts: 5ms, application-code: 6ms)
- GET /auth/start/google 307 in 34ms (next.js: 13ms, proxy.ts: 6ms, application-code: 15ms)
- GET /auth/start/google 307 in 25ms (next.js: 7ms, proxy.ts: 6ms, application-code: 12ms)
- GET /sign-in 200 in 548ms (next.js: 88ms, proxy.ts: 266ms, application-code: 193ms)
- GET /sign-in 200 in 574ms (next.js: 163ms, proxy.ts: 36ms, application-code: 376ms)
- GET /api/auth/session 200 in 102ms (next.js: 60ms, proxy.ts: 11ms, application-code: 31ms)
- GET /api/auth/session 200 in 25ms (next.js: 6ms, proxy.ts: 9ms, application-code: 11ms)
- GET /sign-in 200 in 81ms (next.js: 26ms, proxy.ts: 29ms, application-code: 26ms)
- GET / 200 in 208ms (next.js: 36ms, proxy.ts: 7ms, application-code: 164ms)
- GET /sign-in 200 in 192ms (next.js: 18ms, proxy.ts: 31ms, application-code: 142ms)
- GET /auth/start/google 307 in 183ms (next.js: 133ms, proxy.ts: 18ms, application-code: 32ms)
- GET /sign-in 200 in 112ms (next.js: 12ms, proxy.ts: 11ms, application-code: 89ms)
- GET /api/auth/session 200 in 60ms (next.js: 27ms, proxy.ts: 18ms, application-code: 15ms)
- GET /api/auth/session 200 in 27ms (next.js: 6ms, proxy.ts: 10ms, application-code: 11ms)
- GET /storyboard 200 in 95ms (next.js: 22ms, proxy.ts: 8ms, application-code: 65ms)
- GET /api/auth/session 200 in 27ms (next.js: 7ms, proxy.ts: 6ms, application-code: 15ms)
- GET /api/auth/session 200 in 14ms (next.js: 3ms, proxy.ts: 6ms, application-code: 6ms)
- GET /inspiration 200 in 42ms (next.js: 21ms, proxy.ts: 5ms, application-code: 16ms)
- GET /knowledge 200 in 44ms (next.js: 19ms, proxy.ts: 5ms, application-code: 21ms)
- GET /pricing 200 in 45ms (next.js: 18ms, proxy.ts: 6ms, application-code: 21ms)
- GET /api/inspiration/stats 200 in 1226ms (next.js: 58ms, proxy.ts: 8ms, application-code: 1159ms)
- GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 1232ms (next.js: 98ms, proxy.ts: 9ms, application-code: 1126ms)
- GET /api/user/me 200 in 75ms (next.js: 24ms, proxy.ts: 7ms, application-code: 45ms)
- GET /api/user/me 200 in 15ms (next.js: 1619µs, proxy.ts: 5ms, application-code: 8ms)
- GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 146ms (next.js: 19ms, proxy.ts: 10ms, application-code: 118ms)
- GET /api/inspiration/stats 200 in 338ms (next.js: 2ms, proxy.ts: 11ms, application-code: 325ms)
- GET /dashboard 200 in 39ms (next.js: 17ms, proxy.ts: 5ms, application-code: 16ms)
- GET /api/user/me 200 in 53ms (next.js: 2ms, proxy.ts: 11ms, application-code: 40ms)
- GET /api/user/me 200 in 14ms (next.js: 1531µs, proxy.ts: 5ms, application-code: 7ms)
- GET /api/generations 200 in 385ms (next.js: 26ms, proxy.ts: 9ms, application-code: 349ms)
- GET /api/generations 200 in 127ms (next.js: 1699µs, proxy.ts: 5ms, application-code: 120ms)
- GET /inspiration 200 in 21ms (next.js: 2ms, proxy.ts: 5ms, application-code: 14ms)
- GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 140ms (next.js: 8ms, proxy.ts: 8ms, application-code: 125ms)
- GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 137ms (next.js: 3ms, proxy.ts: 7ms, application-code: 127ms)
- GET /api/inspiration/stats 200 in 336ms (next.js: 11ms, proxy.ts: 8ms, application-code: 317ms)
- GET /api/inspiration/stats 200 in 299ms (next.js: 2ms, proxy.ts: 6ms, application-code: 291ms)
- GET /api/auth/callback/google 302 in 31ms (next.js: 17ms, proxy.ts: 6ms, application-code: 8ms)
- GET /api/auth/callback/google 302 in 46ms (next.js: 4ms, proxy.ts: 34ms, application-code: 7ms)
- GET /api/auth/error?error=Configuration 500 in 16ms (next.js: 6ms, proxy.ts: 4ms, application-code: 7ms)
- GET /api/auth/error?error=Configuration 500 in 12ms (next.js: 3ms, proxy.ts: 6ms, application-code: 3ms)
- GET / 200 in 41ms (next.js: 1917µs, proxy.ts: 3ms, application-code: 36ms)
- GET /storyboard 200 in 96ms (next.js: 13ms, proxy.ts: 17ms, application-code: 66ms)
- GET /pricing 200 in 97ms (next.js: 23ms, proxy.ts: 18ms, application-code: 56ms)
- GET /api/auth/callback/google 302 in 150ms (next.js: 87ms, proxy.ts: 17ms, application-code: 46ms)
- GET /api/auth/callback/github 302 in 151ms (next.js: 89ms, proxy.ts: 17ms, application-code: 44ms)
- GET /api/auth/error?error=Configuration 500 in 151ms (next.js: 91ms, proxy.ts: 17ms, application-code: 43ms)
- GET /sign-in 200 in 159ms (next.js: 97ms, proxy.ts: 17ms, application-code: 45ms)
- GET /sign-in 200 in 224ms (next.js: 72ms, proxy.ts: 67ms, application-code: 85ms)
- GET /sign-in 200 in 225ms (next.js: 85ms, proxy.ts: 67ms, application-code: 73ms)
- GET /sign-in 200 in 229ms (next.js: 111ms, proxy.ts: 72ms, application-code: 46ms)
- GET /api/auth/error?error=Configuration 500 in 107ms (next.js: 50ms, proxy.ts: 51ms, application-code: 6ms)
- GET /api/auth/error?error=Configuration 500 in 108ms (next.js: 17ms, proxy.ts: 86ms, application-code: 4ms)
- GET /storyboard 200 in 44ms (next.js: 2ms, proxy.ts: 6ms, application-code: 36ms)
- GET /api/auth/session 200 in 22ms (next.js: 7ms, proxy.ts: 6ms, application-code: 9ms)
- GET /api/auth/session 200 in 13ms (next.js: 3ms, proxy.ts: 5ms, application-code: 6ms)
- GET / 200 in 29ms (next.js: 1830µs, proxy.ts: 14ms, application-code: 14ms)
- GET /storyboard 200 in 29ms (next.js: 1870µs, proxy.ts: 5ms, application-code: 23ms)
- GET /inspiration 200 in 32ms (next.js: 1985µs, proxy.ts: 5ms, application-code: 25ms)
- GET /knowledge 200 in 19ms (next.js: 1830µs, proxy.ts: 4ms, application-code: 13ms)
- GET /pricing 200 in 20ms (next.js: 1774µs, proxy.ts: 5ms, application-code: 13ms)
- GET /api/inspiration/stats 200 in 1148ms (next.js: 7ms, proxy.ts: 7ms, application-code: 1135ms)
- GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 1150ms (next.js: 2ms, proxy.ts: 7ms, application-code: 1141ms)
- GET /api/user/me 200 in 16ms (next.js: 2ms, proxy.ts: 6ms, application-code: 8ms)
- GET /api/user/me 200 in 13ms (next.js: 1432µs, proxy.ts: 4ms, application-code: 7ms)
- GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 334ms (next.js: 21ms, proxy.ts: 13ms, application-code: 299ms)
- GET /api/inspiration/stats 200 in 356ms (next.js: 14ms, proxy.ts: 14ms, application-code: 328ms)
- GET /dashboard 200 in 29ms (next.js: 1924µs, proxy.ts: 14ms, application-code: 13ms)
- GET /api/user/me 200 in 23ms (next.js: 3ms, proxy.ts: 9ms, application-code: 11ms)
- GET /api/user/me 200 in 22ms (next.js: 11ms, proxy.ts: 5ms, application-code: 6ms)
- GET /api/generations 200 in 325ms (next.js: 5ms, proxy.ts: 9ms, application-code: 312ms)
- GET /api/generations 200 in 119ms (next.js: 1628µs, proxy.ts: 5ms, application-code: 112ms)
- GET /api/auth/session 200 in 894ms (next.js: 776ms, proxy.ts: 10ms, application-code: 108ms)
- GET /api/auth/session 200 in 86ms (next.js: 6ms, proxy.ts: 31ms, application-code: 49ms)
- GET /api/user/me 200 in 98ms (next.js: 12ms, proxy.ts: 30ms, application-code: 56ms)
- GET /api/user/me 200 in 12ms (next.js: 1528µs, proxy.ts: 5ms, application-code: 6ms)
- GET /api/generations 200 in 1415ms (next.js: 30ms, proxy.ts: 30ms, application-code: 1355ms)
- GET /api/generations 200 in 170ms (next.js: 1445µs, proxy.ts: 5ms, application-code: 164ms)
+ GET /inspiration 200 in 34ms (next.js: 3ms, proxy.ts: 8ms, application-code: 22ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 442ms (next.js: 4ms, proxy.ts: 11ms, application-code: 427ms)
+ GET /api/inspiration/stats 200 in 449ms (next.js: 10ms, proxy.ts: 11ms, application-code: 429ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 170ms (next.js: 4ms, proxy.ts: 19ms, application-code: 148ms)
+ GET /api/inspiration/stats 200 in 350ms (next.js: 3ms, proxy.ts: 21ms, application-code: 326ms)
+ GET /knowledge 200 in 33ms (next.js: 3ms, proxy.ts: 7ms, application-code: 23ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 346ms (next.js: 2ms, proxy.ts: 7ms, application-code: 337ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 128ms (next.js: 3ms, proxy.ts: 8ms, application-code: 117ms)
+ GET /inspiration 200 in 39ms (next.js: 4ms, proxy.ts: 9ms, application-code: 26ms)
+ GET /api/inspiration/stats 200 in 520ms (next.js: 10ms, proxy.ts: 12ms, application-code: 498ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 524ms (next.js: 5ms, proxy.ts: 11ms, application-code: 508ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 131ms (next.js: 5ms, proxy.ts: 11ms, application-code: 115ms)
+ GET /api/inspiration/stats 200 in 363ms (next.js: 9ms, proxy.ts: 11ms, application-code: 342ms)
+ GET /api/auth/session 200 in 29ms (next.js: 12ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /api/auth/session 200 in 20ms (next.js: 5ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 18ms (next.js: 4ms, proxy.ts: 6ms, application-code: 8ms)
+ GET /api/auth/session 200 in 26ms (next.js: 10ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 19ms (next.js: 4ms, proxy.ts: 7ms, application-code: 7ms)
+ GET /api/auth/session 200 in 19ms (next.js: 5ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 27ms (next.js: 11ms, proxy.ts: 8ms, application-code: 8ms)
+ GET /api/auth/session 200 in 19ms (next.js: 4ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 25ms (next.js: 7ms, proxy.ts: 8ms, application-code: 10ms)
+ GET / 200 in 32ms (next.js: 3ms, proxy.ts: 7ms, application-code: 22ms)
+ GET /api/auth/session 200 in 27ms (next.js: 11ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 21ms (next.js: 4ms, proxy.ts: 8ms, application-code: 8ms)
+ GET /api/auth/session 200 in 20ms (next.js: 5ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /inspiration 200 in 35ms (next.js: 4ms, proxy.ts: 7ms, application-code: 24ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 661ms (next.js: 6ms, proxy.ts: 12ms, application-code: 643ms)
+ GET /api/inspiration/stats 200 in 661ms (next.js: 10ms, proxy.ts: 12ms, application-code: 639ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 135ms (next.js: 5ms, proxy.ts: 11ms, application-code: 119ms)
+ GET /api/inspiration/stats 200 in 396ms (next.js: 9ms, proxy.ts: 12ms, application-code: 376ms)
+ POST /api/inspiration/analyze-url 200 in 15.1s (next.js: 307ms, proxy.ts: 8ms, application-code: 14.8s)
+ GET /api/auth/session 200 in 33ms (next.js: 12ms, proxy.ts: 10ms, application-code: 10ms)
+ GET /api/auth/session 200 in 20ms (next.js: 4ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 20ms (next.js: 5ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 26ms (next.js: 11ms, proxy.ts: 6ms, application-code: 9ms)
+ GET /api/auth/session 200 in 19ms (next.js: 4ms, proxy.ts: 6ms, application-code: 8ms)
+ GET /api/auth/session 200 in 20ms (next.js: 5ms, proxy.ts: 7ms, application-code: 8ms)
+ POST /api/inspiration/analyze-url 200 in 15.3s (next.js: 3ms, proxy.ts: 8ms, application-code: 15.2s)
+ POST /api/inspiration/favorites 200 in 1193ms (next.js: 228ms, proxy.ts: 8ms, application-code: 957ms)
+ POST /api/inspiration/favorites 200 in 486ms (next.js: 4ms, proxy.ts: 8ms, application-code: 475ms)
+ POST /api/inspiration/favorites 200 in 496ms (next.js: 2ms, proxy.ts: 9ms, application-code: 485ms)
+ POST /api/inspiration/favorites 200 in 452ms (next.js: 2ms, proxy.ts: 8ms, application-code: 441ms)
+ POST /api/inspiration/favorites 200 in 461ms (next.js: 2ms, proxy.ts: 6ms, application-code: 452ms)
+ POST /api/inspiration/favorites 200 in 679ms (next.js: 3ms, proxy.ts: 8ms, application-code: 669ms)
+ GET /api/auth/session 200 in 26ms (next.js: 11ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 18ms (next.js: 4ms, proxy.ts: 7ms, application-code: 7ms)
+ GET /api/auth/session 200 in 20ms (next.js: 4ms, proxy.ts: 8ms, application-code: 8ms)
+ POST /api/inspiration/favorites 200 in 5.3s (next.js: 3ms, proxy.ts: 8ms, application-code: 5.3s)
+ GET /storyboard 200 in 34ms (next.js: 3ms, proxy.ts: 7ms, application-code: 24ms)
+ GET /inspiration 200 in 30ms (next.js: 3ms, proxy.ts: 7ms, application-code: 20ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 341ms (next.js: 4ms, proxy.ts: 13ms, application-code: 323ms)
+ GET /api/inspiration/stats 200 in 348ms (next.js: 9ms, proxy.ts: 13ms, application-code: 326ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 584ms (next.js: 5ms, proxy.ts: 15ms, application-code: 563ms)
+ GET /api/inspiration/stats 200 in 624ms (next.js: 9ms, proxy.ts: 14ms, application-code: 602ms)
+ GET /storyboard 200 in 33ms (next.js: 4ms, proxy.ts: 7ms, application-code: 22ms)
+Pet ad pack product fetch fallback: fetch failed
+ GET /api/auth/session 200 in 32ms (next.js: 13ms, proxy.ts: 9ms, application-code: 10ms)
+ GET /api/auth/session 200 in 21ms (next.js: 6ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 21ms (next.js: 5ms, proxy.ts: 8ms, application-code: 8ms)
+ POST /api/pet-ad-pack 200 in 76s (next.js: 278ms, proxy.ts: 7ms, application-code: 76s)
+ GET /api/auth/session 200 in 33ms (next.js: 13ms, proxy.ts: 11ms, application-code: 9ms)
+ GET /api/auth/session 200 in 22ms (next.js: 6ms, proxy.ts: 7ms, application-code: 9ms)
+ GET /api/auth/session 200 in 19ms (next.js: 5ms, proxy.ts: 7ms, application-code: 7ms)
+ GET /api/auth/session 200 in 28ms (next.js: 11ms, proxy.ts: 9ms, application-code: 8ms)
+ GET /api/auth/session 200 in 19ms (next.js: 4ms, proxy.ts: 8ms, application-code: 7ms)
+ GET /api/auth/session 200 in 28ms (next.js: 11ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /api/auth/session 200 in 21ms (next.js: 5ms, proxy.ts: 8ms, application-code: 8ms)
+Pet ad pack product fetch fallback: fetch failed
+ GET /api/auth/session 200 in 30ms (next.js: 12ms, proxy.ts: 10ms, application-code: 8ms)
+ GET /api/auth/session 200 in 19ms (next.js: 4ms, proxy.ts: 7ms, application-code: 8ms)
+ POST /api/pet-ad-pack 200 in 66s (next.js: 3ms, proxy.ts: 8ms, application-code: 66s)
+ GET /api/auth/session 200 in 29ms (next.js: 11ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /api/auth/session 200 in 20ms (next.js: 5ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 35ms (next.js: 17ms, proxy.ts: 8ms, application-code: 11ms)
+ GET /api/auth/session 200 in 20ms (next.js: 5ms, proxy.ts: 8ms, application-code: 8ms)
+ GET /inspiration 200 in 36ms (next.js: 4ms, proxy.ts: 7ms, application-code: 25ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 877ms (next.js: 4ms, proxy.ts: 13ms, application-code: 860ms)
+ GET /api/inspiration/stats 200 in 881ms (next.js: 10ms, proxy.ts: 13ms, application-code: 858ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 151ms (next.js: 4ms, proxy.ts: 16ms, application-code: 131ms)
+ GET /api/inspiration/stats 200 in 368ms (next.js: 9ms, proxy.ts: 15ms, application-code: 343ms)
+ GET /api/auth/session 200 in 30ms (next.js: 12ms, proxy.ts: 9ms, application-code: 9ms)
+ GET /api/auth/session 200 in 19ms (next.js: 4ms, proxy.ts: 8ms, application-code: 8ms)
+ GET /storyboard 200 in 32ms (next.js: 3ms, proxy.ts: 7ms, application-code: 21ms)
+ GET /api/auth/session 200 in 30ms (next.js: 12ms, proxy.ts: 9ms, application-code: 9ms)
+ GET /api/auth/session 200 in 19ms (next.js: 5ms, proxy.ts: 7ms, application-code: 7ms)
+ GET /storyboard 200 in 164ms (next.js: 54ms, proxy.ts: 79ms, application-code: 30ms)
+ GET /storyboard 200 in 25ms (next.js: 1854µs, proxy.ts: 6ms, application-code: 18ms)
+ GET /storyboard 200 in 21ms (next.js: 1737µs, proxy.ts: 5ms, application-code: 14ms)
+ GET /storyboard 200 in 21ms (next.js: 1645µs, proxy.ts: 5ms, application-code: 14ms)
+ GET /storyboard 200 in 24ms (next.js: 1768µs, proxy.ts: 6ms, application-code: 16ms)
+ GET /storyboard 200 in 23ms (next.js: 2ms, proxy.ts: 7ms, application-code: 14ms)
+ GET /storyboard 200 in 21ms (next.js: 1655µs, proxy.ts: 5ms, application-code: 15ms)
+ GET /storyboard 200 in 24ms (next.js: 1759µs, proxy.ts: 5ms, application-code: 18ms)
+ GET /storyboard 200 in 25ms (next.js: 2ms, proxy.ts: 8ms, application-code: 15ms)
+ GET /storyboard 200 in 23ms (next.js: 1944µs, proxy.ts: 5ms, application-code: 16ms)
+ GET /storyboard 200 in 23ms (next.js: 1629µs, proxy.ts: 5ms, application-code: 17ms)
+ GET /storyboard 200 in 24ms (next.js: 1967µs, proxy.ts: 7ms, application-code: 15ms)
+ GET /storyboard 200 in 22ms (next.js: 1740µs, proxy.ts: 5ms, application-code: 15ms)
+ GET /storyboard 200 in 25ms (next.js: 1961µs, proxy.ts: 5ms, application-code: 18ms)
+ GET /storyboard 200 in 26ms (next.js: 2ms, proxy.ts: 8ms, application-code: 15ms)
+ GET /storyboard 200 in 21ms (next.js: 1963µs, proxy.ts: 5ms, application-code: 15ms)
+ GET /storyboard 200 in 22ms (next.js: 1795µs, proxy.ts: 5ms, application-code: 15ms)
+ GET /storyboard 200 in 23ms (next.js: 1914µs, proxy.ts: 7ms, application-code: 14ms)
+ GET /storyboard 200 in 22ms (next.js: 1959µs, proxy.ts: 5ms, application-code: 15ms)
+ GET /storyboard 200 in 21ms (next.js: 1736µs, proxy.ts: 5ms, application-code: 14ms)
+ GET /storyboard 200 in 26ms (next.js: 2ms, proxy.ts: 7ms, application-code: 17ms)
+ GET /storyboard 200 in 25ms (next.js: 1896µs, proxy.ts: 5ms, application-code: 17ms)
+ GET /storyboard 200 in 28ms (next.js: 1847µs, proxy.ts: 6ms, application-code: 20ms)
+ GET /storyboard 200 in 27ms (next.js: 2ms, proxy.ts: 10ms, application-code: 14ms)
+ GET /storyboard 200 in 25ms (next.js: 2ms, proxy.ts: 5ms, application-code: 18ms)
+ GET /storyboard 200 in 40ms (next.js: 2ms, proxy.ts: 7ms, application-code: 32ms)
+ GET /storyboard 200 in 27ms (next.js: 3ms, proxy.ts: 5ms, application-code: 19ms)
+ GET /storyboard 200 in 24ms (next.js: 2ms, proxy.ts: 7ms, application-code: 15ms)
+ GET /storyboard 200 in 22ms (next.js: 2ms, proxy.ts: 5ms, application-code: 15ms)
+ GET /storyboard 200 in 22ms (next.js: 1796µs, proxy.ts: 5ms, application-code: 15ms)
+ GET /storyboard 200 in 20ms (next.js: 1809µs, proxy.ts: 5ms, application-code: 13ms)
+ GET /storyboard 200 in 20ms (next.js: 1657µs, proxy.ts: 4ms, application-code: 14ms)
+ GET /storyboard 200 in 25ms (next.js: 1741µs, proxy.ts: 5ms, application-code: 19ms)
+ GET /storyboard 200 in 21ms (next.js: 1766µs, proxy.ts: 5ms, application-code: 14ms)
+ GET /storyboard 200 in 21ms (next.js: 1963µs, proxy.ts: 4ms, application-code: 14ms)
+ GET /storyboard 200 in 24ms (next.js: 2ms, proxy.ts: 4ms, application-code: 17ms)
+ GET /storyboard 200 in 23ms (next.js: 1724µs, proxy.ts: 7ms, application-code: 14ms)
+ GET /storyboard 200 in 21ms (next.js: 1674µs, proxy.ts: 4ms, application-code: 14ms)
+ GET /storyboard 200 in 20ms (next.js: 1847µs, proxy.ts: 4ms, application-code: 13ms)
+ GET /storyboard 200 in 22ms (next.js: 2ms, proxy.ts: 7ms, application-code: 13ms)
+ GET /storyboard 200 in 20ms (next.js: 1718µs, proxy.ts: 5ms, application-code: 14ms)
+ GET /storyboard 200 in 21ms (next.js: 1860µs, proxy.ts: 4ms, application-code: 14ms)
+ GET /storyboard 200 in 23ms (next.js: 1795µs, proxy.ts: 7ms, application-code: 14ms)
+ GET /storyboard 200 in 20ms (next.js: 1641µs, proxy.ts: 4ms, application-code: 14ms)
+ GET /storyboard 200 in 22ms (next.js: 1810µs, proxy.ts: 4ms, application-code: 16ms)
+ GET /storyboard 200 in 27ms (next.js: 4ms, proxy.ts: 6ms, application-code: 17ms)
+ GET /storyboard 200 in 22ms (next.js: 1870µs, proxy.ts: 6ms, application-code: 14ms)
+ GET /storyboard 200 in 20ms (next.js: 1720µs, proxy.ts: 5ms, application-code: 13ms)
+ GET /storyboard 200 in 23ms (next.js: 1744µs, proxy.ts: 4ms, application-code: 17ms)
+ GET /storyboard 200 in 21ms (next.js: 1819µs, proxy.ts: 5ms, application-code: 14ms)
+ GET /storyboard 200 in 21ms (next.js: 1685µs, proxy.ts: 5ms, application-code: 14ms)
+ GET /storyboard 200 in 23ms (next.js: 1839µs, proxy.ts: 5ms, application-code: 16ms)
+ GET /storyboard 200 in 21ms (next.js: 1929µs, proxy.ts: 5ms, application-code: 15ms)
+ GET /storyboard 200 in 20ms (next.js: 1696µs, proxy.ts: 5ms, application-code: 14ms)
+ GET /storyboard 200 in 22ms (next.js: 1691µs, proxy.ts: 5ms, application-code: 16ms)
+ GET /storyboard 200 in 24ms (next.js: 1937µs, proxy.ts: 7ms, application-code: 15ms)
+ GET /storyboard 200 in 21ms (next.js: 1735µs, proxy.ts: 5ms, application-code: 14ms)
+ GET /storyboard 200 in 22ms (next.js: 1704µs, proxy.ts: 5ms, application-code: 15ms)
+ GET /storyboard 200 in 23ms (next.js: 1887µs, proxy.ts: 7ms, application-code: 14ms)
+ GET /storyboard 200 in 20ms (next.js: 1810µs, proxy.ts: 5ms, application-code: 14ms)
+ GET /storyboard 200 in 20ms (next.js: 1725µs, proxy.ts: 5ms, application-code: 14ms)
+ GET /storyboard 200 in 23ms (next.js: 1909µs, proxy.ts: 6ms, application-code: 15ms)
+ GET /storyboard 200 in 22ms (next.js: 1790µs, proxy.ts: 5ms, application-code: 15ms)
+ GET /storyboard 200 in 21ms (next.js: 1806µs, proxy.ts: 5ms, application-code: 14ms)
+ GET /storyboard 200 in 22ms (next.js: 4ms, proxy.ts: 4ms, application-code: 14ms)
+ GET /storyboard 200 in 22ms (next.js: 1753µs, proxy.ts: 4ms, application-code: 15ms)
+ GET /storyboard 200 in 24ms (next.js: 1876µs, proxy.ts: 6ms, application-code: 17ms)
+ GET /storyboard 200 in 25ms (next.js: 1675µs, proxy.ts: 8ms, application-code: 16ms)
+ GET /storyboard 200 in 20ms (next.js: 1797µs, proxy.ts: 4ms, application-code: 14ms)
+ GET /storyboard 200 in 20ms (next.js: 1722µs, proxy.ts: 4ms, application-code: 14ms)
+ GET /storyboard 200 in 23ms (next.js: 1711µs, proxy.ts: 5ms, application-code: 17ms)
+ GET /storyboard 200 in 20ms (next.js: 1690µs, proxy.ts: 5ms, application-code: 14ms)
+ GET /storyboard 200 in 21ms (next.js: 1812µs, proxy.ts: 5ms, application-code: 14ms)
+ GET /storyboard 200 in 20ms (next.js: 1824µs, proxy.ts: 4ms, application-code: 14ms)
+ GET /storyboard 200 in 21ms (next.js: 1911µs, proxy.ts: 6ms, application-code: 13ms)
+ GET /storyboard 200 in 19ms (next.js: 1999µs, proxy.ts: 5ms, application-code: 12ms)
+ GET /storyboard 200 in 156ms (next.js: 54ms, proxy.ts: 69ms, application-code: 33ms)
+ GET /storyboard 200 in 31ms (next.js: 3ms, proxy.ts: 8ms, application-code: 21ms)
+ GET /storyboard 200 in 22ms (next.js: 1733µs, proxy.ts: 5ms, application-code: 16ms)
+ GET /storyboard 200 in 19ms (next.js: 1687µs, proxy.ts: 5ms, application-code: 13ms)
+ GET /api/auth/session 200 in 162ms (next.js: 132ms, proxy.ts: 8ms, application-code: 22ms)
+ GET /api/auth/session 200 in 26ms (next.js: 5ms, proxy.ts: 8ms, application-code: 13ms)
+ GET /inspiration 200 in 44ms (next.js: 12ms, proxy.ts: 7ms, application-code: 24ms)
+ GET /knowledge 200 in 46ms (next.js: 13ms, proxy.ts: 9ms, application-code: 25ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 1176ms (next.js: 44ms, proxy.ts: 13ms, application-code: 1119ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 573ms (next.js: 27ms, proxy.ts: 7ms, application-code: 540ms)
+ GET /api/inspiration/stats 200 in 1190ms (next.js: 77ms, proxy.ts: 14ms, application-code: 1100ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 146ms (next.js: 6ms, proxy.ts: 23ms, application-code: 117ms)
+ GET /api/inspiration/stats 200 in 342ms (next.js: 19ms, proxy.ts: 19ms, application-code: 304ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 360ms (next.js: 12ms, proxy.ts: 19ms, application-code: 328ms)
+ GET /inspiration 200 in 36ms (next.js: 3ms, proxy.ts: 8ms, application-code: 25ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 122ms (next.js: 5ms, proxy.ts: 13ms, application-code: 105ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 124ms (next.js: 5ms, proxy.ts: 14ms, application-code: 105ms)
+ GET /api/inspiration/stats 200 in 377ms (next.js: 9ms, proxy.ts: 13ms, application-code: 355ms)
+ GET /api/inspiration/stats 200 in 338ms (next.js: 3ms, proxy.ts: 8ms, application-code: 328ms)
+ GET /storyboard 200 in 33ms (next.js: 4ms, proxy.ts: 8ms, application-code: 22ms)
+ GET /inspiration 200 in 32ms (next.js: 3ms, proxy.ts: 6ms, application-code: 22ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 331ms (next.js: 5ms, proxy.ts: 10ms, application-code: 317ms)
+ GET /api/inspiration/stats 200 in 398ms (next.js: 10ms, proxy.ts: 10ms, application-code: 377ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 120ms (next.js: 3ms, proxy.ts: 10ms, application-code: 107ms)
+ GET /api/inspiration/stats 200 in 343ms (next.js: 3ms, proxy.ts: 7ms, application-code: 334ms)
+ GET /api/auth/session 200 in 36ms (next.js: 14ms, proxy.ts: 12ms, application-code: 11ms)
+ GET /api/auth/session 200 in 22ms (next.js: 6ms, proxy.ts: 7ms, application-code: 9ms)
+ POST /api/inspiration/analyze-url 200 in 9.1s (next.js: 146ms, proxy.ts: 8ms, application-code: 9.0s)
+ GET /inspiration 200 in 171ms (next.js: 3ms, proxy.ts: 8ms, application-code: 161ms)
+ GET /api/auth/session 200 in 62ms (next.js: 36ms, proxy.ts: 17ms, application-code: 10ms)
+ GET /api/auth/session 200 in 19ms (next.js: 4ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 397ms (next.js: 5ms, proxy.ts: 17ms, application-code: 375ms)
+ GET /api/inspiration/stats 200 in 433ms (next.js: 11ms, proxy.ts: 17ms, application-code: 405ms)
+ GET /inspiration 200 in 286ms (next.js: 98ms, proxy.ts: 114ms, application-code: 75ms)
+ GET /inspiration 200 in 64ms (next.js: 3ms, proxy.ts: 11ms, application-code: 49ms)
+ GET /inspiration 200 in 59ms (next.js: 4ms, proxy.ts: 26ms, application-code: 29ms)
+ GET /inspiration 200 in 33ms (next.js: 3ms, proxy.ts: 8ms, application-code: 22ms)
+ GET /storyboard 200 in 45ms (next.js: 13ms, proxy.ts: 10ms, application-code: 22ms)
+ GET /inspiration 200 in 31ms (next.js: 3ms, proxy.ts: 7ms, application-code: 22ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 476ms (next.js: 90ms, proxy.ts: 11ms, application-code: 375ms)
+ GET /api/inspiration/stats 200 in 501ms (next.js: 130ms, proxy.ts: 11ms, application-code: 361ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 134ms (next.js: 3ms, proxy.ts: 13ms, application-code: 119ms)
+ GET /api/inspiration/stats 200 in 343ms (next.js: 3ms, proxy.ts: 9ms, application-code: 332ms)
+ GET /inspiration 200 in 169ms (next.js: 5ms, proxy.ts: 10ms, application-code: 154ms)
+ GET /api/auth/session 200 in 150ms (next.js: 111ms, proxy.ts: 16ms, application-code: 24ms)
+ GET /api/auth/session 200 in 30ms (next.js: 5ms, proxy.ts: 13ms, application-code: 12ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 607ms (next.js: 7ms, proxy.ts: 16ms, application-code: 584ms)
+ GET /api/inspiration/stats 200 in 609ms (next.js: 14ms, proxy.ts: 16ms, application-code: 579ms)
+ GET /storyboard 200 in 35ms (next.js: 3ms, proxy.ts: 9ms, application-code: 22ms)
+ POST /api/pet-ad-pack 429 in 662ms (next.js: 148ms, proxy.ts: 8ms, application-code: 507ms)
+ POST /api/pet-ad-pack 429 in 472ms (next.js: 2ms, proxy.ts: 7ms, application-code: 462ms)
+ GET /pricing 200 in 333ms (next.js: 302ms, proxy.ts: 7ms, application-code: 23ms)
+ GET /api/user/me 200 in 1316ms (next.js: 220ms, proxy.ts: 7ms, application-code: 1089ms)
+ POST /api/upgrade 200 in 1206ms (next.js: 231ms, proxy.ts: 7ms, application-code: 967ms)
+ GET /api/user/me 200 in 548ms (next.js: 3ms, proxy.ts: 7ms, application-code: 538ms)
+ GET /storyboard 200 in 34ms (next.js: 3ms, proxy.ts: 10ms, application-code: 21ms)
+Pet ad pack product fetch fallback: fetch failed
+✓ Compiled in 60ms
+ GET /storyboard 200 in 280ms (next.js: 117ms, proxy.ts: 119ms, application-code: 44ms)
+ GET /api/auth/session 200 in 178ms (next.js: 143ms, proxy.ts: 10ms, application-code: 25ms)
+ GET /api/auth/session 200 in 26ms (next.js: 6ms, proxy.ts: 8ms, application-code: 12ms)
+✓ Compiled in 155ms
+ GET /storyboard 200 in 445ms (next.js: 118ms, proxy.ts: 128ms, application-code: 198ms)
+ GET /api/auth/session 200 in 340ms (next.js: 129ms, proxy.ts: 181ms, application-code: 30ms)
+ GET /api/auth/session 200 in 20ms (next.js: 4ms, proxy.ts: 7ms, application-code: 9ms)
+✓ Compiled in 74ms
+ GET /storyboard 200 in 261ms (next.js: 110ms, proxy.ts: 101ms, application-code: 50ms)
+✓ Compiled in 62ms
+ GET /storyboard 200 in 276ms (next.js: 119ms, proxy.ts: 110ms, application-code: 47ms)
+ POST /api/pet-ad-pack 200 in 76s (next.js: 3ms, proxy.ts: 7ms, application-code: 76s)
+ GET /api/auth/session 200 in 180ms (next.js: 144ms, proxy.ts: 11ms, application-code: 25ms)
+ GET /api/auth/session 200 in 24ms (next.js: 5ms, proxy.ts: 8ms, application-code: 11ms)
+ GET /api/auth/session 200 in 27ms (next.js: 10ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /api/auth/session 200 in 19ms (next.js: 4ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 30ms (next.js: 12ms, proxy.ts: 9ms, application-code: 9ms)
+ GET /api/auth/session 200 in 20ms (next.js: 5ms, proxy.ts: 7ms, application-code: 8ms)
+ GET / 200 in 176ms (next.js: 12ms, proxy.ts: 5ms, application-code: 160ms)
+ GET /api/auth/session 200 in 31ms (next.js: 11ms, proxy.ts: 10ms, application-code: 10ms)
+ GET /api/auth/session 200 in 19ms (next.js: 4ms, proxy.ts: 8ms, application-code: 7ms)
+ GET /api/auth/session 200 in 34ms (next.js: 16ms, proxy.ts: 9ms, application-code: 10ms)
+ GET /api/auth/session 200 in 22ms (next.js: 5ms, proxy.ts: 9ms, application-code: 9ms)
+ GET /api/auth/session 200 in 32ms (next.js: 12ms, proxy.ts: 10ms, application-code: 10ms)
+ GET /api/auth/session 200 in 20ms (next.js: 5ms, proxy.ts: 8ms, application-code: 8ms)
+ GET /storyboard 200 in 47ms (next.js: 1845µs, proxy.ts: 2ms, application-code: 43ms)
+ GET /api/auth/session 200 in 30ms (next.js: 13ms, proxy.ts: 10ms, application-code: 8ms)
+ GET /api/auth/session 200 in 20ms (next.js: 6ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /knowledge 200 in 45ms (next.js: 12ms, proxy.ts: 7ms, application-code: 26ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 789ms (next.js: 42ms, proxy.ts: 7ms, application-code: 739ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 142ms (next.js: 4ms, proxy.ts: 6ms, application-code: 132ms)
+ GET /inspiration 200 in 43ms (next.js: 12ms, proxy.ts: 8ms, application-code: 22ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 183ms (next.js: 32ms, proxy.ts: 13ms, application-code: 138ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 153ms (next.js: 4ms, proxy.ts: 16ms, application-code: 133ms)
+ GET /api/inspiration/stats 200 in 489ms (next.js: 65ms, proxy.ts: 13ms, application-code: 411ms)
+ GET /api/inspiration/stats 200 in 330ms (next.js: 3ms, proxy.ts: 11ms, application-code: 317ms)
+ GET /storyboard 200 in 32ms (next.js: 3ms, proxy.ts: 7ms, application-code: 21ms)
+ GET /api/auth/session 200 in 35ms (next.js: 13ms, proxy.ts: 11ms, application-code: 11ms)
+ GET /api/auth/session 200 in 22ms (next.js: 6ms, proxy.ts: 7ms, application-code: 9ms)
+ GET /api/auth/session 200 in 33ms (next.js: 12ms, proxy.ts: 10ms, application-code: 11ms)
+ GET /api/auth/session 200 in 21ms (next.js: 5ms, proxy.ts: 7ms, application-code: 9ms)
+ GET /api/auth/session 200 in 32ms (next.js: 10ms, proxy.ts: 12ms, application-code: 9ms)
+ GET /api/auth/session 200 in 21ms (next.js: 6ms, proxy.ts: 7ms, application-code: 8ms)
+Pet ad pack product fetch fallback: fetch failed
+ GET /storyboard 200 in 437ms (next.js: 121ms, proxy.ts: 115ms, application-code: 202ms)
+ GET /api/auth/session 200 in 446ms (next.js: 304ms, proxy.ts: 116ms, application-code: 26ms)
+ GET /api/auth/session 200 in 26ms (next.js: 4ms, proxy.ts: 14ms, application-code: 8ms)
+ GET /api/auth/session 200 in 30ms (next.js: 10ms, proxy.ts: 11ms, application-code: 8ms)
+ GET /api/auth/session 200 in 23ms (next.js: 4ms, proxy.ts: 7ms, application-code: 12ms)
+ POST /api/pet-ad-pack 200 in 80s (next.js: 88ms, proxy.ts: 7ms, application-code: 80s)
+✓ Compiled in 43ms
+ GET /storyboard 200 in 148ms (next.js: 59ms, proxy.ts: 64ms, application-code: 25ms)
+ GET /storyboard 200 in 25ms (next.js: 1838µs, proxy.ts: 6ms, application-code: 18ms)
+ GET /storyboard 200 in 22ms (next.js: 1746µs, proxy.ts: 5ms, application-code: 15ms)
+ GET /storyboard 200 in 24ms (next.js: 1675µs, proxy.ts: 5ms, application-code: 17ms)
+ GET /storyboard 200 in 23ms (next.js: 1847µs, proxy.ts: 6ms, application-code: 15ms)
+ GET /storyboard 200 in 18ms (next.js: 1705µs, proxy.ts: 4ms, application-code: 12ms)
+ GET /api/auth/session 200 in 166ms (next.js: 130ms, proxy.ts: 9ms, application-code: 27ms)
+ GET /api/auth/session 200 in 23ms (next.js: 5ms, proxy.ts: 8ms, application-code: 10ms)
+ GET /storyboard 200 in 261ms (next.js: 102ms, proxy.ts: 112ms, application-code: 47ms)
+ GET /api/auth/session 200 in 174ms (next.js: 139ms, proxy.ts: 10ms, application-code: 25ms)
+ GET /api/auth/session 200 in 24ms (next.js: 5ms, proxy.ts: 8ms, application-code: 10ms)
+ GET /api/auth/session 200 in 28ms (next.js: 10ms, proxy.ts: 8ms, application-code: 10ms)
+ GET /api/auth/session 200 in 20ms (next.js: 4ms, proxy.ts: 8ms, application-code: 8ms)
+ GET /api/auth/session 200 in 28ms (next.js: 11ms, proxy.ts: 7ms, application-code: 10ms)
+ GET /api/auth/session 200 in 20ms (next.js: 4ms, proxy.ts: 8ms, application-code: 8ms)
+ GET /storyboard 200 in 272ms (next.js: 105ms, proxy.ts: 114ms, application-code: 53ms)
+ GET /storyboard 200 in 146ms (next.js: 57ms, proxy.ts: 66ms, application-code: 23ms)
+ GET /inspiration 200 in 154ms (next.js: 105ms, proxy.ts: 8ms, application-code: 41ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 885ms (next.js: 99ms, proxy.ts: 12ms, application-code: 774ms)
+ GET /api/inspiration/stats 200 in 891ms (next.js: 205ms, proxy.ts: 13ms, application-code: 673ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 148ms (next.js: 4ms, proxy.ts: 13ms, application-code: 131ms)
+ GET /api/inspiration/stats 200 in 339ms (next.js: 8ms, proxy.ts: 13ms, application-code: 318ms)
+ GET /api/auth/session 200 in 131ms (next.js: 99ms, proxy.ts: 10ms, application-code: 22ms)
+ GET /api/auth/session 200 in 23ms (next.js: 5ms, proxy.ts: 9ms, application-code: 9ms)
+ GET /knowledge 200 in 51ms (next.js: 13ms, proxy.ts: 11ms, application-code: 27ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 485ms (next.js: 101ms, proxy.ts: 8ms, application-code: 376ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 154ms (next.js: 3ms, proxy.ts: 11ms, application-code: 140ms)
+ GET /inspiration 200 in 32ms (next.js: 3ms, proxy.ts: 7ms, application-code: 22ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 649ms (next.js: 4ms, proxy.ts: 11ms, application-code: 634ms)
+ GET /api/inspiration/stats 200 in 712ms (next.js: 8ms, proxy.ts: 11ms, application-code: 693ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 142ms (next.js: 3ms, proxy.ts: 10ms, application-code: 129ms)
+ GET /api/inspiration/stats 200 in 388ms (next.js: 2ms, proxy.ts: 13ms, application-code: 373ms)
+ GET /inspiration 200 in 171ms (next.js: 3ms, proxy.ts: 8ms, application-code: 160ms)
+ GET /api/auth/session 200 in 59ms (next.js: 30ms, proxy.ts: 17ms, application-code: 11ms)
+ GET /api/auth/session 200 in 21ms (next.js: 5ms, proxy.ts: 7ms, application-code: 9ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 383ms (next.js: 5ms, proxy.ts: 17ms, application-code: 360ms)
+ GET /api/inspiration/stats 200 in 491ms (next.js: 12ms, proxy.ts: 17ms, application-code: 461ms)
+ GET /knowledge 200 in 36ms (next.js: 3ms, proxy.ts: 7ms, application-code: 26ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 404ms (next.js: 3ms, proxy.ts: 7ms, application-code: 394ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 166ms (next.js: 3ms, proxy.ts: 12ms, application-code: 151ms)
+ GET /inspiration 200 in 28ms (next.js: 3ms, proxy.ts: 7ms, application-code: 17ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 199ms (next.js: 5ms, proxy.ts: 14ms, application-code: 180ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 141ms (next.js: 4ms, proxy.ts: 11ms, application-code: 126ms)
+ GET /api/inspiration/stats 200 in 373ms (next.js: 9ms, proxy.ts: 14ms, application-code: 351ms)
+ GET /api/inspiration/stats 200 in 318ms (next.js: 2ms, proxy.ts: 9ms, application-code: 307ms)
+ GET /storyboard 200 in 34ms (next.js: 4ms, proxy.ts: 8ms, application-code: 22ms)
+ GET /inspiration 200 in 31ms (next.js: 4ms, proxy.ts: 7ms, application-code: 20ms)
+ GET /api/inspiration/stats 200 in 365ms (next.js: 9ms, proxy.ts: 11ms, application-code: 345ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 387ms (next.js: 4ms, proxy.ts: 11ms, application-code: 373ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 137ms (next.js: 3ms, proxy.ts: 9ms, application-code: 126ms)
+ GET /api/inspiration/stats 200 in 337ms (next.js: 3ms, proxy.ts: 7ms, application-code: 327ms)
+ GET /storyboard 200 in 32ms (next.js: 3ms, proxy.ts: 8ms, application-code: 20ms)
+ GET /dashboard 200 in 338ms (next.js: 305ms, proxy.ts: 7ms, application-code: 26ms)
+ GET /api/user/me 200 in 645ms (next.js: 41ms, proxy.ts: 10ms, application-code: 594ms)
+ GET /api/generations 200 in 822ms (next.js: 238ms, proxy.ts: 10ms, application-code: 574ms)
+ GET /api/user/me 200 in 498ms (next.js: 4ms, proxy.ts: 8ms, application-code: 486ms)
+ GET /api/generations 200 in 383ms (next.js: 3ms, proxy.ts: 9ms, application-code: 371ms)
+ GET /knowledge 200 in 34ms (next.js: 3ms, proxy.ts: 8ms, application-code: 23ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 346ms (next.js: 3ms, proxy.ts: 7ms, application-code: 337ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 123ms (next.js: 3ms, proxy.ts: 8ms, application-code: 111ms)
+ GET /inspiration 200 in 38ms (next.js: 3ms, proxy.ts: 7ms, application-code: 28ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 132ms (next.js: 4ms, proxy.ts: 13ms, application-code: 115ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 128ms (next.js: 3ms, proxy.ts: 6ms, application-code: 119ms)
+ GET /api/inspiration/stats 200 in 374ms (next.js: 9ms, proxy.ts: 12ms, application-code: 353ms)
+ GET /api/inspiration/stats 200 in 333ms (next.js: 3ms, proxy.ts: 8ms, application-code: 322ms)
+ GET /api/auth/session 200 in 25ms (next.js: 10ms, proxy.ts: 6ms, application-code: 9ms)
+ GET /api/auth/session 200 in 17ms (next.js: 3ms, proxy.ts: 6ms, application-code: 7ms)
+ GET /api/auth/session 200 in 36ms (next.js: 14ms, proxy.ts: 12ms, application-code: 10ms)
+ GET /api/auth/session 200 in 23ms (next.js: 6ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /dashboard 200 in 34ms (next.js: 4ms, proxy.ts: 7ms, application-code: 23ms)
+ GET /api/generations 200 in 968ms (next.js: 8ms, proxy.ts: 13ms, application-code: 947ms)
+ GET /api/user/me 200 in 1303ms (next.js: 3ms, proxy.ts: 14ms, application-code: 1286ms)
+ GET /api/generations 200 in 408ms (next.js: 5ms, proxy.ts: 7ms, application-code: 396ms)
+ GET /api/user/me 200 in 494ms (next.js: 3ms, proxy.ts: 7ms, application-code: 484ms)
+ GET /dashboard 200 in 151ms (next.js: 56ms, proxy.ts: 72ms, application-code: 24ms)
+✓ Compiled in 38ms
+ GET /dashboard 200 in 149ms (next.js: 54ms, proxy.ts: 70ms, application-code: 25ms)
+✓ Compiled in 37ms
+ GET /dashboard 200 in 144ms (next.js: 53ms, proxy.ts: 68ms, application-code: 22ms)
+✓ Compiled in 92ms
+ GET /dashboard 200 in 145ms (next.js: 60ms, proxy.ts: 64ms, application-code: 21ms)
+ GET /dashboard 200 in 150ms (next.js: 58ms, proxy.ts: 67ms, application-code: 24ms)
+ GET / 200 in 46ms (next.js: 12ms, proxy.ts: 8ms, application-code: 26ms)
+ GET /storyboard 200 in 54ms (next.js: 14ms, proxy.ts: 9ms, application-code: 31ms)
+ GET /inspiration 200 in 159ms (next.js: 105ms, proxy.ts: 10ms, application-code: 43ms)
+ GET /api/inspiration/stats 200 in 755ms (next.js: 91ms, proxy.ts: 14ms, application-code: 649ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 765ms (next.js: 142ms, proxy.ts: 16ms, application-code: 607ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 154ms (next.js: 16ms, proxy.ts: 16ms, application-code: 122ms)
+ GET /api/inspiration/stats 200 in 381ms (next.js: 6ms, proxy.ts: 20ms, application-code: 355ms)
+ GET /api/auth/session 200 in 129ms (next.js: 95ms, proxy.ts: 14ms, application-code: 20ms)
+ GET /api/auth/session 200 in 23ms (next.js: 5ms, proxy.ts: 9ms, application-code: 9ms)
+ GET /inspiration 200 in 157ms (next.js: 59ms, proxy.ts: 72ms, application-code: 25ms)
+ GET /inspiration 200 in 148ms (next.js: 58ms, proxy.ts: 66ms, application-code: 24ms)
+ GET /inspiration 200 in 256ms (next.js: 105ms, proxy.ts: 102ms, application-code: 49ms)
+ GET /api/auth/session 200 in 174ms (next.js: 142ms, proxy.ts: 10ms, application-code: 23ms)
+ GET /api/auth/session 200 in 21ms (next.js: 5ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /storyboard 200 in 44ms (next.js: 13ms, proxy.ts: 8ms, application-code: 24ms)
+ GET /inspiration 200 in 35ms (next.js: 4ms, proxy.ts: 11ms, application-code: 20ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 804ms (next.js: 42ms, proxy.ts: 11ms, application-code: 751ms)
+ GET /api/inspiration/stats 200 in 804ms (next.js: 77ms, proxy.ts: 11ms, application-code: 717ms)
+ GET /api/inspiration/stats 200 in 319ms (next.js: 4ms, proxy.ts: 17ms, application-code: 298ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 375ms (next.js: 13ms, proxy.ts: 17ms, application-code: 346ms)
+ GET /inspiration 200 in 272ms (next.js: 102ms, proxy.ts: 117ms, application-code: 53ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=ja&page=1&pageSize=20 200 in 476ms (next.js: 93ms, proxy.ts: 13ms, application-code: 370ms)
+ GET /api/inspiration/stats 200 in 516ms (next.js: 133ms, proxy.ts: 13ms, application-code: 370ms)
+ GET /storyboard 200 in 53ms (next.js: 14ms, proxy.ts: 9ms, application-code: 30ms)
+ GET /inspiration 200 in 39ms (next.js: 4ms, proxy.ts: 9ms, application-code: 26ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 366ms (next.js: 5ms, proxy.ts: 14ms, application-code: 346ms)
+ GET /api/inspiration/stats 200 in 382ms (next.js: 10ms, proxy.ts: 15ms, application-code: 356ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 161ms (next.js: 8ms, proxy.ts: 25ms, application-code: 129ms)
+ GET /api/inspiration/stats 200 in 371ms (next.js: 2ms, proxy.ts: 24ms, application-code: 345ms)
+ GET /knowledge 200 in 46ms (next.js: 13ms, proxy.ts: 10ms, application-code: 24ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 165ms (next.js: 29ms, proxy.ts: 7ms, application-code: 128ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 143ms (next.js: 5ms, proxy.ts: 7ms, application-code: 131ms)
+ GET /pricing 200 in 43ms (next.js: 13ms, proxy.ts: 8ms, application-code: 22ms)
+ GET /knowledge 200 in 30ms (next.js: 3ms, proxy.ts: 7ms, application-code: 20ms)
+ GET /api/user/me 200 in 592ms (next.js: 41ms, proxy.ts: 6ms, application-code: 544ms)
+ GET /inspiration 200 in 33ms (next.js: 3ms, proxy.ts: 7ms, application-code: 23ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 379ms (next.js: 2ms, proxy.ts: 7ms, application-code: 370ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 148ms (next.js: 7ms, proxy.ts: 17ms, application-code: 124ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 152ms (next.js: 11ms, proxy.ts: 17ms, application-code: 124ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 132ms (next.js: 4ms, proxy.ts: 8ms, application-code: 120ms)
+ GET /api/inspiration/stats 200 in 371ms (next.js: 13ms, proxy.ts: 17ms, application-code: 340ms)
+ GET /api/user/me 200 in 674ms (next.js: 3ms, proxy.ts: 7ms, application-code: 664ms)
+ GET /api/inspiration/stats 200 in 353ms (next.js: 3ms, proxy.ts: 7ms, application-code: 343ms)
+ GET /knowledge 200 in 33ms (next.js: 3ms, proxy.ts: 8ms, application-code: 22ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 321ms (next.js: 3ms, proxy.ts: 8ms, application-code: 310ms)
+ GET /inspiration 200 in 34ms (next.js: 3ms, proxy.ts: 7ms, application-code: 24ms)
+ GET /api/inspiration/knowledge?targetMarket=en-US 200 in 130ms (next.js: 2ms, proxy.ts: 7ms, application-code: 121ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 135ms (next.js: 4ms, proxy.ts: 9ms, application-code: 122ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 128ms (next.js: 3ms, proxy.ts: 10ms, application-code: 116ms)
+ GET /api/inspiration/stats 200 in 323ms (next.js: 7ms, proxy.ts: 9ms, application-code: 306ms)
+ GET /api/inspiration/stats 200 in 342ms (next.js: 3ms, proxy.ts: 8ms, application-code: 332ms)
+ GET /storyboard 200 in 36ms (next.js: 4ms, proxy.ts: 7ms, application-code: 25ms)
+ GET /api/auth/session 200 in 90ms (next.js: 71ms, proxy.ts: 8ms, application-code: 10ms)
+ GET /api/auth/session 200 in 23ms (next.js: 4ms, proxy.ts: 6ms, application-code: 13ms)
+ GET /api/auth/session 200 in 32ms (next.js: 10ms, proxy.ts: 10ms, application-code: 11ms)
+ GET /api/auth/session 200 in 21ms (next.js: 5ms, proxy.ts: 8ms, application-code: 8ms)
+ GET /api/auth/session 200 in 28ms (next.js: 11ms, proxy.ts: 7ms, application-code: 9ms)
+ GET /api/auth/session 200 in 19ms (next.js: 5ms, proxy.ts: 6ms, application-code: 8ms)
+ GET /api/auth/session 200 in 30ms (next.js: 11ms, proxy.ts: 8ms, application-code: 11ms)
+ GET /api/auth/session 200 in 21ms (next.js: 6ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /inspiration 200 in 36ms (next.js: 5ms, proxy.ts: 7ms, application-code: 24ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 1212ms (next.js: 5ms, proxy.ts: 14ms, application-code: 1193ms)
+ GET /api/inspiration/stats 200 in 1214ms (next.js: 12ms, proxy.ts: 14ms, application-code: 1188ms)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 155ms (next.js: 7ms, proxy.ts: 17ms, application-code: 131ms)
+ GET /api/inspiration/stats 200 in 346ms (next.js: 11ms, proxy.ts: 16ms, application-code: 320ms)
+Updated knowledge base for pet_cleaning (2 videos)
+ POST /api/inspiration/analyze-url 200 in 12.9s (next.js: 154ms, proxy.ts: 7ms, application-code: 12.8s)
+ GET /api/inspiration/videos?sort=views&targetMarket=en-US&page=1&pageSize=20 200 in 390ms (next.js: 4ms, proxy.ts: 15ms, application-code: 371ms)
+ GET /api/inspiration/stats 200 in 430ms (next.js: 9ms, proxy.ts: 14ms, application-code: 407ms)
+ GET /api/auth/session 200 in 29ms (next.js: 10ms, proxy.ts: 7ms, application-code: 11ms)
+ GET /api/auth/session 200 in 20ms (next.js: 4ms, proxy.ts: 7ms, application-code: 10ms)
+ GET /storyboard 200 in 30ms (next.js: 3ms, proxy.ts: 7ms, application-code: 19ms)
+Pet ad pack product fetch fallback: fetch failed
+ GET /api/auth/session 200 in 34ms (next.js: 13ms, proxy.ts: 10ms, application-code: 11ms)
+ GET /api/auth/session 200 in 22ms (next.js: 5ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /api/auth/session 200 in 29ms (next.js: 11ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /api/auth/session 200 in 21ms (next.js: 5ms, proxy.ts: 8ms, application-code: 8ms)
+ GET /api/auth/session 200 in 28ms (next.js: 11ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /api/auth/session 200 in 20ms (next.js: 5ms, proxy.ts: 7ms, application-code: 9ms)
+ POST /api/pet-ad-pack 200 in 65s (next.js: 145ms, proxy.ts: 8ms, application-code: 65s)
+ GET /api/auth/session 200 in 35ms (next.js: 12ms, proxy.ts: 13ms, application-code: 10ms)
+ GET /api/auth/session 200 in 21ms (next.js: 5ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 29ms (next.js: 10ms, proxy.ts: 7ms, application-code: 11ms)
+ GET /api/auth/session 200 in 20ms (next.js: 4ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 30ms (next.js: 12ms, proxy.ts: 9ms, application-code: 9ms)
+ GET /api/auth/session 200 in 20ms (next.js: 5ms, proxy.ts: 8ms, application-code: 8ms)
+ GET /api/auth/session 200 in 28ms (next.js: 11ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /api/auth/session 200 in 20ms (next.js: 5ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 26ms (next.js: 11ms, proxy.ts: 6ms, application-code: 9ms)
+ GET /api/auth/session 200 in 20ms (next.js: 6ms, proxy.ts: 6ms, application-code: 8ms)
+ GET /api/auth/session 200 in 29ms (next.js: 12ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /api/auth/session 200 in 20ms (next.js: 4ms, proxy.ts: 7ms, application-code: 9ms)
+ GET /api/auth/session 200 in 29ms (next.js: 12ms, proxy.ts: 9ms, application-code: 9ms)
+ GET /api/auth/session 200 in 19ms (next.js: 4ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 31ms (next.js: 12ms, proxy.ts: 10ms, application-code: 10ms)
+ GET /api/auth/session 200 in 20ms (next.js: 5ms, proxy.ts: 7ms, application-code: 8ms)
+Pet ad pack product fetch fallback: fetch failed
+ POST /api/pet-ad-pack 200 in 66s (next.js: 3ms, proxy.ts: 8ms, application-code: 66s)
+ GET /api/auth/session 200 in 35ms (next.js: 11ms, proxy.ts: 14ms, application-code: 9ms)
+ GET /api/auth/session 200 in 20ms (next.js: 5ms, proxy.ts: 7ms, application-code: 9ms)
+ GET /api/auth/session 200 in 27ms (next.js: 12ms, proxy.ts: 7ms, application-code: 9ms)
+ GET /api/auth/session 200 in 18ms (next.js: 4ms, proxy.ts: 6ms, application-code: 8ms)
+ GET /api/auth/session 200 in 27ms (next.js: 11ms, proxy.ts: 8ms, application-code: 8ms)
+ GET /api/auth/session 200 in 19ms (next.js: 4ms, proxy.ts: 7ms, application-code: 8ms)
+ GET /api/auth/session 200 in 31ms (next.js: 11ms, proxy.ts: 10ms, application-code: 10ms)
+ GET /api/auth/session 200 in 19ms (next.js: 5ms, proxy.ts: 6ms, application-code: 8ms)
+ GET /api/auth/session 200 in 30ms (next.js: 12ms, proxy.ts: 9ms, application-code: 9ms)
+ GET /api/auth/session 200 in 21ms (next.js: 5ms, proxy.ts: 8ms, application-code: 8ms)
+ GET /api/auth/session 200 in 21ms (next.js: 8ms, proxy.ts: 6ms, application-code: 8ms)
+ GET /api/auth/session 200 in 14ms (next.js: 3ms, proxy.ts: 6ms, application-code: 5ms)
+ GET /storyboard 200 in 290ms (next.js: 111ms, proxy.ts: 128ms, application-code: 51ms)
+ GET /storyboard 200 in 157ms (next.js: 61ms, proxy.ts: 69ms, application-code: 27ms)
+ GET /storyboard 200 in 153ms (next.js: 60ms, proxy.ts: 66ms, application-code: 27ms)
+ GET /storyboard 200 in 286ms (next.js: 114ms, proxy.ts: 126ms, application-code: 46ms)
+ GET /storyboard 200 in 281ms (next.js: 116ms, proxy.ts: 116ms, application-code: 49ms)
+ GET /api/auth/session 200 in 188ms (next.js: 151ms, proxy.ts: 12ms, application-code: 26ms)
+ GET /api/auth/session 200 in 26ms (next.js: 5ms, proxy.ts: 12ms, application-code: 10ms)
+ GET /api/auth/session 200 in 31ms (next.js: 11ms, proxy.ts: 9ms, application-code: 11ms)
+ GET /api/auth/session 200 in 20ms (next.js: 4ms, proxy.ts: 7ms, application-code: 9ms)
+Pet ad pack product fetch fallback: fetch failed
+ POST /api/pet-ad-pack 200 in 75s (next.js: 92ms, proxy.ts: 10ms, application-code: 74s)
+ GET /api/auth/session 200 in 29ms (next.js: 10ms, proxy.ts: 8ms, application-code: 11ms)
+ GET /api/auth/session 200 in 21ms (next.js: 6ms, proxy.ts: 7ms, application-code: 7ms)
+ GET /api/auth/session 200 in 35ms (next.js: 13ms, proxy.ts: 11ms, application-code: 11ms)
+ GET /api/auth/session 200 in 23ms (next.js: 5ms, proxy.ts: 8ms, application-code: 10ms)
+ GET /api/auth/session 200 in 29ms (next.js: 11ms, proxy.ts: 8ms, application-code: 10ms)
+ GET /api/auth/session 200 in 20ms (next.js: 4ms, proxy.ts: 8ms, application-code: 8ms)
+Pet ad pack product fetch fallback: fetch failed
+ POST /api/pet-ad-pack 200 in 71s (next.js: 5ms, proxy.ts: 10ms, application-code: 71s)
+ GET /api/auth/session 200 in 30ms (next.js: 12ms, proxy.ts: 8ms, application-code: 10ms)
+ GET /api/auth/session 200 in 21ms (next.js: 4ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /api/auth/session 200 in 32ms (next.js: 13ms, proxy.ts: 8ms, application-code: 11ms)
+ GET /api/auth/session 200 in 22ms (next.js: 5ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /api/auth/session 200 in 28ms (next.js: 12ms, proxy.ts: 7ms, application-code: 9ms)
+ GET /api/auth/session 200 in 22ms (next.js: 5ms, proxy.ts: 7ms, application-code: 9ms)
+ GET /api/auth/session 200 in 26ms (next.js: 11ms, proxy.ts: 8ms, application-code: 8ms)
+ GET /api/auth/session 200 in 21ms (next.js: 5ms, proxy.ts: 8ms, application-code: 9ms)
+ GET /api/auth/session 200 in 31ms (next.js: 12ms, proxy.ts: 10ms, application-code: 9ms)
+ GET /api/auth/session 200 in 19ms (next.js: 5ms, proxy.ts: 6ms, application-code: 8ms)
+ POST /api/inspiration/analyze-url 401 in 170ms (next.js: 109ms, proxy.ts: 4ms, application-code: 57ms)
 [?25h

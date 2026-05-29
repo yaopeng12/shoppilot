@@ -98,6 +98,7 @@ export function VideoDetailModal({
 
   if (!video) return null;
   const analysis = getAnalysis(video);
+  const playbook = video.market_playbook || analysis?.market_playbook;
 
   async function handleFavorite() {
     const { data } = await apiFetch<{ favorited: boolean }>("/api/inspiration/favorites", {
@@ -128,6 +129,14 @@ export function VideoDetailModal({
               <div className="text-xs">
                 <span className="text-white/35">{t.engagement}: </span>
                 <span className="font-semibold text-emerald-300">{analysis.engagement_score}</span>
+              </div>
+            )}
+            {playbook && (
+              <div className="rounded-xl border border-blue-400/12 bg-blue-400/[0.045] p-3 text-xs leading-5 text-blue-50/70">
+                <div className="font-semibold text-blue-100">Top market: {playbook.primaryMarketLabel} · {playbook.confidence}</div>
+                <div className="mt-1 text-blue-50/45">{playbook.reason}</div>
+                <div className="mt-2 text-blue-50/70">打法：{playbook.hookAngle}</div>
+                <div className="mt-1 text-blue-50/70">CTA：{playbook.cta}</div>
               </div>
             )}
             <div className="flex flex-wrap gap-2 pt-1">

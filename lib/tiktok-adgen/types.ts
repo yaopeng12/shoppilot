@@ -8,7 +8,7 @@ export const PLANS = {
   pro: {
     name: "Pro",
     dailyLimit: -1,
-    price: 19,
+    price: 9.9,
     features: [
       "Unlimited ad packs",
       "Source match scoring",
@@ -16,19 +16,6 @@ export const PLANS = {
       "Hooks + UGC scripts",
       "Claim safety guidance",
       "JSON and Markdown export",
-    ],
-  },
-  team: {
-    name: "Team",
-    dailyLimit: -1,
-    price: 49,
-    features: [
-      "Everything in Pro",
-      "Up to 10 members",
-      "Shared template workflow",
-      "Team creative library",
-      "Admin dashboard",
-      "API access",
     ],
   },
 } as const;

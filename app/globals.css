@@ -124,6 +124,18 @@ input::placeholder, textarea::placeholder {
   }
 }
 
+@keyframes home-meter {
+  0% { width: 18%; opacity: 0.55; }
+  55% { width: 92%; opacity: 1; }
+  100% { width: 74%; opacity: 0.85; }
+}
+
+@keyframes home-scan {
+  0% { transform: translateX(-70%); opacity: 0; }
+  20% { opacity: 1; }
+  100% { transform: translateX(70%); opacity: 0; }
+}
+
 .animate-fade-in-up {
   animation: fade-in-up 0.6s ease-out both;
 }
@@ -142,6 +154,14 @@ input::placeholder, textarea::placeholder {
 
 .animate-slide-in-bottom {
   animation: slide-in-bottom 0.35s ease-out both;
+}
+
+.animate-home-meter {
+  animation: home-meter 2.8s ease-in-out infinite;
+}
+
+.animate-home-scan {
+  animation: home-scan 3.4s ease-in-out infinite;
 }
 
 .delay-100 { animation-delay: 0.1s; }

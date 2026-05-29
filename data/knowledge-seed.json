@@ -1,0 +1,439 @@
+[
+  {
+    "id": "kb-cat-litter-odor",
+    "category": "cat_litter",
+    "hook_patterns": [
+      { "pattern": "smell_test", "example": "Can you smell it? Because your guests definitely can.", "frequency": 82, "avg_engagement": 4.2 },
+      { "pattern": "routine_upgrade", "example": "I stopped scooping every day. Here's what I use instead.", "frequency": 76, "avg_engagement": 3.8 },
+      { "pattern": "guest_panic", "example": "Someone's coming over in 10 minutes and the litter box exists.", "frequency": 71, "avg_engagement": 4.5 },
+      { "pattern": "before_after", "example": "This is what the litter box area smelled like before. And now.", "frequency": 68, "avg_engagement": 3.9 },
+      { "pattern": "comment_reply", "example": "You asked how I keep the litter box area from smelling. Here's my secret.", "frequency": 65, "avg_engagement": 4.1 }
+    ],
+    "structure_templates": [
+      {
+        "name": "POV Room Reset",
+        "scenes": [
+          { "time": "0-3s", "description": "POV walking into room, noticing smell" },
+          { "time": "3-8s", "description": "Show the litter box area, problem visible" },
+          { "time": "8-15s", "description": "Apply the product, show the process" },
+          { "time": "15-22s", "description": "Show the fresh result, owner reaction" },
+          { "time": "22-30s", "description": "Soft CTA about daily routine" }
+        ],
+        "best_for": "deodorizer spray, litter additive, odor absorber"
+      },
+      {
+        "name": "Quick Tip Format",
+        "scenes": [
+          { "time": "0-2s", "description": "Hook: cat owner problem statement" },
+          { "time": "2-10s", "description": "One clear tip or product reveal" },
+          { "time": "10-20s", "description": "Demonstrate the solution" },
+          { "time": "20-28s", "description": "Show the result" },
+          { "time": "28-35s", "description": "CTA to try it" }
+        ],
+        "best_for": "litter deodorizer, baking soda alternative, air purifier"
+      }
+    ],
+    "cta_templates": [
+      "Try it and tell me your litter box doesn't smell better.",
+      "Link in bio if you're tired of the smell.",
+      "Your cat will thank you. Your nose will thank you more.",
+      "Save this for your next litter box reset.",
+      "Comment 'SMELL' and I'll send you the link."
+    ],
+    "tone_profiles": [
+      "relatable cat parent",
+      "no-nonsense problem solver",
+      "humor-first cat owner",
+      "clean home enthusiast",
+      "empathetic pet parent"
+    ],
+    "top_hashtags": [
+      "catsoftiktok",
+      "cattok",
+      "litterbox",
+      "catlife",
+      "petcleaning",
+      "odorremover",
+      "catmom",
+      "catdad",
+      "petparent",
+      "cleanhome"
+    ],
+    "avg_duration": 28,
+    "engagement_benchmarks": [
+      { "metric": "avg_view_rate", "value": 0.42 },
+      { "metric": "avg_like_rate", "value": 0.058 },
+      { "metric": "avg_comment_rate", "value": 0.012 },
+      { "metric": "avg_share_rate", "value": 0.008 }
+    ],
+    "summary": "Cat litter odor content performs best when it combines a relatable smell problem with a quick, visible solution. POV-style room resets and guest-panic hooks drive the highest engagement. The strongest CTAs use humor or direct challenge language.",
+    "video_count": 45,
+    "generated_at": "2026-05-28T10:00:00Z",
+    "created_at": "2026-05-28T10:00:00Z",
+    "updated_at": "2026-05-28T10:00:00Z"
+  },
+  {
+    "id": "kb-cat-urine-cleaner",
+    "category": "cat_urine_cleaner",
+    "hook_patterns": [
+      { "pattern": "panic_moment", "example": "If your cat just peed on the carpet, STOP. Don't rub it.", "frequency": 88, "avg_engagement": 4.8 },
+      { "pattern": "did_you_know", "example": "Did you know cat urine crystals can last for years in your carpet?", "frequency": 74, "avg_engagement": 4.1 },
+      { "pattern": "life_hack", "example": "The one thing that actually gets rid of cat urine smell. Not vinegar.", "frequency": 70, "avg_engagement": 4.3 },
+      { "pattern": "science_explained", "example": "Why regular cleaners don't work on cat urine. The science.", "frequency": 62, "avg_engagement": 3.7 },
+      { "pattern": "rescue_story", "example": "This rug was about to go in the trash. Then I tried this.", "frequency": 58, "avg_engagement": 4.6 }
+    ],
+    "structure_templates": [
+      {
+        "name": "Emergency Cleanup",
+        "scenes": [
+          { "time": "0-2s", "description": "Hook: urgent problem statement" },
+          { "time": "2-7s", "description": "Show the stain or accident scene" },
+          { "time": "7-18s", "description": "Step-by-step cleanup process" },
+          { "time": "18-25s", "description": "Show clean result, sniff test" },
+          { "time": "25-30s", "description": "Practical tip or CTA" }
+        ],
+        "best_for": "enzyme cleaner, urine remover, carpet cleaner"
+      },
+      {
+        "name": "Myth Buster",
+        "scenes": [
+          { "time": "0-3s", "description": "Myth: vinegar/baking soda works on cat urine" },
+          { "time": "3-12s", "description": "Explain why it doesn't (crystals, uric acid)" },
+          { "time": "12-22s", "description": "Introduce enzyme-based solution" },
+          { "time": "22-30s", "description": "Demo with visible result" },
+          { "time": "30-35s", "description": "CTA: save yourself the trial and error" }
+        ],
+        "best_for": "enzyme cleaner, professional grade remover"
+      }
+    ],
+    "cta_templates": [
+      "Save this before your cat has another accident.",
+      "Link in bio. Your carpets will thank you.",
+      "Stop wasting money on products that don't work. Try this.",
+      "Comment 'HELP' and I'll share the product link.",
+      "Bookmark this for emergency cleanup day."
+    ],
+    "tone_profiles": [
+      "urgent problem solver",
+      "science-backed educator",
+      "experienced cat parent",
+      "no-BS product reviewer",
+      "emergencies helper"
+    ],
+    "top_hashtags": [
+      "caturine",
+      "petcleaning",
+      "catmom",
+      "enzyme cleaner",
+      "carpetcleaning",
+      "cathacks",
+      "petstain",
+      "urineremover",
+      "catsoftiktok",
+      "cleaninghacks"
+    ],
+    "avg_duration": 32,
+    "engagement_benchmarks": [
+      { "metric": "avg_view_rate", "value": 0.48 },
+      { "metric": "avg_like_rate", "value": 0.065 },
+      { "metric": "avg_comment_rate", "value": 0.018 },
+      { "metric": "avg_share_rate", "value": 0.012 }
+    ],
+    "summary": "Cat urine cleanup content thrives on urgency and fear-of-missing-out. Panic hooks and myth-busting formats outperform standard demos. The audience responds well to science-backed explanations of why common solutions fail. Enzyme cleaner positioning resonates strongly.",
+    "video_count": 52,
+    "generated_at": "2026-05-28T10:00:00Z",
+    "created_at": "2026-05-28T10:00:00Z",
+    "updated_at": "2026-05-28T10:00:00Z"
+  },
+  {
+    "id": "kb-litter-mat",
+    "category": "litter_mat",
+    "hook_patterns": [
+      { "pattern": "floor_reality", "example": "This is my floor 5 minutes after cleaning. Every cat owner knows.", "frequency": 85, "avg_engagement": 4.4 },
+      { "pattern": "satisfying_demo", "example": "Watch what happens when I lift this mat. So satisfying.", "frequency": 79, "avg_engagement": 4.7 },
+      { "pattern": "comparison_test", "example": "I tested 5 litter mats. Only one actually worked.", "frequency": 72, "avg_engagement": 4.2 },
+      { "pattern": "cat_reaction", "example": "My cat's reaction to the new litter mat. Priceless.", "frequency": 68, "avg_engagement": 4.9 },
+      { "pattern": "problem_solve", "example": "Tired of stepping on litter? Here's the fix.", "frequency": 64, "avg_engagement": 3.8 }
+    ],
+    "structure_templates": [
+      {
+        "name": "Floor Level Demo",
+        "scenes": [
+          { "time": "0-3s", "description": "Floor-level shot of litter scattered" },
+          { "time": "3-10s", "description": "Cat stepping out of box, spreading litter" },
+          { "time": "10-18s", "description": "Show the mat catching litter" },
+          { "time": "18-25s", "description": "Lift mat, show collected litter" },
+          { "time": "25-30s", "description": "Clean floor comparison" }
+        ],
+        "best_for": "litter mat, litter catcher, honeycomb mat"
+      },
+      {
+        "name": "Test and Compare",
+        "scenes": [
+          { "time": "0-3s", "description": "Hook: testing litter mats so you don't have to" },
+          { "time": "3-8s", "description": "Show multiple mats" },
+          { "time": "8-20s", "description": "Quick test of each with results" },
+          { "time": "20-28s", "description": "Reveal the winner" },
+          { "time": "28-35s", "description": "Link or CTA for the winner" }
+        ],
+        "best_for": "litter mat comparison, product review"
+      }
+    ],
+    "cta_templates": [
+      "Your floors deserve this. Link in bio.",
+      "Stop vacuuming litter. Start catching it.",
+      "Save this for your next litter box upgrade.",
+      "Comment 'MAT' and I'll send you the link.",
+      "This changed my daily cleanup routine."
+    ],
+    "tone_profiles": [
+      "satisfying content creator",
+      "practical cat parent",
+      "product tester",
+      "clean home advocate",
+      "cat lifestyle blogger"
+    ],
+    "top_hashtags": [
+      "littermat",
+      "cathacks",
+      "catsoftiktok",
+      "petcleaning",
+      "satisfyingcleaning",
+      "catlife",
+      "litterbox",
+      "catparent",
+      "cleanhome",
+      "petproducts"
+    ],
+    "avg_duration": 25,
+    "engagement_benchmarks": [
+      { "metric": "avg_view_rate", "value": 0.51 },
+      { "metric": "avg_like_rate", "value": 0.072 },
+      { "metric": "avg_comment_rate", "value": 0.015 },
+      { "metric": "avg_share_rate", "value": 0.019 }
+    ],
+    "summary": "Litter mat content is highly visual and satisfying-driven. Floor-level camera angles and litter-catching demos generate the strongest engagement. Cat reaction videos add emotional appeal. Comparison formats work well for decision-making audiences.",
+    "video_count": 38,
+    "generated_at": "2026-05-28T10:00:00Z",
+    "created_at": "2026-05-28T10:00:00Z",
+    "updated_at": "2026-05-28T10:00:00Z"
+  },
+  {
+    "id": "kb-pet-hair-remover",
+    "category": "pet_hair_remover",
+    "hook_patterns": [
+      { "pattern": "outfit_panic", "example": "Black clothes and a shedding pet. Name a worse combo.", "frequency": 90, "avg_engagement": 4.6 },
+      { "pattern": "satisfying_peel", "example": "Watch me peel off all this fur in one swipe.", "frequency": 86, "avg_engagement": 4.9 },
+      { "pattern": "before_after_sofa", "example": "This sofa looked like a fur blanket. Not anymore.", "frequency": 78, "avg_engagement": 4.3 },
+      { "pattern": "tool_test", "example": "I tried every pet hair remover. Here's what actually works.", "frequency": 73, "avg_engagement": 4.1 },
+      { "pattern": "daily_routine", "example": "My 30-second fur cleanup routine before leaving the house.", "frequency": 67, "avg_engagement": 3.9 }
+    ],
+    "structure_templates": [
+      {
+        "name": "One Swipe Proof",
+        "scenes": [
+          { "time": "0-3s", "description": "Show fur-covered surface" },
+          { "time": "3-8s", "description": "Single swipe with the tool" },
+          { "time": "8-13s", "description": "Show collected fur close-up" },
+          { "time": "13-20s", "description": "Clean surface reveal" },
+          { "time": "20-25s", "description": "Quick CTA" }
+        ],
+        "best_for": "lint roller, pet hair brush, fur remover"
+      },
+      {
+        "name": "Multi-Surface Test",
+        "scenes": [
+          { "time": "0-3s", "description": "Hook: one tool, every surface" },
+          { "time": "3-10s", "description": "Test on clothes" },
+          { "time": "10-17s", "description": "Test on sofa" },
+          { "time": "17-24s", "description": "Test on car seat" },
+          { "time": "24-30s", "description": "Results summary and CTA" }
+        ],
+        "best_for": "versatile fur remover, reusable brush"
+      }
+    ],
+    "cta_templates": [
+      "Your black clothes deserve this. Link in bio.",
+      "Stop lint-rolling your way through life.",
+      "Save this. You'll need it before your next date.",
+      "Comment 'FUR' and I'll send the link.",
+      "This lives in my bag now. Everywhere I go."
+    ],
+    "tone_profiles": [
+      "relatable pet owner",
+      "satisfying content creator",
+      "style-conscious pet parent",
+      "product comparison expert",
+      "daily routine sharer"
+    ],
+    "top_hashtags": [
+      "pethair",
+      "furremover",
+      "petsoftiktok",
+      "cleaningtok",
+      "satisfyingcleaning",
+      "petparent",
+      "cathair",
+      "doghair",
+      "lintroller",
+      "cleaninghacks"
+    ],
+    "avg_duration": 22,
+    "engagement_benchmarks": [
+      { "metric": "avg_view_rate", "value": 0.55 },
+      { "metric": "avg_like_rate", "value": 0.078 },
+      { "metric": "avg_comment_rate", "value": 0.014 },
+      { "metric": "avg_share_rate", "value": 0.022 }
+    ],
+    "summary": "Pet hair remover content is the most shareable pet cleaning niche. Satisfying one-swipe demos and outfit-panic hooks dominate. The content works across all pet types. Multi-surface testing builds credibility. Black clothes + fur is a universally relatable pain point.",
+    "video_count": 61,
+    "generated_at": "2026-05-28T10:00:00Z",
+    "created_at": "2026-05-28T10:00:00Z",
+    "updated_at": "2026-05-28T10:00:00Z"
+  },
+  {
+    "id": "kb-auto-litter-box",
+    "category": "automatic_litter_box",
+    "hook_patterns": [
+      { "pattern": "time_saved", "example": "I haven't scooped litter in 3 months. Here's how.", "frequency": 84, "avg_engagement": 4.5 },
+      { "pattern": "tech_reveal", "example": "This litter box cleans itself. Watch what happens when my cat leaves.", "frequency": 80, "avg_engagement": 4.7 },
+      { "pattern": "multi_cat_solution", "example": "3 cats. Zero scooping. The math finally math.", "frequency": 72, "avg_engagement": 4.3 },
+      { "pattern": "objection_handling", "example": "Is a $400 litter box worth it? After 6 months, here's my honest take.", "frequency": 69, "avg_engagement": 4.8 },
+      { "pattern": "lifestyle_upgrade", "example": "The one purchase that actually changed my daily routine.", "frequency": 65, "avg_engagement": 4.1 }
+    ],
+    "structure_templates": [
+      {
+        "name": "Honest Review",
+        "scenes": [
+          { "time": "0-3s", "description": "Hook: price objection or time savings claim" },
+          { "time": "3-10s", "description": "Show the product in daily use" },
+          { "time": "10-20s", "description": "Demonstrate the auto-cleaning cycle" },
+          { "time": "20-30s", "description": "Share pros and cons honestly" },
+          { "time": "30-40s", "description": "Final verdict and CTA" }
+        ],
+        "best_for": "automatic litter box, self-cleaning litter box"
+      },
+      {
+        "name": "Day in the Life",
+        "scenes": [
+          { "time": "0-3s", "description": "Morning: cat uses the box" },
+          { "time": "3-10s", "description": "Box auto-cleans while owner makes coffee" },
+          { "time": "10-18s", "description": "App notification or status check" },
+          { "time": "18-25s", "description": "Evening: still clean, no scooping done" },
+          { "time": "25-30s", "description": "CTA: get your time back" }
+        ],
+        "best_for": "smart litter box, app-connected litter box"
+      }
+    ],
+    "cta_templates": [
+      "Get your time back. Link in bio.",
+      "Stop scooping. Start living.",
+      "This is the upgrade your cat deserves.",
+      "Comment 'AUTO' and I'll share the details.",
+      "Worth every penny. Here's why."
+    ],
+    "tone_profiles": [
+      "honest reviewer",
+      "tech-savvy pet parent",
+      "lifestyle upgrader",
+      "multi-cat household",
+      "busy professional pet owner"
+    ],
+    "top_hashtags": [
+      "automaticlitterbox",
+      "selfcleaning",
+      "cattech",
+      "catsoftiktok",
+      "pettech",
+      "litterbox",
+      "catlife",
+      "smartpet",
+      "petgadgets",
+      "catparent"
+    ],
+    "avg_duration": 35,
+    "engagement_benchmarks": [
+      { "metric": "avg_view_rate", "value": 0.46 },
+      { "metric": "avg_like_rate", "value": 0.062 },
+      { "metric": "avg_comment_rate", "value": 0.021 },
+      { "metric": "avg_share_rate", "value": 0.016 }
+    ],
+    "summary": "Automatic litter box content succeeds on time-savings and lifestyle-upgrade narratives. Objection-handling formats (price vs value) generate the highest comment engagement. Tech reveal videos with app demonstrations build trust. Multi-cat household positioning resonates strongly.",
+    "video_count": 33,
+    "generated_at": "2026-05-28T10:00:00Z",
+    "created_at": "2026-05-28T10:00:00Z",
+    "updated_at": "2026-05-28T10:00:00Z"
+  },
+  {
+    "id": "kb-dog-grooming",
+    "category": "pet_bathing",
+    "hook_patterns": [
+      { "pattern": "bath_struggle", "example": "Bath time with my dog. Send help.", "frequency": 87, "avg_engagement": 4.8 },
+      { "pattern": "transformation", "example": "From street dog to show dog. Watch this transformation.", "frequency": 81, "avg_engagement": 4.6 },
+      { "pattern": "grooming_hack", "example": "The groomer trick that saves me $50 every month.", "frequency": 75, "avg_engagement": 4.2 },
+      { "pattern": "calm_bath", "example": "How I turned bath time from chaos to calm.", "frequency": 68, "avg_engagement": 4.0 },
+      { "pattern": "before_after_groom", "example": "You won't recognize this dog after the groom.", "frequency": 64, "avg_engagement": 4.9 }
+    ],
+    "structure_templates": [
+      {
+        "name": "Struggle to Success",
+        "scenes": [
+          { "time": "0-3s", "description": "Hook: the bath time struggle is real" },
+          { "time": "3-10s", "description": "Show the messy or reluctant pet" },
+          { "time": "10-20s", "description": "Introduce the grooming tool or product" },
+          { "time": "20-30s", "description": "Show the grooming process working" },
+          { "time": "30-40s", "description": "Clean, happy pet result" }
+        ],
+        "best_for": "pet shampoo, grooming brush, bathing tool"
+      },
+      {
+        "name": "Grooming Transformation",
+        "scenes": [
+          { "time": "0-3s", "description": "Before: matted, dirty, or scruffy pet" },
+          { "time": "3-15s", "description": "Grooming process highlights" },
+          { "time": "15-25s", "description": "After: clean, styled, happy pet" },
+          { "time": "25-30s", "description": "Owner reaction and CTA" }
+        ],
+        "best_for": "grooming kit, detangling spray, coat conditioner"
+      }
+    ],
+    "cta_templates": [
+      "Your dog deserves spa day too. Link in bio.",
+      "Stop paying groomer prices. Do it yourself.",
+      "Save this for your next grooming session.",
+      "Comment 'GROOM' and I'll send the product list.",
+      "The transformation says it all."
+    ],
+    "tone_profiles": [
+      "funny pet parent",
+      "grooming enthusiast",
+      "DIY pet care",
+      "transformation content",
+      "pet wellness advocate"
+    ],
+    "top_hashtags": [
+      "dogbath",
+      "petgrooming",
+      "dogsoftiktok",
+      "grooming",
+      "dogtransformation",
+      "petcare",
+      "bath time",
+      "dogmom",
+      "dogdad",
+      "petparent"
+    ],
+    "avg_duration": 30,
+    "engagement_benchmarks": [
+      { "metric": "avg_view_rate", "value": 0.49 },
+      { "metric": "avg_like_rate", "value": 0.071 },
+      { "metric": "avg_comment_rate", "value": 0.019 },
+      { "metric": "avg_share_rate", "value": 0.025 }
+    ],
+    "summary": "Dog grooming content combines humor with transformation appeal. Bath struggle videos are highly shareable. Before-after grooming transformations drive the highest engagement. The audience responds to both funny chaos content and satisfying professional results.",
+    "video_count": 42,
+    "generated_at": "2026-05-28T10:00:00Z",
+    "created_at": "2026-05-28T10:00:00Z",
+    "updated_at": "2026-05-28T10:00:00Z"
+  }
+]

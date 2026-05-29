@@ -14,7 +14,7 @@ export type DBUser = {
   email: string;
   name: string;
   image?: string;
-  plan: "free" | "pro" | "team";
+  plan: "free" | "pro";
   apiKey?: string;
   apiKeyLast4?: string;
   passwordHash?: string;
@@ -33,7 +33,7 @@ type ProfileRow = {
   email: string;
   name: string | null;
   image?: string | null;
-  plan: "free" | "pro" | "team";
+  plan: "free" | "pro";
   api_key_hash: string | null;
   api_key_last4: string | null;
   password_hash?: string | null;

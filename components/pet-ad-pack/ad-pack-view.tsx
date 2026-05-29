@@ -30,6 +30,12 @@ type Labels = {
   language: string;
   creatorVoice: string;
   culturalNotes: string;
+  ali1688Products: string;
+  selectedProduct: string;
+  searchLinks: string;
+  viewOn1688: string;
+  minOrder: string;
+  transactions: string;
 };
 
 type PetAdPackViewProps = {
@@ -71,6 +77,30 @@ export function PetAdPackView({ data, labels }: PetAdPackViewProps) {
         <div className="mt-4 text-xs leading-6 text-emerald-50/70">
           <span className="text-emerald-100/90">{labels.culturalNotes}: </span>
           {data.localization.culturalNotes.join(" / ")}
+        </div>
+        <div className="mt-4 rounded-xl border border-white/[0.08] bg-black/15 p-4">
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            <span className="rounded-full bg-emerald-400/12 px-2.5 py-1 font-semibold text-emerald-100">
+              Plays strongest: {data.marketPlaybook.primaryMarketLabel}
+            </span>
+            <span className="rounded-full bg-white/[0.06] px-2.5 py-1 text-white/55">
+              {data.marketPlaybook.confidence} confidence
+            </span>
+          </div>
+          <div className="mt-3 grid gap-3 md:grid-cols-3">
+            <div className="text-xs leading-5 text-white/62">
+              <span className="block text-white/35">Hook angle</span>
+              {data.marketPlaybook.hookAngle}
+            </div>
+            <div className="text-xs leading-5 text-white/62">
+              <span className="block text-white/35">CTA</span>
+              {data.marketPlaybook.cta}
+            </div>
+            <div className="text-xs leading-5 text-white/62">
+              <span className="block text-white/35">Why</span>
+              {data.marketPlaybook.reason}
+            </div>
+          </div>
         </div>
       </div>
 
@@ -166,6 +196,24 @@ export function PetAdPackView({ data, labels }: PetAdPackViewProps) {
         </div>
       </Section>
 
+      {data.creativeVariants && data.creativeVariants.length > 0 && (
+        <Section title="Creative Variants">
+          <div className="grid gap-3 md:grid-cols-3">
+            {data.creativeVariants.map((variant) => (
+              <div key={variant.id} className="rounded-xl border border-white/[0.07] bg-white/[0.025] p-4">
+                <div className="text-xs font-semibold text-blue-200">{variant.angle}</div>
+                <p className="mt-2 text-sm leading-6 text-white/70">{variant.hook}</p>
+                <div className="mt-3 border-t border-white/[0.06] pt-3 text-xs leading-5 text-white/42">
+                  <div>First shot: {variant.firstShot}</div>
+                  <div className="mt-1">CTA: {variant.cta}</div>
+                  <div className="mt-1 text-emerald-200/65">{variant.bestFor}</div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Section>
+      )}
+
       <Section title={labels.scripts}>
         <div className="grid gap-4 lg:grid-cols-2">
           {data.scripts.map((script) => (
@@ -235,19 +283,134 @@ export function PetAdPackView({ data, labels }: PetAdPackViewProps) {
         </div>
       </Section>
 
-      {data.alternatives.length > 0 && (
-        <Section title={labels.alternatives}>
-          <div className="grid gap-3 md:grid-cols-3">
-            {data.alternatives.map((candidate) => (
-              <div key={candidate.id} className="rounded-xl border border-white/[0.07] bg-white/[0.025] p-4">
-                <div className="flex items-center justify-between gap-3">
-                  <h3 className="text-sm font-semibold text-white">{candidate.productType}</h3>
-                  <span className="text-sm font-bold text-white/75">{candidate.score}</span>
+      {data.ali1688 && (
+        <Section title={labels.ali1688Products}>
+          {/* Selected product */}
+          {data.ali1688.selectedProduct && (
+            <div className="mb-5 rounded-2xl border border-orange-400/20 bg-orange-400/[0.04] p-5">
+              <div className="text-xs uppercase tracking-[0.18em] text-orange-300/70">{labels.selectedProduct}</div>
+              <div className="mt-3 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+                <div className="flex-1">
+                  <h3 className="text-base font-semibold text-white">{data.ali1688.selectedProduct.title}</h3>
+                  <div className="mt-2 flex flex-wrap gap-3 text-sm text-white/55">
+                    <span className="text-orange-200 font-semibold">¥{data.ali1688.selectedProduct.price}</span>
+                    <span>/</span>
+                    <span>{data.ali1688.selectedProduct.unit}</span>
+                    <span>/</span>
+                    <span>{labels.minOrder}: {data.ali1688.selectedProduct.minOrder}</span>
+                  </div>
+                  <div className="mt-2 text-xs text-white/40">
+                    {data.ali1688.selectedProduct.supplier} · {data.ali1688.selectedProduct.supplierLocation}
+                  </div>
+                  <div className="mt-3 grid gap-2 sm:grid-cols-3">
+                    <SourcingMetric label="Match" value={String(data.ali1688.selectedProduct.matchScore ?? "-")} />
+                    <SourcingMetric label="Retail" value={`$${data.ali1688.selectedProduct.suggestedRetailUsd}`} />
+                    <SourcingMetric label="Margin" value={`${data.ali1688.selectedProduct.grossMarginPercent}%`} />
+                  </div>
+                  <div className="mt-2 flex items-center gap-3 text-xs text-white/40">
+                    <span>★ {data.ali1688.selectedProduct.supplierRating.toFixed(1)}</span>
+                    <span>{labels.transactions}: {data.ali1688.selectedProduct.transactionCount >= 10000
+                      ? `${(data.ali1688.selectedProduct.transactionCount / 10000).toFixed(1)}万`
+                      : data.ali1688.selectedProduct.transactionCount >= 1000
+                        ? `${(data.ali1688.selectedProduct.transactionCount / 1000).toFixed(1)}千`
+                        : data.ali1688.selectedProduct.transactionCount}</span>
+                  </div>
+                  {data.ali1688.selectedProduct.tags.length > 0 && (
+                    <div className="mt-3 flex flex-wrap gap-1.5">
+                      {data.ali1688.selectedProduct.tags.map((tag) => (
+                        <span key={tag} className="rounded-full border border-white/[0.08] bg-white/[0.035] px-2.5 py-0.5 text-[11px] text-white/50">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    <span className="rounded-full border border-orange-300/15 bg-orange-300/[0.06] px-2.5 py-0.5 text-[11px] text-orange-100/65">
+                      Risk: {data.ali1688.selectedProduct.riskLevel}
+                    </span>
+                    {data.ali1688.selectedProduct.matchReasons?.slice(0, 3).map((reason) => (
+                      <span key={reason} className="rounded-full border border-white/[0.08] bg-white/[0.035] px-2.5 py-0.5 text-[11px] text-white/50">
+                        {reason}
+                      </span>
+                    ))}
+                  </div>
+                  {data.ali1688.selectedProduct.sourcingTips.length > 0 && (
+                    <ul className="mt-3 space-y-1.5 text-xs leading-5 text-white/45">
+                      {data.ali1688.selectedProduct.sourcingTips.slice(0, 3).map((tip) => (
+                        <li key={tip}>- {tip}</li>
+                      ))}
+                    </ul>
+                  )}
                 </div>
-                <p className="mt-2 text-xs leading-5 text-white/45">{candidate.title}</p>
+                <a
+                  href={data.ali1688.selectedProduct.productUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="inline-flex h-9 shrink-0 items-center rounded-lg bg-orange-500/20 px-4 text-xs font-medium text-orange-200 transition hover:bg-orange-500/30"
+                >
+                  {labels.viewOn1688}
+                </a>
               </div>
-            ))}
-          </div>
+            </div>
+          )}
+
+          {/* Alternative products */}
+          {data.ali1688.products.length > 1 && (
+            <div className="grid gap-3 md:grid-cols-2 lg:grid-cols-3">
+              {data.ali1688.products.filter(p => p.id !== data.ali1688?.selectedProduct?.id).map((product) => (
+                <div key={product.id} className="rounded-xl border border-white/[0.07] bg-white/[0.025] p-4">
+                  <h4 className="text-sm font-medium text-white/80 line-clamp-2">{product.title}</h4>
+                  <div className="mt-2 flex items-center gap-2 text-xs text-white/45">
+                    <span className="text-orange-200/80 font-semibold">¥{product.price}</span>
+                    <span>·</span>
+                    <span>★ {product.supplierRating.toFixed(1)}</span>
+                    <span>·</span>
+                    <span>{product.transactionCount >= 10000
+                      ? `${(product.transactionCount / 10000).toFixed(1)}万`
+                      : product.transactionCount >= 1000
+                        ? `${(product.transactionCount / 1000).toFixed(1)}千`
+                        : product.transactionCount}笔</span>
+                  </div>
+                  <div className="mt-1.5 text-[11px] text-white/30">{product.supplier}</div>
+                  <div className="mt-2 flex flex-wrap gap-1.5 text-[11px] text-white/40">
+                    <span>Match {product.matchScore ?? "-"}</span>
+                    <span>/</span>
+                    <span>Margin {product.grossMarginPercent}%</span>
+                    <span>/</span>
+                    <span>Risk {product.riskLevel}</span>
+                  </div>
+                  <a
+                    href={product.productUrl}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="mt-3 inline-flex text-xs text-orange-300/60 hover:text-orange-300 transition"
+                  >
+                    {labels.viewOn1688} →
+                  </a>
+                </div>
+              ))}
+            </div>
+          )}
+
+          {/* Search links */}
+          {data.ali1688.searchUrls.length > 0 && (
+            <div className="mt-5">
+              <div className="mb-3 text-xs text-white/40">{labels.searchLinks}</div>
+              <div className="flex flex-wrap gap-2">
+                {data.ali1688.searchUrls.map(({ keyword, url }) => (
+                  <a
+                    key={keyword}
+                    href={url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-full border border-white/[0.08] bg-white/[0.035] px-3 py-1.5 text-xs text-white/55 transition hover:bg-white/[0.06] hover:text-white"
+                  >
+                    {keyword}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </Section>
       )}
 
@@ -264,6 +427,15 @@ function Section({ title, children }: { title: string; children: React.ReactNode
     <div>
       <h2 className="mb-4 text-lg font-semibold tracking-tight text-white">{title}</h2>
       {children}
+    </div>
+  );
+}
+
+function SourcingMetric({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg border border-white/[0.07] bg-white/[0.025] px-3 py-2">
+      <div className="text-[10px] uppercase tracking-[0.12em] text-white/30">{label}</div>
+      <div className="mt-1 text-sm font-semibold text-white/78">{value}</div>
     </div>
   );
 }
@@ -354,6 +526,8 @@ function buildMarkdown(data: PetAdPack) {
     `Product: ${data.product.title}`,
     `Target market: ${data.localization.label} (${data.localization.targetMarket})`,
     `Localization: ${data.localization.localizationLevel}`,
+    `Top play market: ${data.marketPlaybook.primaryMarketLabel} (${data.marketPlaybook.confidence})`,
+    `Market tactic: ${data.marketPlaybook.hookAngle}`,
     `Selected source: ${data.selectedSource.title} (${data.selectedSource.score}/100)`,
     `Template: ${data.selectedTemplate.name}`,
     "",

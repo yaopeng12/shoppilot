@@ -1,5 +1,25 @@
 import type { TargetMarketCode } from "@/lib/localization/markets";
 
+export type MarketScore = {
+  market: TargetMarketCode;
+  label: string;
+  score: number;
+  reason: string;
+};
+
+export type MarketPlaybook = {
+  primaryMarket: TargetMarketCode;
+  primaryMarketLabel: string;
+  confidence: "high" | "medium" | "low";
+  reason: string;
+  marketScores: MarketScore[];
+  hookAngle: string;
+  tone: string;
+  cta: string;
+  creativeNotes: string[];
+  localizationRisks: string[];
+};
+
 export type TrendingVideo = {
   id: string;
   video_url: string;
@@ -17,6 +37,7 @@ export type TrendingVideo = {
   duration_seconds: number | null;
   scraped_at: string;
   source_period: string | null;
+  market_playbook?: MarketPlaybook;
   created_at: string;
   updated_at: string;
 };
@@ -35,6 +56,7 @@ export type VideoAnalysis = {
   tone_style: string | null;
   engagement_score: number | null;
   key_takeaways: string[];
+  market_playbook?: MarketPlaybook;
   analysis_model: string;
   analyzed_at: string;
   created_at: string;
@@ -93,6 +115,12 @@ export const CATEGORIES = [
   "pet_hair_remover",
   "fabric_odor_control",
   "dog_pad_cleanup",
+  "pet_bathing",
+  "paw_cleanup",
+  "pet_stain_removal",
+  "pet_toys_cleaning",
+  "aquarium_cleaning",
+  "pet_cleaning",
 ] as const;
 
 export type Category = (typeof CATEGORIES)[number];

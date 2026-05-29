@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import type { Product } from "@/lib/tiktok-adgen/types";
-import type { AdPackScene, PetAdPack, PetAdPackOptions, PetTemplate } from "./types";
+import type { AdPackScene, PetAdPack, PetAdPackOptions, PetCleaningScenario, PetTemplate, SourceCandidate } from "./types";
 import {
   getLocalizedAdPackFallback,
   buildLocalizationPrompt,
@@ -10,10 +10,18 @@ import {
 } from "@/lib/localization/markets";
 import { PET_CLEANING_TEMPLATES } from "./templates";
 import { getScenarioLabel, matchBestSource } from "./source-match";
+import { generate1688SearchUrls, generateMock1688Products, type Ali1688Product } from "./ali1688";
+import { inferProductMarketPlaybook } from "@/lib/inspiration/market-intelligence";
 
 const MODEL = "qwen-plus";
 
 type ParsedAdPack = Partial<Omit<PetAdPack, "product" | "selectedSource" | "alternatives" | "selectedTemplate" | "detectedScenario">>;
+
+export type Ali1688Source = {
+  products: Ali1688Product[];
+  searchUrls: { keyword: string; url: string }[];
+  selectedProduct?: Ali1688Product;
+};
 
 function getClient() {
   const apiKey = process.env.DASHSCOPE_API_KEY;
@@ -63,6 +71,15 @@ Selected source:
 - Reasons: ${source.reasons.join("; ")}
 - Estimated cost: RMB ${source.estimatedPriceCny}
 - Suggested retail: USD ${source.suggestedRetailUsd}
+
+Market performance read:
+- Primary market to adapt for: ${basePack.marketPlaybook.primaryMarketLabel}
+- Confidence: ${basePack.marketPlaybook.confidence}
+- Reason: ${basePack.marketPlaybook.reason}
+- Hook angle to respect: ${basePack.marketPlaybook.hookAngle}
+- CTA style: ${basePack.marketPlaybook.cta}
+- Notes: ${basePack.marketPlaybook.creativeNotes.join(" | ")}
+- Localization risks: ${basePack.marketPlaybook.localizationRisks.join(" | ")}
 
 Selected template:
 - Name: ${template.name}
@@ -202,9 +219,40 @@ function fallbackScenes(product: Product, template: PetTemplate, options: PetAdP
   ];
 }
 
+function buildCreativeVariants(scenes: AdPackScene[], hooks: string[], template: PetTemplate): PetAdPack["creativeVariants"] {
+  const firstShot = scenes[0]?.visual || template.structure[0] || "Open with the pet-home problem.";
+  return [
+    {
+      id: "pain-proof",
+      angle: "Pain point + visible proof",
+      hook: hooks[0] || template.opening,
+      firstShot,
+      cta: "Try the routine before your next deep clean.",
+      bestFor: "Broad cold audience testing",
+    },
+    {
+      id: "demo-speed",
+      angle: "Fast demo + satisfying cleanup",
+      hook: hooks[1] || hooks[0] || template.opening,
+      firstShot: scenes[1]?.visual || firstShot,
+      cta: "Save this for your next pet-home reset.",
+      bestFor: "Short-form TikTok/Reels edits",
+    },
+    {
+      id: "trust-check",
+      angle: "Practical review + objection handling",
+      hook: hooks[2] || hooks[0] || template.opening,
+      firstShot: scenes[2]?.visual || firstShot,
+      cta: "Compare it with your current cleanup routine.",
+      bestFor: "Warm traffic and retargeting",
+    },
+  ];
+}
+
 function fallbackPack(product: Product, options: PetAdPackOptions = {}): PetAdPack {
   const targetMarket = normalizeTargetMarket(options.targetMarket);
   const localization = getMarketProfile(targetMarket);
+  const marketPlaybook = inferProductMarketPlaybook(product, targetMarket);
   const matched = matchBestSource(product, options.userNote);
   const selectedTemplate = selectTemplate(matched.detectedScenario, matched.selected.productType);
   const name = productName(product);
@@ -242,22 +290,25 @@ function fallbackPack(product: Product, options: PetAdPackOptions = {}): PetAdPa
     riskNotes: copy.template.riskNotes,
   };
 
+  const hooks = [
+    signal.opener,
+    signal.secondaryHook,
+    signal.productReveal,
+    signal.proofLine,
+    signal.cta,
+  ];
+
   return {
     product,
     targetMarket,
     localization,
+    marketPlaybook,
     detectedScenario: matched.detectedScenario,
     selectedSource: localizedSource,
     alternatives: matched.alternatives,
     selectedTemplate: localizedTemplate,
     strategy: copy.strategy,
-    hooks: [
-      signal.opener,
-      signal.secondaryHook,
-      signal.productReveal,
-      signal.proofLine,
-      signal.cta,
-    ],
+    hooks,
     scripts: [
       {
         id: "15s",
@@ -289,6 +340,7 @@ function fallbackPack(product: Product, options: PetAdPackOptions = {}): PetAdPa
     aiVideoPrompts: copy.aiVideoPrompts,
     compliance: copy.compliance,
     testingPlan: copy.testingPlan,
+    creativeVariants: buildCreativeVariants(scenes, hooks, selectedTemplate),
   };
 }
 
@@ -299,6 +351,7 @@ function mergeParsed(base: PetAdPack, parsed: ParsedAdPack | null): PetAdPack {
     ...base,
     targetMarket: normalizeTargetMarket(parsed.targetMarket || base.targetMarket),
     localization: getMarketProfile(parsed.targetMarket || base.targetMarket),
+    marketPlaybook: base.marketPlaybook,
     strategy: parsed.strategy || base.strategy,
     hooks: Array.isArray(parsed.hooks) && parsed.hooks.length ? parsed.hooks.slice(0, 7) : base.hooks,
     scripts: Array.isArray(parsed.scripts) && parsed.scripts.length ? parsed.scripts.slice(0, 3) : base.scripts,
@@ -313,13 +366,52 @@ function mergeParsed(base: PetAdPack, parsed: ParsedAdPack | null): PetAdPack {
     compliance: parsed.compliance || base.compliance,
     testingPlan:
       Array.isArray(parsed.testingPlan) && parsed.testingPlan.length ? parsed.testingPlan.slice(0, 5) : base.testingPlan,
+    creativeVariants: base.creativeVariants,
   };
 }
 
-export async function generatePetAdPack(product: Product, options: PetAdPackOptions = {}): Promise<PetAdPack> {
+// Get 1688 products for the detected scenario
+async function get1688Products(
+  product: Product,
+  scenario: PetCleaningScenario,
+  source: SourceCandidate,
+  note?: string,
+): Promise<Ali1688Source> {
+  // Generate search URLs from the selected source type and the product signal.
+  const searchUrls = generate1688SearchUrls(scenario, source, product, note);
+
+  // Try to fetch real products, fallback to mock data
+  let products: Ali1688Product[] = [];
+
+  try {
+    // In production, this would call the real 1688 API
+    // For now, use mock data that looks realistic
+    products = generateMock1688Products(scenario, 5, { product, source, note });
+  } catch (e) {
+    console.warn("1688 product fetch failed, using mock data:", e);
+    products = generateMock1688Products(scenario, 5, { product, source, note });
+  }
+
+  // Products are ranked by product/source keyword fit, supplier quality, and transaction signal.
+  const selectedProduct = products[0];
+
+  return {
+    products,
+    searchUrls,
+    selectedProduct,
+  };
+}
+
+export async function generatePetAdPack(product: Product, options: PetAdPackOptions = {}): Promise<PetAdPack & { ali1688: Ali1688Source }> {
   const base = fallbackPack(product, options);
   const client = getClient();
-  if (!client) return base;
+
+  // Get 1688 products for the detected scenario
+  const ali1688 = await get1688Products(product, base.detectedScenario, base.selectedSource, options.userNote);
+
+  if (!client) {
+    return { ...base, ali1688 };
+  }
 
   try {
     const completion = await client.chat.completions.create({
@@ -336,9 +428,9 @@ export async function generatePetAdPack(product: Product, options: PetAdPackOpti
     });
 
     const text = completion.choices[0]?.message?.content || "";
-    return mergeParsed(base, parseResponse(text));
+    return { ...mergeParsed(base, parseResponse(text)), ali1688 };
   } catch (error) {
     console.error("Pet ad pack generation error:", error);
-    return base;
+    return { ...base, ali1688 };
   }
 }

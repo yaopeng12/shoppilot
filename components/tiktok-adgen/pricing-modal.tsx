@@ -26,7 +26,7 @@ export function PricingModal({
       onClose={onClose}
       className="max-w-4xl"
     >
-      <div className="grid md:grid-cols-3 gap-3">
+      <div className="grid md:grid-cols-2 gap-3">
         {(
           Object.entries(plans || {}) as Array<
             [PlanId, (typeof PLANS)[PlanId]]

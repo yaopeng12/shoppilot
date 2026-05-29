@@ -9,6 +9,12 @@ const SCENARIO_KEYWORDS: Record<PetCleaningScenario, string[]> = {
   pet_hair_cleanup: ["hair", "fur", "lint", "shedding", "sofa", "clothes", "brush", "roller"],
   fabric_odor: ["fabric", "sofa", "pet bed", "couch", "room", "odor", "deodorizer"],
   dog_pad_floor: ["dog", "puppy", "pad", "floor", "pee pad", "training", "urine"],
+  auto_litter_box: ["automatic", "self-cleaning", "smart", "auto", "robot", "litter box", "app"],
+  pet_bathing: ["bath", "shampoo", "grooming", "wash", "brush", "shower", "drying"],
+  paw_cleanup: ["paw", "muddy", "washer", "cleaner cup", "outdoor", "walk", "wipe"],
+  pet_stain_removal: ["carpet", "stain", "remover", "upholstery", "rug", "spot", "treatment"],
+  aquarium_cleaning: ["aquarium", "fish tank", "algae", "water", "filter", "aquatic"],
+  pet_toys_cleaning: ["toy", "sanitizer", "hygiene", "clean", "chew", "disinfect"],
 };
 
 const scenarioLabels: Record<PetCleaningScenario, string> = {
@@ -18,6 +24,12 @@ const scenarioLabels: Record<PetCleaningScenario, string> = {
   pet_hair_cleanup: "pet hair cleanup",
   fabric_odor: "fabric and sofa odor",
   dog_pad_floor: "dog pad and floor cleanup",
+  auto_litter_box: "automatic litter box",
+  pet_bathing: "pet bathing and grooming",
+  paw_cleanup: "paw cleanup",
+  pet_stain_removal: "pet stain removal",
+  aquarium_cleaning: "aquarium cleaning",
+  pet_toys_cleaning: "pet toys cleaning",
 };
 
 function productText(product: Product, note?: string) {

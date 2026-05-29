@@ -47,7 +47,7 @@ const copy = {
     templateLibrary: "Template research",
     templateLibraryDesc: "Review pet-cleaning video structures.",
     pricing: "Upgrade plan",
-    pricingDesc: "Unlock more ad packs and team workflows.",
+    pricingDesc: "Unlock unlimited ad pack generation.",
     apiTitle: "API key",
     apiDesc: "Use this key for integrations when API access is enabled.",
     show: "Show",
@@ -85,7 +85,6 @@ const copy = {
         "Claim safety guidance",
         "JSON and Markdown export",
       ],
-      team: ["Everything in Pro", "Up to 10 members", "Shared template workflow", "Team creative library", "Admin dashboard", "API access"],
     },
   },
   zh: {
@@ -337,7 +336,7 @@ export default function DashboardPage() {
 
         <section>
           <h2 className="mb-4 text-lg font-semibold">{t.plansTitle}</h2>
-          <div className="grid gap-4 md:grid-cols-3">
+          <div className="grid max-w-3xl gap-4 md:grid-cols-2">
             {Object.entries(PLANS).map(([id, planOption]) => {
               const planId = id as PlanId;
               const isCurrent = planId === plan;

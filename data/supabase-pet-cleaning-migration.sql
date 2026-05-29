@@ -10,7 +10,7 @@ CREATE TABLE IF NOT EXISTS profiles (
   email          TEXT NOT NULL,
   name           TEXT,
   image          TEXT,
-  plan           TEXT NOT NULL DEFAULT 'free' CHECK (plan IN ('free', 'pro', 'team')),
+  plan           TEXT NOT NULL DEFAULT 'free' CHECK (plan IN ('free', 'pro')),
   api_key_hash   TEXT,
   api_key_last4  TEXT,
   password_hash  TEXT,

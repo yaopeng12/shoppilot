@@ -4,6 +4,8 @@ const PUBLIC_ROUTE_PREFIXES = [
   "/sign-up",
   "/auth/start",
   "/pricing",
+  "/inspiration",
+  "/knowledge",
   "/storyboard",
   "/tiktok-adgen",
   "/robots.txt",

@@ -132,7 +132,7 @@ async function scrapeHTMLFallback(period: string): Promise<TrendingVideo[]> {
   }
 }
 
-const DEFAULT_COUNTRIES = ["US", "GB", "CA", "AU", "DE", "FR"];
+const DEFAULT_COUNTRIES = ["US", "GB", "TH", "ID", "VN", "MY", "JP", "MX", "BR"];
 const SORT_OPTIONS = ["vv", "like", "comment"] as const;
 
 // --- Mock data for development/testing when TikTok API is unreachable ---

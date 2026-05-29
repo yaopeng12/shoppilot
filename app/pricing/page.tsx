@@ -28,14 +28,6 @@ const planCopy = {
         "Claim safety guidance",
         "JSON and Markdown export",
       ],
-      team: [
-        "Everything in Pro",
-        "Up to 10 members",
-        "Shared template workflow",
-        "Team creative library",
-        "Admin dashboard",
-        "API access",
-      ],
     },
   },
   zh: {
@@ -122,7 +114,7 @@ export default function PricingPage() {
           </p>
         </div>
 
-        <div className="mx-auto grid max-w-4xl gap-5 md:grid-cols-3">
+        <div className="mx-auto grid max-w-3xl gap-5 md:grid-cols-2">
           {Object.entries(PLANS).map(([pid, plan]) => {
             const planId = pid as PlanId;
             const isCurrent = currentPlan === planId;
@@ -202,8 +194,6 @@ export default function PricingPage() {
             );
           })}
         </div>
-
-        <div className="mt-10 text-center text-sm text-white/30">{t.pricing.yearlyDiscount}</div>
       </main>
 
       <Toast message={toast} />

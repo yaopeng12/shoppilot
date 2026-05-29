@@ -1,8 +1,15 @@
 import { supabase } from "./supabase";
 import { existsSync, mkdirSync, readFileSync, readdirSync, writeFileSync } from "fs";
 import path from "path";
-import { getLocalizedCategoryLabel, getLocalizedTemplateSignal, getMarketProfile, normalizeTargetMarket } from "@/lib/localization/markets";
+import {
+  getLocalizedCategoryLabel,
+  getLocalizedTemplateSignal,
+  getMarketProfile,
+  normalizeTargetMarket,
+  type MarketProfile,
+} from "@/lib/localization/markets";
 import { CATEGORIES, type TrendingVideo, type VideoAnalysis, type InspirationFilters, type InspirationStats, type KnowledgeEntry } from "./types";
+import { inferVideoMarketPlaybook } from "./market-intelligence";
 
 export async function upsertVideos(videos: TrendingVideo[]): Promise<number> {
   if (!supabase || videos.length === 0) return 0;
@@ -70,6 +77,22 @@ export async function upsertAnalyses(analyses: VideoAnalysis[]): Promise<number>
   return data?.length || 0;
 }
 
+function attachMarketPlaybook<T extends TrendingVideo & { video_analyses?: VideoAnalysis[] }>(
+  video: T,
+  targetMarket?: string,
+): T {
+  const playbook = inferVideoMarketPlaybook(video, targetMarket);
+  const analyses = Array.isArray(video.video_analyses)
+    ? video.video_analyses.map((analysis) => ({ ...analysis, market_playbook: analysis.market_playbook || playbook }))
+    : video.video_analyses;
+
+  return {
+    ...video,
+    market_playbook: video.market_playbook || playbook,
+    video_analyses: analyses,
+  };
+}
+
 export async function getVideos(filters: InspirationFilters = {}) {
   if (!supabase) return getLocalVideos(filters);
 
@@ -127,7 +150,9 @@ export async function getVideos(filters: InspirationFilters = {}) {
   }
 
   const result = {
-    videos: (data || []) as unknown as (TrendingVideo & { video_analyses: VideoAnalysis[] })[],
+    videos: ((data || []) as unknown as (TrendingVideo & { video_analyses: VideoAnalysis[] })[]).map((video) =>
+      attachMarketPlaybook(video, filters.targetMarket),
+    ),
     total: count || 0,
   };
 
@@ -150,9 +175,8 @@ export async function getVideoById(id: string) {
     return getLocalVideos({ pageSize: 500 }).videos.find((video) => video.id === id) || null;
   }
 
-  return (data as unknown as TrendingVideo & { video_analyses: VideoAnalysis[] }) ||
-    getLocalVideos({ pageSize: 500 }).videos.find((video) => video.id === id) ||
-    null;
+  const fallback = getLocalVideos({ pageSize: 500 }).videos.find((video) => video.id === id) || null;
+  return data ? attachMarketPlaybook(data as unknown as TrendingVideo & { video_analyses: VideoAnalysis[] }) : fallback;
 }
 
 export async function getStats(): Promise<InspirationStats> {
@@ -259,6 +283,7 @@ type LocalTemplateCandidate = {
 };
 
 const LOCAL_RESEARCH_DIR = path.join(process.cwd(), "data", "pet-template-research");
+const KNOWLEDGE_SEED_FILE = path.join(process.cwd(), "data", "knowledge-seed.json");
 
 function humanize(value: string) {
   return value
@@ -369,7 +394,7 @@ function buildKnowledgeEntry(
   const maxLikes = Math.max(...candidates.map((candidate) => candidate.public_metrics?.likes || 0));
   const maxShares = Math.max(...candidates.map((candidate) => candidate.public_metrics?.shares || 0));
 
-  return {
+  const entry: KnowledgeEntry = {
     id,
     category,
     hook_patterns: Object.entries(hookCounts).map(([pattern, frequency]) => {
@@ -417,16 +442,35 @@ function buildKnowledgeEntry(
       { metric: "max_public_shares", value: maxShares },
     ],
     summary:
-      `Localized for ${market.targetMarket}: ${market.creatorVoiceReference}. Local candidate research comes from public TikTok Creative Center metadata; reuse the structure and local speaking style, not creator assets or exact wording.`,
+      "Local candidate research comes from public TikTok Creative Center metadata; reuse the structure and local speaking style, not creator assets or exact wording.",
     video_count: candidates.length,
     generated_at: generatedAt,
     created_at: generatedAt,
     updated_at: generatedAt,
   };
+
+  return localizeKnowledgeEntry(entry, targetMarket);
+}
+
+function readKnowledgeSeed(): KnowledgeEntry[] {
+  try {
+    // Read seed data from file (for initial setup)
+    if (!existsSync(KNOWLEDGE_SEED_FILE)) return [];
+    return JSON.parse(readFileSync(KNOWLEDGE_SEED_FILE, "utf-8")) as KnowledgeEntry[];
+  } catch {
+    return [];
+  }
 }
 
 function buildLocalKnowledgeBase(targetMarket?: string): KnowledgeEntry[] {
   const candidates = readLocalTemplateCandidates();
+  const seedEntries = readKnowledgeSeed();
+
+  // If no candidates from research, use seed data
+  if (candidates.length === 0 && seedEntries.length > 0) {
+    return localizeKnowledgeEntries(seedEntries, targetMarket);
+  }
+
   if (candidates.length === 0) return [];
 
   const generatedAt = candidates
@@ -435,7 +479,7 @@ function buildLocalKnowledgeBase(targetMarket?: string): KnowledgeEntry[] {
     .sort()
     .at(-1) || new Date().toISOString();
 
-  return Object.entries(
+  const researchEntries = Object.entries(
     candidates.reduce<Record<string, LocalTemplateCandidate[]>>((acc, candidate) => {
       const painPoint = candidate.pain_point || "pet_cleaning";
       const productCategory = candidate.product_category || "pet_cleaning";
@@ -454,33 +498,104 @@ function buildLocalKnowledgeBase(targetMarket?: string): KnowledgeEntry[] {
         generatedAt,
         targetMarket,
       );
-    })
+    });
+
+  // Merge seed entries that don't overlap with research entries
+  const researchCategories = new Set(researchEntries.map(e => e.category));
+  const uniqueSeedEntries = seedEntries.filter(e => !researchCategories.has(e.category));
+
+  return [...researchEntries, ...localizeKnowledgeEntries(uniqueSeedEntries, targetMarket)]
     .sort((a, b) => b.video_count - a.video_count || b.engagement_benchmarks[0].value - a.engagement_benchmarks[0].value);
 }
 
 function localizeKnowledgeEntries(entries: KnowledgeEntry[], targetMarket?: string): KnowledgeEntry[] {
-  const market = getMarketProfile(targetMarket);
+  return entries.map((entry) => localizeKnowledgeEntry(entry, targetMarket));
+}
 
-  return entries.map((entry) => {
-    const signal = getLocalizedTemplateSignal({ painPoint: entry.category, productCategory: entry.category }, market.code);
-    return {
-      ...entry,
-      hook_patterns: entry.hook_patterns.map((hook, index) => ({
-        ...hook,
-        example: index === 0 ? signal.opener : signal.secondaryHook,
+function localizeKnowledgeEntry(entry: KnowledgeEntry, targetMarket?: string): KnowledgeEntry {
+  const market = getMarketProfile(normalizeTargetMarket(targetMarket));
+  const signal = getLocalizedTemplateSignal({ painPoint: entry.category, productCategory: entry.category }, market.code);
+  const hookExamples = uniqueStrings([
+    signal.opener,
+    signal.secondaryHook,
+    signal.productReveal,
+    signal.proofLine,
+    signal.cta,
+    ...signal.captions,
+  ]);
+  const sceneDescriptions = [signal.opener, signal.secondaryHook, signal.productReveal, signal.proofLine, signal.cta];
+  const baseSummary = stripMarketSummary(entry.summary);
+
+  return {
+    ...entry,
+    id: `${stripMarketSuffix(entry.id)}_${market.code}`,
+    category: `${stripMarketCategory(entry.category)} · ${market.label}`,
+    hook_patterns: entry.hook_patterns.map((hook, index) => ({
+      ...hook,
+      example: hookExamples[index % hookExamples.length] || hook.example,
+    })),
+    structure_templates: entry.structure_templates.map((template) => ({
+      ...template,
+      name: `${stripMarketTemplateName(template.name)} · ${market.label}`,
+      best_for: `${stripMarketBestFor(template.best_for)} · ${market.targetMarket}`,
+      scenes: template.scenes.map((scene, index) => ({
+        ...scene,
+        description: sceneDescriptions[index % sceneDescriptions.length] || scene.description,
       })),
-      structure_templates: entry.structure_templates.map((template) => ({
-        ...template,
-        scenes: template.scenes.map((scene, index) => ({
-          ...scene,
-          description: [signal.opener, signal.secondaryHook, signal.proofLine, signal.cta][index] || scene.description,
-        })),
-      })),
-      cta_templates: uniqueStrings([signal.cta, ...entry.cta_templates]),
-      tone_profiles: uniqueStrings([market.localizationLevel, market.tone, ...entry.tone_profiles]),
-      summary: `Localized for ${market.targetMarket}: ${market.creatorVoiceReference}. ${entry.summary}`,
-    };
-  });
+    })),
+    cta_templates: uniqueStrings([signal.cta, ...signal.captions.slice(0, 3), ...entry.cta_templates]).slice(0, 8),
+    tone_profiles: uniqueStrings([
+      market.targetMarket,
+      market.localizationLevel,
+      market.tone,
+      market.creatorVoiceReference,
+      ...entry.tone_profiles,
+    ]).slice(0, 8),
+    top_hashtags: buildMarketHashtags(entry.top_hashtags, signal.hashtags, market),
+    summary: `${market.targetMarket} market playbook: ${market.creatorVoiceReference}. ${baseSummary}`,
+  };
+}
+
+function stripMarketSuffix(id: string): string {
+  return id.replace(/_(en-US|en-GB|th|id|vi|ms|ja|es|pt-BR)$/u, "");
+}
+
+function stripMarketCategory(category: string): string {
+  return category.split(" · ")[0].trim();
+}
+
+function stripMarketTemplateName(name: string): string {
+  return name.split(" · ")[0].trim();
+}
+
+function stripMarketBestFor(bestFor: string): string {
+  return bestFor.split(" · ")[0].trim();
+}
+
+function stripMarketSummary(summary: string): string {
+  return summary
+    .replace(/^Localized for [^:]+:\s*[^.]+\.\s*/u, "")
+    .replace(/^[^:]+ market playbook:\s*[^.]+\.\s*/u, "")
+    .trim();
+}
+
+function buildMarketHashtags(baseTags: string[], signalTags: string[], market: MarketProfile): string[] {
+  const marketTags: Record<MarketProfile["code"], string[]> = {
+    "en-US": ["PetTok", "CleanTok", "TikTokMadeMeBuyIt", "PetParent"],
+    "en-GB": ["PetTokUK", "CleanTokUK", "FlatFriendly", "PetCareUK"],
+    th: ["PetTokTH", "TikTokThailand", "PetHomeTH", "CleanHomeTH"],
+    id: ["PetTokID", "TikTokIndonesia", "RumahBersih", "PetCareID"],
+    vi: ["PetTokVN", "TikTokVietnam", "NhaSach", "MeoVatThuCung"],
+    ms: ["PetTokMY", "TikTokMalaysia", "RumahBersih", "PetCareMY"],
+    ja: ["PetTokJP", "TikTokJapan", "PetRoutine", "CleanHomeJP"],
+    es: ["PetTokLATAM", "TikTokMexico", "CasaLimpia", "Mascotas"],
+    "pt-BR": ["PetTokBR", "TikTokBrasil", "CasaLimpa", "PetsBrasil"],
+  };
+
+  return uniqueStrings([...marketTags[market.code], ...signalTags, ...baseTags])
+    .map((tag) => tag.replace(/^#/, ""))
+    .filter(Boolean)
+    .slice(0, 12);
 }
 
 function candidateToVideo(candidate: LocalTemplateCandidate, targetMarket?: string): TrendingVideo & { video_analyses: VideoAnalysis[] } {
@@ -491,7 +606,6 @@ function candidateToVideo(candidate: LocalTemplateCandidate, targetMarket?: stri
   const productCategory = candidate.product_category || "pet_cleaning";
   const useScene = candidate.use_scene || "pet_home";
   const proofType = candidate.proof_type || "practical_demo";
-  const ctaType = candidate.cta_type || "soft_cta";
   const likes = candidate.public_metrics?.likes || 0;
   const comments = candidate.public_metrics?.comments || 0;
   const shares = candidate.public_metrics?.shares || 0;
@@ -504,8 +618,7 @@ function candidateToVideo(candidate: LocalTemplateCandidate, targetMarket?: stri
     },
     market.code,
   );
-
-  return {
+  const baseVideo: TrendingVideo = {
     id,
     video_url: candidate.source_id ? candidate.url || "" : "",
     thumbnail_url: null,
@@ -517,13 +630,19 @@ function candidateToVideo(candidate: LocalTemplateCandidate, targetMarket?: stri
     like_count: likes,
     comment_count: comments,
     share_count: shares,
-    country_code: "US",
-    hashtags: [productCategory, painPoint, useScene].map((value) => value.replace(/[^a-z0-9_]/gi, "")),
+    country_code: market.code === "en-US" ? "US" : market.code === "en-GB" ? "GB" : market.code.toUpperCase(),
+    hashtags: [productCategory, painPoint, useScene, ...signal.hashtags].map((value) => value.replace(/^#/, "").replace(/[^a-z0-9_]/gi, "")),
     duration_seconds: 24,
     scraped_at: collectedAt,
     source_period: "candidate_research",
     created_at: collectedAt,
     updated_at: collectedAt,
+  };
+  const playbook = inferVideoMarketPlaybook(baseVideo, market.code);
+
+  return {
+    ...baseVideo,
+    market_playbook: playbook,
     video_analyses: [
       {
         id: `${id}_analysis`,
@@ -558,11 +677,14 @@ function candidateToVideo(candidate: LocalTemplateCandidate, targetMarket?: stri
           .join(" / "),
         engagement_score: candidate.score || null,
         key_takeaways: [
+          `Best market: ${playbook.primaryMarketLabel} (${playbook.confidence} confidence).`,
+          `Market tactic: ${playbook.hookAngle}`,
           signal.culturalNote,
           ...(candidate.comment_insights || []),
           ...(candidate.compliance_risks || []).map((risk) => `Compliance watchout: ${humanize(risk)}`),
           candidate.originality_notes || "Use this as structural inspiration only; do not copy creator wording or assets.",
         ].filter(Boolean),
+        market_playbook: playbook,
         analysis_model: "local_candidate_research",
         analyzed_at: collectedAt,
         created_at: collectedAt,
