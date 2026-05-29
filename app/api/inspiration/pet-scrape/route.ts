@@ -2,7 +2,7 @@ import { json } from "@/lib/tiktok-adgen/http";
 import { scrapeAndAnalyzePetCleaning } from "@/lib/inspiration/pet-scraper";
 
 export const runtime = "nodejs";
-export const maxDuration = 600; // 10 min timeout
+export const maxDuration = 300; // 10 min timeout
 
 export async function POST(req: Request) {
   const authHeader = req.headers.get("Authorization") || "";

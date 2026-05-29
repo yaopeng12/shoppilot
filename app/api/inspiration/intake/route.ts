@@ -3,7 +3,7 @@ import { intakeVideo, intakeVideos, getIntakeStats } from "@/lib/inspiration/vid
 import { getCurrentUser } from "@/lib/tiktok-adgen/auth";
 
 export const runtime = "nodejs";
-export const maxDuration = 120;
+export const maxDuration = 300;
 
 // POST - Submit video(s) for analysis and intake
 export async function POST(req: Request) {
