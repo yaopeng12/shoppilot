@@ -39,8 +39,12 @@ const MARKET_KEYWORDS: Record<TargetMarketCode, string[]> = {
 };
 
 function engagementRate(video: TrendingVideo): number {
-  if (!video.view_count) return 0;
-  return (video.like_count + video.comment_count * 3 + video.share_count * 5) / video.view_count;
+  // If view_count is 0 but we have likes, estimate view_count from likes
+  // Typical TikTok like rate is around 5-15%, we use 8% as default
+  const viewCount = video.view_count || (video.like_count > 0 ? Math.round(video.like_count / 0.08) : 0);
+
+  if (!viewCount) return 0;
+  return (video.like_count + video.comment_count * 3 + video.share_count * 5) / viewCount;
 }
 
 function textSignal(video: TrendingVideo): string {

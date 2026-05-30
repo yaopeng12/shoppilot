@@ -30,6 +30,11 @@ type VideoInput = {
   category?: string;
   userNote?: string;
   targetMarket?: string;
+  // User-provided metrics (when scraping fails)
+  viewCount?: number;
+  likeCount?: number;
+  commentCount?: number;
+  shareCount?: number;
 };
 
 type AnalysisResult = {
@@ -281,8 +286,12 @@ function fallbackAnalysis(video: TrendingVideo): VideoAnalysis {
 }
 
 function calcEngagement(video: TrendingVideo): number {
-  if (!video.view_count) return 0;
-  return Math.round(((video.like_count + video.comment_count * 3 + video.share_count * 5) / video.view_count) * 10000) / 100;
+  // If view_count is 0 but we have likes, estimate view_count from likes
+  // Typical TikTok like rate is around 5-15%, we use 8% as default
+  const viewCount = video.view_count || (video.like_count > 0 ? Math.round(video.like_count / 0.08) : 0);
+
+  if (!viewCount) return 0;
+  return Math.round(((video.like_count + video.comment_count * 3 + video.share_count * 5) / viewCount) * 10000) / 100;
 }
 
 function parseJson(text: string): Record<string, unknown> | null {
@@ -540,8 +549,9 @@ async function fetchVideoMetadata(url: string): Promise<{
   country_code?: string;
   hashtags?: string[];
 } | null> {
+  // Method 1: Try TikTok oEmbed API first (fast, reliable, but no metrics)
+  let oembedData: any = null;
   try {
-    // Try TikTok oEmbed API first
     const oembedUrl = `https://www.tiktok.com/oembed?url=${encodeURIComponent(url)}`;
     const response = await fetch(oembedUrl, {
       headers: {
@@ -551,17 +561,81 @@ async function fetchVideoMetadata(url: string): Promise<{
     });
 
     if (response.ok) {
-      const data = await response.json();
-      if (data.title) {
-        return {
-          title: data.title,
-          author: data.author_name,
-          thumbnail_url: data.thumbnail_url,
-        };
+      oembedData = await response.json();
+    }
+  } catch {
+    // oEmbed failed
+  }
+
+  // Method 2: Try scraping from TikTok page (for metrics)
+  let metrics: { view_count?: number; like_count?: number; comment_count?: number; share_count?: number } = {};
+  try {
+    const response = await fetch(url, {
+      headers: {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/121.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.9",
+        "Cookie": "tt_webid=7106594312292453675",
+      },
+      redirect: "follow",
+      signal: AbortSignal.timeout(8000),
+    });
+
+    if (response.ok) {
+      const html = await response.text();
+
+      // Try __UNIVERSAL_DATA_FOR_REHYDRATION__
+      const universalDataMatch = html.match(/<script id="__UNIVERSAL_DATA_FOR_REHYDRATION__"[^>]*>([\s\S]*?)<\/script>/);
+      if (universalDataMatch) {
+        try {
+          const data = JSON.parse(universalDataMatch[1]);
+          const videoDetail = data?.__DEFAULT_SCOPE__?.["webapp.video-detail"]?.itemInfo?.itemStruct;
+          if (videoDetail?.stats) {
+            metrics = {
+              view_count: videoDetail.stats.playCount || 0,
+              like_count: videoDetail.stats.diggCount || 0,
+              comment_count: videoDetail.stats.commentCount || 0,
+              share_count: videoDetail.stats.shareCount || 0,
+            };
+          }
+        } catch {}
+      }
+
+      // Try SIGI_STATE if no metrics yet
+      if (!metrics.view_count) {
+        const sigiMatch = html.match(/<script id="SIGI_STATE"[^>]*>([\s\S]*?)<\/script>/);
+        if (sigiMatch) {
+          try {
+            const data = JSON.parse(sigiMatch[1]);
+            const itemModule = data?.ItemModule;
+            if (itemModule) {
+              const videoId = Object.keys(itemModule)[0];
+              const videoDetail = itemModule[videoId];
+              if (videoDetail?.stats) {
+                metrics = {
+                  view_count: videoDetail.stats.playCount || 0,
+                  like_count: videoDetail.stats.diggCount || 0,
+                  comment_count: videoDetail.stats.commentCount || 0,
+                  share_count: videoDetail.stats.shareCount || 0,
+                };
+              }
+            }
+          } catch {}
+        }
       }
     }
   } catch {
-    // oEmbed failed, try alternative methods
+    // Page scraping failed (timeout or network error)
+  }
+
+  // Combine results
+  if (oembedData?.title || metrics.view_count) {
+    return {
+      title: oembedData?.title || undefined,
+      author: oembedData?.author_name || undefined,
+      thumbnail_url: oembedData?.thumbnail_url || undefined,
+      ...metrics,
+    };
   }
 
   // For Creative Center URLs, try to extract from the URL itself
@@ -685,7 +759,7 @@ export async function intakeVideo(input: VideoInput): Promise<AnalysisResult> {
 
   const finalCategory = categorySources[0] || "pet_cleaning";
 
-  // Create video object
+  // Create video object - use scraped metrics or user-provided metrics
   const video: TrendingVideo = {
     id: videoId || `user_${Date.now()}_${Math.random().toString(36).slice(2)}`,
     video_url: input.url,
@@ -694,10 +768,11 @@ export async function intakeVideo(input: VideoInput): Promise<AnalysisResult> {
     author_name: input.author || metadata?.author || null,
     author_avatar: null,
     product_category: finalCategory,
-    view_count: metadata?.view_count || 0,
-    like_count: metadata?.like_count || 0,
-    comment_count: metadata?.comment_count || 0,
-    share_count: metadata?.share_count || 0,
+    // Priority: scraped metadata > user-provided > default 0
+    view_count: metadata?.view_count || input.viewCount || 0,
+    like_count: metadata?.like_count || input.likeCount || 0,
+    comment_count: metadata?.comment_count || input.commentCount || 0,
+    share_count: metadata?.share_count || input.shareCount || 0,
     country_code: metadata?.country_code || marketToCountryCode(input.targetMarket),
     hashtags: metadata?.hashtags || [],
     duration_seconds: metadata?.duration || null,

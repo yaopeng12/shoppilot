@@ -15,6 +15,11 @@ export async function POST(req: Request) {
     category?: string;
     userNote?: string;
     targetMarket?: string;
+    // User-provided metrics (when scraping fails)
+    viewCount?: number;
+    likeCount?: number;
+    commentCount?: number;
+    shareCount?: number;
   };
 
   if (!body.videoUrl) return json(400, { error: "videoUrl is required" });
@@ -28,6 +33,11 @@ export async function POST(req: Request) {
       category: body.category,
       userNote: body.userNote,
       targetMarket: body.targetMarket,
+      // Pass user-provided metrics
+      viewCount: body.viewCount,
+      likeCount: body.likeCount,
+      commentCount: body.commentCount,
+      shareCount: body.shareCount,
     });
 
     return json(200, {

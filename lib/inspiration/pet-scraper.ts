@@ -487,8 +487,12 @@ function fallbackAnalysis(video: TrendingVideo): VideoAnalysis {
 }
 
 function calcEngagement(video: TrendingVideo): number {
-  if (!video.view_count) return 0;
-  return Math.round(((video.like_count + video.comment_count * 3 + video.share_count * 5) / video.view_count) * 10000) / 100;
+  // If view_count is 0 but we have likes, estimate view_count from likes
+  // Typical TikTok like rate is around 5-15%, we use 8% as default
+  const viewCount = video.view_count || (video.like_count > 0 ? Math.round(video.like_count / 0.08) : 0);
+
+  if (!viewCount) return 0;
+  return Math.round(((video.like_count + video.comment_count * 3 + video.share_count * 5) / viewCount) * 10000) / 100;
 }
 
 function parseJson(text: string): Record<string, unknown> | null {

@@ -17,12 +17,16 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://shoppilot.help"),
   title: {
-    default: "ShopPilot - Pet Cleaning Ad Pack Generator",
+    default: "ShopPilot - TikTok UGC Ad Generator for Pet Dropshipping & Shopify Stores",
     template: "%s",
   },
   description:
-    "Generate pet cleaning ad packs from one product link: source matching, cat odor and litter templates, UGC scripts, storyboard, captions, AI video prompts, and claim-safe TikTok creative.",
+    "AI-powered TikTok UGC ad generator for pet dropshipping and Shopify stores. Create cat litter ad scripts, pet cleaning video ads, and winning product creatives with 1688 sourcing match.",
   keywords: [
+    "TikTok UGC ad generator",
+    "pet dropshipping winning products",
+    "cat litter ad scripts",
+    "AI tool for Shopify pet stores",
     "pet cleaning ad generator",
     "cat litter odor ads",
     "pet odor remover marketing",
@@ -32,6 +36,10 @@ export const metadata: Metadata = {
     "UGC script generator for pet products",
     "TikTok pet ads",
     "pet ecommerce creative",
+    "Shopify pet store marketing",
+    "dropshipping pet products AI",
+    "pet product video ad creator",
+    "winning product ad script",
   ],
   robots: {
     index: true,
@@ -49,15 +57,15 @@ export const metadata: Metadata = {
     locale: "en_US",
     url: "https://shoppilot.help",
     siteName: "ShopPilot",
-    title: "ShopPilot - Pet Cleaning Ad Pack Generator",
+    title: "ShopPilot - TikTok UGC Ad Generator for Pet Dropshipping",
     description:
-      "Turn pet cleaning product links into source matches, niche templates, UGC scripts, storyboards, captions, AI video prompts, and claim-safe TikTok ad packs.",
+      "Turn pet product links into TikTok UGC ads with 1688 sourcing match, cat litter scripts, storyboard, and winning product creatives for Shopify pet stores.",
   },
   twitter: {
     card: "summary_large_image",
-    title: "ShopPilot - Pet Cleaning Ad Pack Generator",
+    title: "ShopPilot - TikTok UGC Ad Generator for Pet Dropshipping",
     description:
-      "Generate source matching, pet cleaning templates, UGC scripts, storyboards, captions, and claim-safe TikTok ad packs.",
+      "AI-powered TikTok UGC ad generator: cat litter scripts, pet cleaning video ads, 1688 sourcing, and winning product creatives for Shopify pet stores.",
   },
   alternates: {
     canonical: "https://shoppilot.help",

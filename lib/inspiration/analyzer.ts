@@ -76,9 +76,13 @@ function parseResponse(text: string): Record<string, unknown> | null {
 }
 
 function calcEngagementScore(video: TrendingVideo): number {
-  if (!video.view_count) return 0;
+  // If view_count is 0 but we have likes, estimate view_count from likes
+  // Typical TikTok like rate is around 5-15%, we use 8% as default
+  const viewCount = video.view_count || (video.like_count > 0 ? Math.round(video.like_count / 0.08) : 0);
+
+  if (!viewCount) return 0;
   const score =
-    ((video.like_count + video.comment_count * 3 + video.share_count * 5) / video.view_count) * 100;
+    ((video.like_count + video.comment_count * 3 + video.share_count * 5) / viewCount) * 100;
   return Math.round(score * 100) / 100;
 }
 

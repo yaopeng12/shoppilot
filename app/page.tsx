@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 import { Navbar } from "@/components/tiktok-adgen/navbar";
@@ -7,12 +8,13 @@ import { useI18n } from "@/lib/i18n/context";
 
 const copy = {
   en: {
-    badge: "Pet cleaning ad workflow",
-    title: "Turn one product link into a sourcing-backed ad pack",
-    desc: "ShopPilot reads a pet-cleaning product or competitor link, scores the best 1688 sourcing direction, matches a reusable short-video template, and outputs hooks, scripts, storyboard, shooting list, captions, claims, and test variants.",
-    primary: "Generate Ad Pack",
+    badge: "TikTok UGC Ad Generator for Pet Dropshipping",
+    title: "AI TikTok UGC Ad Generator — Turn Product Links into Winning Pet Ads",
+    desc: "ShopPilot is the AI tool for Shopify pet stores and dropshipping sellers. Paste a cat litter or pet cleaning product link to generate TikTok UGC ad scripts, 1688 sourcing match, storyboard, captions, and winning product creatives.",
+    primary: "Start Free — Generate Ad Pack",
     secondary: "View Templates",
-    proof: ["1688 match", "Template fit", "3 creative variants", "Shoot-ready brief"],
+    primaryMicrocopy: "No credit card required · 3 free packs/day · Ready in 60s",
+    proof: ["TikTok UGC scripts", "1688 sourcing match", "Cat litter ad templates", "Shopify-ready creatives"],
     inputLabel: "Input",
     input: "cat litter smell remover spray",
     stageTitle: "Live workflow preview",
@@ -35,39 +37,49 @@ const copy = {
       ["Fast Demo", "Watch this five-second litter box reset."],
       ["Trust Check", "What I would compare before switching products."],
     ],
-    sectionTitle: "Built for people who need ads they can actually make",
+    sectionTitle: "AI Ad Tool Built for Shopify Pet Stores & Dropshipping Sellers",
     sectionDesc:
-      "Generic AI writers stop at copy. ShopPilot ties product signal, sourcing logic, template fit, and production detail into one pet-cleaning workflow.",
+      "Generic AI writers stop at copy. ShopPilot is the TikTok UGC ad generator that ties product signal, 1688 sourcing logic, cat litter ad templates, and production detail into one winning product workflow.",
     features: [
-      ["Sourcing decision card", "See match score, expected margin, risk flags, sample-order tips, and precise 1688 search terms."],
-      ["Template memory", "Use proven structures for cat litter odor, urine cleanup, tracking, pet hair, fabric odor, paw cleanup, and more."],
-      ["Creative variants", "Generate multiple angles for testing instead of betting on one script."],
-      ["Production brief", "Turn strategy into first shot, scene timing, overlay, narration, CTA, and shot list."],
+      ["1688 sourcing decision card", "See match score, expected margin, risk flags, sample-order tips, and precise 1688 search terms for pet dropshipping winning products."],
+      ["Cat litter ad templates", "Use proven TikTok UGC structures for cat litter odor, urine cleanup, tracking, pet hair, fabric odor, paw cleanup, and more."],
+      ["Winning product creatives", "Generate multiple TikTok ad angles for testing instead of betting on one script."],
+      ["Production brief", "Turn strategy into first shot, scene timing, overlay, narration, CTA, and shoot-ready TikTok UGC brief."],
     ],
-    workflowTitle: "From link to launch material",
+    workflowTitle: "From Shopify Link to TikTok UGC Ad Pack",
     workflow: [
-      ["Paste link", "Use a Shopify, Amazon, TikTok, marketplace, or competitor page."],
-      ["Score product direction", "Detect the cleaning scenario and rank sourcing candidates by fit, demand, margin, demo value, and safety."],
-      ["Match creative structure", "Pick a pet-cleaning template and localize the voice for the target market."],
-      ["Export the ad pack", "Use scripts, storyboard, captions, AI video prompts, claim guardrails, and test variants."],
+      ["Paste Shopify or product link", "Use a Shopify, Amazon, TikTok Shop, marketplace, or competitor page."],
+      ["AI scores sourcing direction", "Detect the pet cleaning scenario and rank 1688 sourcing candidates by fit, demand, margin, demo value, and safety."],
+      ["Match TikTok UGC template", "Pick a cat litter ad template or pet cleaning structure and localize for your target market."],
+      ["Export winning ad pack", "Get TikTok UGC scripts, storyboard, captions, AI video prompts, claim guardrails, and test variants."],
     ],
-    scenariosTitle: "Pet-cleaning scenarios with real pattern memory",
+    scenariosTitle: "Pet dropshipping winning product scenarios",
     scenarios: ["Cat litter odor", "Cat urine cleanup", "Litter tracking", "Pet hair removal", "Fabric odor", "Dog pad floor", "Paw cleanup", "Pet stain removal"],
-    ctaTitle: "Try it with one pet-cleaning product link",
-    ctaDesc: "The sharper the product signal, the better the sourcing card, template match, and creative variants become.",
+    ctaTitle: "Try the AI TikTok UGC Ad Generator with One Product Link",
+    ctaDesc: "Paste a Shopify pet store product link or any pet cleaning item. The sharper the signal, the better the 1688 sourcing card, cat litter ad template match, and winning product creatives.",
+    faqTitle: "Frequently asked questions",
+    faqDesc: "Quick answers about ShopPilot — the AI tool for Shopify pet stores",
+    faqItems: [
+      { q: "What product links does ShopPilot support?", a: "ShopPilot works with Shopify, Amazon, TikTok Shop, 1688, and most marketplace product pages. Paste any link and we'll extract the product signal." },
+      { q: "How accurate is the sourcing match?", a: "The 1688 match score is based on category fit, historical demand, margin estimation, and sample-path viability. Scores above 75 typically indicate a strong sourcing direction." },
+      { q: "Can I use this for non-pet products?", a: "ShopPilot is currently optimized for pet-cleaning products. We're expanding to adjacent categories—tell us what you need via the feedback form." },
+      { q: "What do I get in the ad pack?", a: "Each pack includes: hook options, full script, storyboard, shot list, SRT captions, AI video prompts, compliance-safe claim alternatives, and 3 creative test variants." },
+      { q: "Is there a free trial?", a: "Yes. Free plan includes 3 ad pack generations per day with full sourcing cards and template matching." },
+    ],
     contactTitle: "Have feedback or a sourcing request?",
     contactDesc: "Tell us what product category, market, or workflow detail you want ShopPilot to support next.",
     contactEmail: "mason@shoppilot.help",
     contactCta: "Email us",
-    footer: "Focused AI workflow for pet cleaning commerce.",
+    footer: "AI-powered TikTok UGC ad generator for pet dropshipping and Shopify stores.",
   },
   zh: {
-    badge: "宠物清洁广告工作流",
-    title: "一个商品链接，生成带货源判断的广告包",
-    desc: "ShopPilot 会读取宠物清洁商品或竞品链接，判断细分场景，给出 1688 采购方向和匹配分，再匹配短视频模板，输出 Hook、脚本、分镜、拍摄清单、字幕、合规表达和测试变体。",
-    primary: "生成广告包",
+    badge: "TikTok UGC 广告生成器 · 宠物 Dropshipping",
+    title: "AI TikTok UGC 广告生成器 — 商品链接变宠物爆款广告",
+    desc: "ShopPilot 是 Shopify 宠物店铺和 Dropshipping 卖家的 AI 广告工具。粘贴猫砂或宠物清洁商品链接，即可生成 TikTok UGC 广告脚本、1688 货源匹配、分镜、字幕和爆款产品素材。",
+    primary: "免费生成 TikTok 广告包",
     secondary: "查看模板库",
-    proof: ["1688 匹配", "模板适配", "3 组创意变体", "可拍摄 Brief"],
+    primaryMicrocopy: "无需信用卡 · 每天 3 次免费生成 · 60 秒出结果",
+    proof: ["TikTok UGC 脚本", "1688 货源匹配", "猫砂广告模板", "Shopify 可用素材"],
     inputLabel: "输入信号",
     input: "猫砂盆除臭喷雾 / 多猫家庭 / 美国市场",
     stageTitle: "工作流动态预览",
@@ -90,31 +102,40 @@ const copy = {
       ["快速演示", "看这个 5 秒猫砂盆 reset 过程。"],
       ["信任测评", "换产品前，我会先看这几个点。"],
     ],
-    sectionTitle: "为真正要拍、要测、要投放的人设计",
+    sectionTitle: "为 Shopify 宠物店铺和 Dropshipping 卖家打造的 AI 广告工具",
     sectionDesc:
-      "普通 AI 文案工具只给文字。ShopPilot 把商品信号、货源逻辑、模板适配和拍摄细节串成一个宠物清洁广告工作流。",
+      "普通 AI 文案工具只给文字。ShopPilot 是 TikTok UGC 广告生成器，把商品信号、1688 货源逻辑、猫砂广告模板和拍摄细节串成一个爆款产品工作流。",
     features: [
-      ["采购决策卡", "展示匹配分、预估毛利、风险点、拿样建议和精准 1688 搜索词。"],
-      ["模板记忆", "覆盖猫砂异味、猫尿清洁、猫砂带出、宠物毛发、织物异味、脚掌清洁等结构。"],
-      ["创意变体", "一次生成多个测试角度，而不是只押一个脚本。"],
-      ["拍摄 Brief", "把策略落成首镜头、时间轴、字幕、口播、CTA 和镜头清单。"],
+      ["1688 货源决策卡", "展示匹配分、预估毛利、风险点、拿样建议和精准搜索词，助你找到宠物 Dropshipping 爆款。"],
+      ["猫砂广告模板", "覆盖猫砂异味、猫尿清洁、猫砂带出、宠物毛发、织物异味、脚掌清洁等 TikTok UGC 结构。"],
+      ["爆款产品创意", "一次生成多个 TikTok 广告测试角度，而不是只押一个脚本。"],
+      ["拍摄 Brief", "把策略落成首镜头、时间轴、字幕、口播、CTA 和可拍摄的 TikTok UGC 清单。"],
     ],
-    workflowTitle: "从链接到可投放素材",
+    workflowTitle: "从 Shopify 链接到 TikTok UGC 广告包",
     workflow: [
-      ["粘贴链接", "支持 Shopify、Amazon、TikTok、平台商品页或竞品链接。"],
-      ["判断方向", "识别清洁场景，并按匹配度、需求、毛利、演示价值和合规安全给货源排序。"],
-      ["匹配结构", "选择宠物清洁模板，并按目标市场本地化语气。"],
-      ["导出广告包", "得到脚本、分镜、字幕、AI 视频提示词、合规边界和测试变体。"],
+      ["粘贴 Shopify 或商品链接", "支持 Shopify、Amazon、TikTok Shop、平台商品页或竞品链接。"],
+      ["AI 评分货源方向", "识别宠物清洁场景，按匹配度、需求、毛利、演示价值和合规安全给 1688 货源排序。"],
+      ["匹配 TikTok UGC 模板", "选择猫砂广告模板或宠物清洁结构，并按目标市场本地化语气。"],
+      ["导出爆款广告包", "得到 TikTok UGC 脚本、分镜、字幕、AI 视频提示词、合规边界和测试变体。"],
     ],
-    scenariosTitle: "持续积累的宠物清洁细分场景",
+    scenariosTitle: "宠物 Dropshipping 爆款产品场景",
     scenarios: ["猫砂盆异味", "猫尿清洁", "猫砂带出", "宠物除毛", "织物异味", "狗尿垫地板", "脚掌清洁", "宠物污渍"],
-    ctaTitle: "用一个宠物清洁商品链接试试",
-    ctaDesc: "商品信号越清楚，采购卡、模板匹配和创意变体就越准。",
+    ctaTitle: "用一个商品链接试试 AI TikTok UGC 广告生成器",
+    ctaDesc: "粘贴 Shopify 宠物店铺商品链接或任意宠物清洁产品。信号越清楚，1688 货源卡、猫砂广告模板匹配和爆款产品创意就越准。",
+    faqTitle: "常见问题",
+    faqDesc: "关于 ShopPilot — Shopify 宠物店铺 AI 工具的快速解答",
+    faqItems: [
+      { q: "ShopPilot 支持哪些商品链接？", a: "支持 Shopify、Amazon、TikTok Shop、1688 以及大多数电商平台的商品页。粘贴任意链接，我们会自动提取商品信号。" },
+      { q: "货源匹配的准确度如何？", a: "1688 匹配分基于品类契合度、历史需求、毛利估算和拿样可行性综合计算。75 分以上通常代表较强的采购方向。" },
+      { q: "可以用于非宠物产品吗？", a: "ShopPilot 目前专注于宠物清洁品类。我们正在向相邻品类扩展——通过反馈表告诉我们你的需求。" },
+      { q: "广告包包含哪些内容？", a: "每个广告包包含：Hook 选项、完整脚本、分镜、镜头清单、SRT 字幕、AI 视频提示词、合规表达替代方案，以及 3 组创意测试变体。" },
+      { q: "有免费试用吗？", a: "有。免费计划每天可生成 3 个广告包，包含完整的采购卡和模板匹配功能。" },
+    ],
     contactTitle: "有反馈或想支持的新货品方向？",
     contactDesc: "告诉我们你希望 ShopPilot 优化的品类、市场、1688 匹配或广告包细节。",
     contactEmail: "mason@shoppilot.help",
     contactCta: "发送邮件",
-    footer: "专注宠物清洁电商的一体化 AI 工作流。",
+    footer: "AI 驱动的 TikTok UGC 广告生成器，服务宠物 Dropshipping 和 Shopify 店铺。",
   },
 } as const;
 
@@ -127,17 +148,31 @@ export default function ShopPilotLanding() {
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    name: "ShopPilot",
+    name: "ShopPilot - TikTok UGC Ad Generator",
     applicationCategory: "BusinessApplication",
     operatingSystem: "Web",
     url: "https://shoppilot.help",
-    description: "Pet cleaning ad pack generator with sourcing match, template selection, scripts, storyboard, and claim-safe creative.",
+    description: "AI-powered TikTok UGC ad generator for pet dropshipping and Shopify stores. Create cat litter ad scripts, 1688 sourcing match, storyboard, and winning product creatives.",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
+  };
+
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: t.faqItems.map((item) => ({
+      "@type": "Question",
+      name: item.q,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.a,
+      },
+    })),
   };
 
   return (
     <div className="min-h-screen text-white">
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
       <Navbar isSignedIn={!!user} user={user} />
 
       <main>
@@ -151,10 +186,13 @@ export default function ShopPilotLanding() {
               {t.title}
             </h1>
             <p className="mt-5 max-w-2xl text-base leading-8 text-white/58">{t.desc}</p>
-            <div className="mt-7 flex flex-col gap-3 sm:flex-row">
-              <Link className="inline-flex h-12 items-center justify-center rounded-xl bg-white px-6 text-sm font-semibold text-black transition hover:bg-white/90" href="/storyboard">
-                {t.primary}
-              </Link>
+            <div className="mt-7 flex flex-col gap-3 sm:flex-row sm:items-center">
+              <div>
+                <Link className="inline-flex h-12 items-center justify-center rounded-xl bg-white px-6 text-sm font-semibold text-black transition hover:bg-white/90" href="/storyboard">
+                  {t.primary}
+                </Link>
+                <p className="mt-2.5 text-xs text-white/40">{t.primaryMicrocopy}</p>
+              </div>
               <Link className="inline-flex h-12 items-center justify-center rounded-xl border border-white/[0.12] px-6 text-sm font-semibold text-white/72 transition hover:border-white/25 hover:bg-white/[0.04] hover:text-white" href="/inspiration">
                 {t.secondary}
               </Link>
@@ -233,12 +271,17 @@ export default function ShopPilotLanding() {
                 <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{t.ctaTitle}</h2>
                 <p className="mt-3 max-w-2xl text-sm leading-7 text-white/50">{t.ctaDesc}</p>
               </div>
-              <Link className="inline-flex h-12 items-center justify-center rounded-xl bg-white px-6 text-sm font-semibold text-black transition hover:bg-white/90" href="/storyboard">
-                {t.primary}
-              </Link>
+              <div className="text-center lg:text-right">
+                <Link className="inline-flex h-12 items-center justify-center rounded-xl bg-white px-6 text-sm font-semibold text-black transition hover:bg-white/90" href="/storyboard">
+                  {t.primary}
+                </Link>
+                <p className="mt-2.5 text-xs text-white/40">{t.primaryMicrocopy}</p>
+              </div>
             </div>
           </div>
         </section>
+
+        <FaqSection t={t} />
 
         <section className="mx-auto max-w-7xl px-5 pb-20 sm:px-6">
           <div className="rounded-2xl border border-emerald-300/15 bg-emerald-300/[0.045] p-6 sm:p-8">
@@ -350,5 +393,54 @@ function VariantRail({ variants }: { variants: readonly (readonly [string, strin
         ))}
       </div>
     </div>
+  );
+}
+
+function FaqSection({ t }: { t: (typeof copy)["en"] | (typeof copy)["zh"] }) {
+  const [openIndex, setOpenIndex] = useState<number | null>(null);
+
+  return (
+    <section className="mx-auto max-w-7xl px-5 py-16 sm:px-6 sm:py-20">
+      <div className="mb-10">
+        <h2 className="text-2xl font-bold tracking-tight sm:text-3xl">{t.faqTitle}</h2>
+        <p className="mt-3 text-sm leading-7 text-white/48">{t.faqDesc}</p>
+      </div>
+      <div className="grid gap-3 md:grid-cols-2">
+        {t.faqItems.map((item, index) => (
+          <div
+            key={item.q}
+            className="rounded-2xl border border-white/[0.08] bg-white/[0.03] transition-all duration-300 hover:border-white/[0.14]"
+          >
+            <button
+              className="flex w-full items-center gap-4 px-6 py-5 text-left"
+              onClick={() => setOpenIndex(openIndex === index ? null : index)}
+              aria-expanded={openIndex === index}
+            >
+              <span className="flex-1 text-sm font-semibold text-white">{item.q}</span>
+              <svg
+                className={`h-4 w-4 shrink-0 text-white/40 transition-transform duration-300 ${
+                  openIndex === index ? "rotate-180" : ""
+                }`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
+            <div
+              className={`overflow-hidden transition-all duration-300 ${
+                openIndex === index ? "max-h-96 opacity-100" : "max-h-0 opacity-0"
+              }`}
+            >
+              <div className="border-t border-white/[0.06] px-6 pb-5 pt-4">
+                <p className="text-sm leading-7 text-white/50">{item.a}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
   );
 }

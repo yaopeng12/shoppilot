@@ -9,12 +9,18 @@ import { apiFetch } from "@/lib/tiktok-adgen/client";
 import { useI18n } from "@/lib/i18n/context";
 import { DEFAULT_TARGET_MARKET, type TargetMarketCode } from "@/lib/localization/markets";
 import type { KnowledgeEntry } from "@/lib/inspiration/types";
+import blogPosts from "@/data/blog-posts.json";
+
+type TabType = "patterns" | "guides";
 
 const pageI18n = {
   en: {
     badge: "Pet Cleaning Knowledge Base",
-    title: "Patterns worth turning into ads",
-    desc: "Browse proven hook angles, scene structures, CTA language, tones, and hashtags extracted from pet-cleaning short-video research.",
+    title: "Everything you need to create winning pet ads",
+    desc: "Browse proven ad patterns, hook angles, and content marketing guides to scale your pet product business.",
+    tabPatterns: "Ad Patterns",
+    tabGuides: "Marketing Guides",
+    // Patterns tab
     insight: "Pattern intelligence",
     categories: "scenarios",
     videos: "source videos",
@@ -35,11 +41,21 @@ const pageI18n = {
     seconds: "s",
     bestFor: "Best for",
     benchmark: "Benchmark",
+    // Guides tab
+    guidesTitle: "Content Marketing Guides",
+    guidesDesc: "Step-by-step tutorials on TikTok ads, dropshipping, UGC scripts, and Shopify marketing.",
+    readArticle: "Read article",
+    minRead: "min",
+    guidesCta: "Want to apply these tips?",
+    guidesCtaDesc: "Use ShopPilot to generate ad packs based on what you learned.",
   },
   zh: {
     badge: "宠物清洁知识库",
-    title: "把爆款结构变成可复用广告",
-    desc: "浏览从宠物清洁短视频研究里沉淀出的 Hook 角度、镜头结构、CTA 话术、语气风格和标签。",
+    title: "打造爆款宠物广告所需的一切",
+    desc: "浏览经过验证的广告模式、Hook 角度和内容营销指南，助力你的宠物业务增长。",
+    tabPatterns: "广告模板",
+    tabGuides: "营销指南",
+    // 广告模板 tab
     insight: "结构洞察",
     categories: "细分场景",
     videos: "来源视频",
@@ -60,6 +76,13 @@ const pageI18n = {
     seconds: "秒",
     bestFor: "适合",
     benchmark: "指标",
+    // 营销指南 tab
+    guidesTitle: "内容营销指南",
+    guidesDesc: "手把手教你 TikTok 广告投放、Dropshipping 选品、UGC 脚本写作和 Shopify 引流。",
+    readArticle: "阅读文章",
+    minRead: "分钟",
+    guidesCta: "想应用这些技巧？",
+    guidesCtaDesc: "使用 ShopPilot 生成基于你所学内容的广告包。",
   },
 } as const;
 
@@ -72,6 +95,7 @@ export default function KnowledgePage() {
   const [entries, setEntries] = useState<KnowledgeEntry[]>([]);
   const [targetMarket, setTargetMarket] = useState<TargetMarketCode>(DEFAULT_TARGET_MARKET);
   const [loadingMarket, setLoadingMarket] = useState<TargetMarketCode | null>(DEFAULT_TARGET_MARKET);
+  const [activeTab, setActiveTab] = useState<TabType>("patterns");
 
   useEffect(() => {
     let isCurrent = true;
@@ -103,66 +127,184 @@ export default function KnowledgePage() {
       <Navbar isSignedIn={!!session?.user} user={session?.user} />
 
       <main className="mx-auto max-w-7xl px-4 pb-20 pt-10 sm:px-6">
-        <section className="grid gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
-          <div>
-            <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-300/15 bg-emerald-300/[0.06] px-3.5 py-1.5 text-xs text-emerald-100/70">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse-glow" />
-              {t.badge}
-            </div>
-            <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl">{t.title}</h1>
-            <p className="mt-4 max-w-2xl text-sm leading-7 text-white/52">{t.desc}</p>
-            <div className="mt-6 flex flex-wrap gap-3">
-              <Link href="/storyboard" className="inline-flex h-11 items-center rounded-xl bg-white px-5 text-sm font-semibold text-black transition hover:bg-white/90">
-                {t.generate}
-              </Link>
-              <Link href="/inspiration" className="inline-flex h-11 items-center rounded-xl border border-white/[0.1] px-5 text-sm font-semibold text-white/62 transition hover:bg-white/[0.05] hover:text-white">
-                {t.viewResearch}
-              </Link>
-            </div>
+        {/* Hero Section */}
+        <section className="mb-8">
+          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-emerald-300/15 bg-emerald-300/[0.06] px-3.5 py-1.5 text-xs text-emerald-100/70">
+            <span className="h-1.5 w-1.5 rounded-full bg-emerald-300 animate-pulse-glow" />
+            {t.badge}
           </div>
-
-          <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
-            <TargetMarketSelect
-              value={targetMarket}
-              onChange={(value) => {
-                setTargetMarket(value);
-                setLoadingMarket(value);
-              }}
-              label={t.market}
-              hint={t.marketHint}
-            />
-          </div>
+          <h1 className="max-w-3xl text-4xl font-bold leading-tight tracking-tight sm:text-5xl">{t.title}</h1>
+          <p className="mt-4 max-w-2xl text-sm leading-7 text-white/52">{t.desc}</p>
         </section>
 
-        <section className="mt-8 grid gap-4 md:grid-cols-4">
-          <MetricCard label={t.categories} value={String(entries.length)} tone="emerald" />
-          <MetricCard label={t.videos} value={String(stats.videoCount)} tone="blue" />
-          <MetricCard label={t.hooks} value={String(stats.hookCount)} tone="violet" />
-          <MetricCard label={t.avgDuration} value={`${stats.avgDuration}${t.seconds}`} tone="orange" />
-        </section>
+        {/* Tab Navigation */}
+        <div className="mb-8 flex gap-1 rounded-xl border border-white/[0.08] bg-white/[0.03] p-1">
+          <button
+            onClick={() => setActiveTab("patterns")}
+            className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+              activeTab === "patterns"
+                ? "bg-white/[0.12] text-white"
+                : "text-white/50 hover:text-white/70"
+            }`}
+          >
+            <span className="mr-2">🎯</span>
+            {t.tabPatterns}
+          </button>
+          <button
+            onClick={() => setActiveTab("guides")}
+            className={`flex-1 rounded-lg px-4 py-2.5 text-sm font-medium transition-all ${
+              activeTab === "guides"
+                ? "bg-white/[0.12] text-white"
+                : "text-white/50 hover:text-white/70"
+            }`}
+          >
+            <span className="mr-2">📚</span>
+            {t.tabGuides}
+          </button>
+        </div>
 
-        {loading ? (
-          <div className="py-20 text-center text-sm text-white/30">Loading...</div>
-        ) : entries.length === 0 ? (
-          <div className="space-y-4 py-20 text-center">
-            <div className="text-sm text-white/35">{t.noData}</div>
-            <Link href="/inspiration" className="inline-flex items-center rounded-xl border border-white/[0.1] px-4 py-2 text-xs text-white/55 transition-all hover:bg-white/[0.05] hover:text-white">
-              {t.viewResearch}
-            </Link>
-          </div>
+        {/* Tab Content */}
+        {activeTab === "patterns" ? (
+          <PatternsTab
+            entries={entries}
+            spotlight={spotlight}
+            stats={stats}
+            loading={loading}
+            targetMarket={targetMarket}
+            setTargetMarket={setTargetMarket}
+            setLoadingMarket={setLoadingMarket}
+            t={t as PageCopy}
+          />
         ) : (
-          <>
-            {spotlight && <Spotlight entry={spotlight} t={t as PageCopy} />}
-
-            <section className="mt-10 grid gap-5">
-              {entries.map((entry, index) => (
-                <CategoryCard key={entry.id} entry={entry} t={t as PageCopy} index={index} />
-              ))}
-            </section>
-          </>
+          <GuidesTab t={t as PageCopy} locale={locale} />
         )}
       </main>
     </div>
+  );
+}
+
+function PatternsTab({
+  entries,
+  spotlight,
+  stats,
+  loading,
+  targetMarket,
+  setTargetMarket,
+  setLoadingMarket,
+  t,
+}: {
+  entries: KnowledgeEntry[];
+  spotlight: KnowledgeEntry | undefined;
+  stats: { videoCount: number; hookCount: number; avgDuration: number };
+  loading: boolean;
+  targetMarket: TargetMarketCode;
+  setTargetMarket: (value: TargetMarketCode) => void;
+  setLoadingMarket: (value: TargetMarketCode | null) => void;
+  t: PageCopy;
+}) {
+  return (
+    <>
+      <section className="grid gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
+        <div>
+          <div className="flex flex-wrap gap-3">
+            <Link href="/storyboard" className="inline-flex h-11 items-center rounded-xl bg-white px-5 text-sm font-semibold text-black transition hover:bg-white/90">
+              {t.generate}
+            </Link>
+            <Link href="/inspiration" className="inline-flex h-11 items-center rounded-xl border border-white/[0.1] px-5 text-sm font-semibold text-white/62 transition hover:bg-white/[0.05] hover:text-white">
+              {t.viewResearch}
+            </Link>
+          </div>
+        </div>
+
+        <div className="rounded-2xl border border-white/[0.08] bg-white/[0.03] p-4">
+          <TargetMarketSelect
+            value={targetMarket}
+            onChange={(value) => {
+              setTargetMarket(value);
+              setLoadingMarket(value);
+            }}
+            label={t.market}
+            hint={t.marketHint}
+          />
+        </div>
+      </section>
+
+      <section className="mt-6 grid gap-4 md:grid-cols-4">
+        <MetricCard label={t.categories} value={String(entries.length)} tone="emerald" />
+        <MetricCard label={t.videos} value={String(stats.videoCount)} tone="blue" />
+        <MetricCard label={t.hooks} value={String(stats.hookCount)} tone="violet" />
+        <MetricCard label={t.avgDuration} value={`${stats.avgDuration}${t.seconds}`} tone="orange" />
+      </section>
+
+      {loading ? (
+        <div className="py-20 text-center text-sm text-white/30">Loading...</div>
+      ) : entries.length === 0 ? (
+        <div className="space-y-4 py-20 text-center">
+          <div className="text-sm text-white/35">{t.noData}</div>
+          <Link href="/inspiration" className="inline-flex items-center rounded-xl border border-white/[0.1] px-4 py-2 text-xs text-white/55 transition-all hover:bg-white/[0.05] hover:text-white">
+            {t.viewResearch}
+          </Link>
+        </div>
+      ) : (
+        <>
+          {spotlight && <Spotlight entry={spotlight} t={t} />}
+
+          <section className="mt-8 grid gap-5">
+            {entries.map((entry, index) => (
+              <CategoryCard key={entry.id} entry={entry} t={t} index={index} />
+            ))}
+          </section>
+        </>
+      )}
+    </>
+  );
+}
+
+function GuidesTab({ t, locale }: { t: PageCopy; locale: "en" | "zh" }) {
+  return (
+    <>
+      <section className="mb-8 grid gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
+        <div>
+          <h2 className="text-2xl font-bold tracking-tight">{t.guidesTitle}</h2>
+          <p className="mt-3 max-w-2xl text-sm leading-7 text-white/48">{t.guidesDesc}</p>
+        </div>
+        <div className="rounded-2xl border border-blue-300/15 bg-blue-300/[0.04] p-5 text-center">
+          <p className="text-sm text-blue-100/70">{t.guidesCta}</p>
+          <Link href="/storyboard" className="mt-3 inline-flex h-10 items-center justify-center rounded-lg bg-blue-400/20 px-5 text-sm font-medium text-blue-100 transition hover:bg-blue-400/30">
+            {t.generate}
+          </Link>
+        </div>
+      </section>
+
+      <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {blogPosts.map((post, index) => (
+          <Link
+            key={post.slug}
+            href={`/blog/${post.slug}`}
+            className="group rounded-2xl border border-blue-300/10 bg-blue-300/[0.025] p-5 transition-all duration-300 hover:border-blue-300/25 hover:bg-blue-300/[0.06] hover:-translate-y-0.5"
+            style={{ animationDelay: `${index * 0.08}s` }}
+          >
+            <div className="mb-3 flex items-center justify-between gap-2">
+              <span className="rounded-full border border-blue-300/20 bg-blue-300/[0.08] px-2.5 py-1 text-[11px] text-blue-100/70">
+                {post.category}
+              </span>
+              <span className="text-[11px] text-white/30">
+                {post.readTime} {t.minRead}
+              </span>
+            </div>
+            <h3 className="mb-2 text-base font-semibold text-white group-hover:text-blue-100 transition-colors">
+              {post.title[locale]}
+            </h3>
+            <p className="text-sm leading-6 text-white/45 line-clamp-3">
+              {post.excerpt[locale]}
+            </p>
+            <div className="mt-4 text-xs font-medium text-blue-100/50 group-hover:text-blue-100/80 transition-colors">
+              {t.readArticle} →
+            </div>
+          </Link>
+        ))}
+      </div>
+    </>
   );
 }
 
